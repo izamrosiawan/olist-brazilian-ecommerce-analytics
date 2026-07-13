@@ -1,115 +1,184 @@
-# Olist Brazilian E-Commerce: Business Analytics & Performance Report
+# E-Commerce Olist Brasil: Analisis Bisnis & Laporan Kinerja
 
-An end-to-end data analytics project using Python to analyze the **Olist Brazilian E-Commerce Dataset**. This project provides critical business insights to optimize sales marketing, logisitical operations, and customer retention.
-
----
-
-## 📊 Project Overview
-This project serves as a comprehensive diagnostic report analyzing transaction records, operational logs, and customer reviews from **Olist**, the leading e-commerce integration platform in Brazil. By merging and preprocessing **over 100,000 orders** spanning late 2016 to mid-2018, this report diagnoses issues across key business areas:
-1. **Revenue Drivers:** Which products drive sales?
-2. **Regional Performance:** Where is demand concentrated?
-3. **Temporal Trends:** When do sales peak?
-4. **Logistics & Delivery:** How efficient is the supply chain?
-5. **Customer Loyalty:** Do customers return?
-6. **Customer Experience:** How does delivery speed affect review scores?
+Proyek analisis data end-to-end menggunakan Python untuk menganalisis **Dataset E-Commerce Olist Brasil**. Proyek ini memberikan wawasan bisnis yang krusial untuk mengoptimalkan pemasaran penjualan, operasi logistik, dan retensi pelanggan.
 
 ---
 
-## 🗄️ Dataset Schema (ERD)
-The dataset comprises 9 interconnected tables hosted originally on Kaggle:
-* **`olist_customers_dataset.csv`**: Connects orders to unique customer profiles.
-* **`olist_orders_dataset.csv`**: The central table containing order status and chronological logs.
-* **`olist_order_items_dataset.csv`**: Item-level transaction lines containing product IDs, seller IDs, price, and freight.
-* **`olist_order_payments_dataset.csv`**: Finanical tracking of orders (credit card, boleto, voucher, debit card).
-* **`olist_order_reviews_dataset.csv`**: Feedback ratings and comments from customers.
-* **`olist_products_dataset.csv`**: Details of products (weight, dimensions, category names).
-* **`olist_sellers_dataset.csv`**: Locations and identifiers of marketplace vendors.
-* **`product_category_name_translation.csv`**: Translates Portuguese categories into English.
-* **`olist_geolocation_dataset.csv`**: Maps Brazilian zip codes to coordinates (lat/lng).
+## 📊 Ringkasan Proyek
+Proyek ini berfungsi sebagai laporan diagnostik komprehensif yang menganalisis catatan transaksi, log operasional, dan ulasan pelanggan dari **Olist**, platform integrasi e-commerce terkemuka di Brasil. Dengan menggabungkan dan mempra-proses **lebih dari 100.000 pesanan** dari akhir 2016 hingga pertengahan 2018, laporan ini mendiagnosis masalah di berbagai area bisnis utama:
+1. **Pendorong Pendapatan:** Produk apa saja yang mendorong penjualan?
+2. **Kinerja Regional:** Di mana permintaan terkonsentrasi?
+3. **Tren Temporal:** Kapan penjualan mencapai puncak?
+4. **Logistik & Pengiriman:** Seberapa efisien rantai pasok (supply chain)?
+5. **Loyalitas Pelanggan:** Apakah pelanggan melakukan pembelian berulang?
+6. **Pengalaman Pelanggan:** Bagaimana kecepatan pengiriman memengaruhi skor ulasan?
 
-### **Relationship Diagram**
+---
+
+## 🗄️ Skema Dataset (ERD)
+Dataset ini terdiri dari 9 tabel yang saling terhubung, awalnya di-host di Kaggle:
+* **`olist_customers_dataset.csv`**: Menghubungkan pesanan dengan profil pelanggan yang unik.
+* **`olist_orders_dataset.csv`**: Tabel utama yang berisi status pesanan dan log kronologis.
+* **`olist_order_items_dataset.csv`**: Detail transaksi tingkat item yang berisi ID produk, ID penjual, harga, dan biaya pengiriman (freight).
+* **`olist_order_payments_dataset.csv`**: Pelacakan keuangan pesanan (kartu kredit, boleto, voucher, kartu debit).
+* **`olist_order_reviews_dataset.csv`**: Peringkat umpan balik (rating) dan komentar dari pelanggan.
+* **`olist_products_dataset.csv`**: Detail produk (berat, dimensi, nama kategori).
+* **`olist_sellers_dataset.csv`**: Lokasi dan identitas vendor/penjual di marketplace.
+* **`product_category_name_translation.csv`**: Menerjemahkan nama kategori dari bahasa Portugis ke bahasa Inggris.
+* **`olist_geolocation_dataset.csv`**: Memetakan kode pos Brasil ke koordinat geografis (lat/lng).
+
+### **Diagram Hubungan (ERD)**
+
+```mermaid
+erDiagram
+    olist_customers_dataset {
+        string customer_id PK
+        string customer_unique_id
+        string customer_zip_code_prefix FK
+        string customer_city
+        string customer_state
+    }
+    olist_orders_dataset {
+        string order_id PK
+        string customer_id FK
+        string order_status
+        timestamp order_purchase_timestamp
+        timestamp order_approved_at
+        timestamp order_delivered_carrier_date
+        timestamp order_delivered_customer_date
+        timestamp order_estimated_delivery_date
+    }
+    olist_order_items_dataset {
+        string order_id PK, FK
+        int order_item_id PK
+        string product_id FK
+        string seller_id FK
+        timestamp shipping_limit_date
+        float price
+        float freight_value
+    }
+    olist_order_payments_dataset {
+        string order_id PK, FK
+        int payment_sequential PK
+        string payment_type
+        int payment_installments
+        float payment_value
+    }
+    olist_order_reviews_dataset {
+        string review_id PK
+        string order_id FK
+        int review_score
+        string review_comment_title
+        string review_comment_message
+        timestamp review_creation_date
+        timestamp review_answer_timestamp
+    }
+    olist_products_dataset {
+        string product_id PK
+        string product_category_name FK
+        int product_name_length
+        int product_description_length
+        int product_photos_qty
+        float product_weight_g
+        float product_length_cm
+        float product_height_cm
+        float product_width_cm
+    }
+    olist_sellers_dataset {
+        string seller_id PK
+        string seller_zip_code_prefix FK
+        string seller_city
+        string seller_state
+    }
+    product_category_name_translation {
+        string product_category_name PK
+        string product_category_name_english
+    }
+    olist_geolocation_dataset {
+        string geolocation_zip_code_prefix PK
+        float geolocation_lat
+        float geolocation_lng
+        string geolocation_city
+        string geolocation_state
+    }
+
+    olist_customers_dataset ||--|| olist_orders_dataset : "customer_id"
+    olist_orders_dataset ||--|{ olist_order_items_dataset : "order_id"
+    olist_orders_dataset ||--|{ olist_order_payments_dataset : "order_id"
+    olist_orders_dataset ||--o| olist_order_reviews_dataset : "order_id"
+    olist_products_dataset ||--|{ olist_order_items_dataset : "product_id"
+    olist_sellers_dataset ||--|{ olist_order_items_dataset : "seller_id"
+    product_category_name_translation ||--|{ olist_products_dataset : "product_category_name"
+    olist_geolocation_dataset ||--|{ olist_customers_dataset : "customer_zip_code_prefix = geolocation_zip_code_prefix"
+    olist_geolocation_dataset ||--|{ olist_sellers_dataset : "seller_zip_code_prefix = geolocation_zip_code_prefix"
 ```
-              [customers] (customer_id)
-                   │
-                   ▼ (1:1)
-  [order_reviews]  ◄─── [orders] ───► [order_payments]
-    (order_id)     (1:N)   │   (1:N)   (order_id)
-                           ▼ (1:N)
-                     [order_items] (order_id)
-                       │       │
-                 (1:1) ▼       ▼ (1:1)
-                  [products]  [sellers] (seller_id)
-                       │
-                 (1:1) ▼
-        [category_translation] (product_category_name)
-```
 
 ---
 
-## 📈 Key Visualizations & Insights
+## 📈 Visualisasi Utama & Wawasan
 
-### **1. Top Revenue-Generating Categories**
-The majority of sales value is generated by a small group of high-performance product domains. **Health & Beauty** and **Watches & Gifts** are the leading categories, each bringing in more than 1.2M BRL.
-* **AOV vs. Volume:** "Health & Beauty" is volume-driven, whereas "Watches & Gifts" is driven by higher average unit prices.
+### **1. Kategori Pendorong Pendapatan Teratas**
+Sebagian besar nilai penjualan dihasilkan oleh sekelompok kecil kategori produk berkinerja tinggi. **Health & Beauty** (Kesehatan & Kecantikan) dan **Watches & Gifts** (Jam Tangan & Kado) adalah kategori utama, masing-masing menghasilkan lebih dari 1,2 juta BRL.
+* **AOV vs. Volume:** "Health & Beauty" didorong oleh volume penjualan, sedangkan "Watches & Gifts" didorong oleh nilai rata-rata pesanan (Average Order Value) yang lebih tinggi.
 
 ![Top Categories by Revenue](images/top_10_categories_revenue.png)
 
 ---
 
-### **2. Regional Performance Hotspots**
-Demand is highly concentrated in the Southeast region of Brazil. **São Paulo** is the primary driver, accounting for 15,540 orders and generating over 2.2M BRL. **Rio de Janeiro** follows in second place, with Belo Horizonte in third.
+### **2. Titik Panas (Hotspot) Kinerja Regional**
+Permintaan sangat terkonsentrasi di wilayah Tenggara Brasil. **São Paulo** adalah pendorong utama, menyumbang 15.540 pesanan dan menghasilkan lebih dari 2,2 juta BRL. **Rio de Janeiro** menyusul di tempat kedua, diikuti oleh Belo Horizonte di tempat ketiga.
 
 ![Top Cities by Orders and Revenue](images/top_cities_orders_revenue.png)
 
 ---
 
-### **3. Sales Seasonality & Growth**
-Sales grew consistently from early 2017 to mid-2018. A notable spike occurs in **November 2017**, reaching **1.19M BRL**—a 53% monthly increase driven by **Black Friday** promotions.
+### **3. Musiman & Pertumbuhan Penjualan**
+Penjualan tumbuh secara konsisten dari awal tahun 2017 hingga pertengahan 2018. Lonjakan signifikan terjadi pada **November 2017**, mencapai **1,19 juta BRL**—peningkatan bulanan sebesar 53% yang didorong oleh promosi **Black Friday**.
 
 ![Monthly Sales Trend](images/sales_seasonality_trend.png)
 
 ---
 
-### **4. Supply Chain & Delivery Times**
-The average delivery time across Brazil is **12.3 days** (median: 10.2 days). However, delivery times vary significantly by region:
-* **Fastest:** Southeast states like São Paulo average **8.7 days**.
-* **Slowest:** Remote Northern states like Amazonas (AM) average **25.6 days** and Amapá (AP) averages **24.8 days**.
+### **4. Rantai Pasok & Waktu Pengiriman**
+Rata-rata waktu pengiriman di seluruh Brasil adalah **12,3 hari** (median: 10,2 hari). Namun, waktu pengiriman bervariasi secara signifikan berdasarkan wilayah:
+* **Tercepat:** Negara bagian di wilayah Tenggara seperti São Paulo rata-rata **8,7 hari**.
+* **Terlambat:** Negara bagian terpencil di wilayah Utara seperti Amazonas (AM) rata-rata **25,6 hari** dan Amapá (AP) rata-rata **24,8 hari**.
 
 ![Delivery Days Distribution](images/delivery_time_distribution.png)
 ![Delivery Days by State](images/delivery_time_by_state.png)
 
 ---
 
-### **5. Customer Loyalty & Retention**
-The platform faces a significant retention challenge, with a repeat purchase rate of only **3.12%**. Over 96.8% of users are one-time buyers.
+### **5. Loyalitas & Retensi Pelanggan**
+Platform ini menghadapi tantangan retensi yang signifikan, dengan tingkat pembelian berulang hanya sebesar **3,12%**. Lebih dari 96,8% pelanggan adalah pembeli satu kali.
 
 ![Customer Order Frequency Distribution](images/customer_order_frequency.png)
 
 ---
 
-### **6. Impact of Delivery Speed on Customer Reviews**
-Analysis shows a clear negative correlation between delivery times and customer review scores:
-* **5-Star Reviews:** Delivered in **10.6 days** on average.
-* **1-Star Reviews:** Delivered in **20.2 days** on average.
-* Shipping delays are a primary cause of low customer ratings.
+### **6. Dampak Kecepatan Pengiriman pada Ulasan Pelanggan**
+Analisis menunjukkan korelasi negatif yang jelas antara waktu pengiriman dan skor ulasan pelanggan:
+* **Ulasan Bintang 5:** Dikirim dalam rata-rata **10,6 hari**.
+* **Ulasan Bintang 1:** Dikirim dalam rata-rata **20,2 hari**.
+* Keterlambatan pengiriman adalah penyebab utama rendahnya rating pelanggan.
 
 ![Delivery Time vs Review Score](images/review_score_vs_delivery_time.png)
 
 ---
 
-## ⚙️ Technologies Used
+## ⚙️ Teknologi yang Digunakan
 * **Python 3.11**
-* **Pandas & NumPy** for data cleaning, merging, and aggregations.
-* **Matplotlib & Seaborn** for high-resolution visualizations.
-* **Jupyter Notebook** for interactive analysis.
-* **nbformat** for programmatic notebook compilation.
+* **Pandas & NumPy** untuk pembersihan data, penggabungan, dan agregasi.
+* **Matplotlib & Seaborn** untuk visualisasi resolusi tinggi.
+* **Jupyter Notebook** untuk analisis interaktif.
+* **nbformat** untuk kompilasi notebook secara terprogram.
 
 ---
 
-## 🚀 How to Run the Project
+## 🚀 Cara Menjalankan Proyek
 
-### **1. Clone & Set Up Directory**
-Ensure the project structure is arranged as follows:
+### **1. Kloning & Atur Direktori**
+Pastikan struktur proyek diatur sebagai berikut:
 ```text
 olist-brazilian-ecommerce-analytics/
 ├── data/
@@ -120,21 +189,21 @@ olist-brazilian-ecommerce-analytics/
 │   ├── olist_order_reviews_dataset.csv
 │   ├── olist_products_dataset.csv
 │   ├── olist_sellers_dataset.csv
-│   ├── olist_geolocation_dataset.csv (placeholder or full file)
+│   ├── olist_geolocation_dataset.csv (placeholder atau file lengkap)
 │   └── product_category_name_translation.csv
-├── images/ (exported charts)
+├── images/ (grafik hasil ekspor)
 ├── notebook.ipynb
 └── requirements.txt
 ```
 
-### **2. Install Dependencies**
-Install the required packages using pip:
+### **2. Instal Dependensi**
+Instal paket yang diperlukan menggunakan pip:
 ```bash
 pip install -r requirements.txt
 ```
 
-### **3. Open the Notebook**
-Launch the Jupyter interface to view the fully executed analysis:
+### **3. Buka Jupyter Notebook**
+Jalankan Jupyter Notebook untuk melihat analisis lengkap yang telah dieksekusi:
 ```bash
 jupyter notebook notebook.ipynb
 ```
