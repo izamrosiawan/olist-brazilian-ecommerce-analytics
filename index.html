@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flyhyer Operational System // Olist Brazil Analytics</title>
-  <meta name="description" content="A stark, high-contrast operational analytics dashboard for Olist Brazilian E-commerce performance, built on clean Swiss typography and white space.">
+  <title>Olist E-Commerce Performance // operational Dashboard</title>
+  <meta name="description" content="A premium, clean analytics dashboard for Olist Brazilian E-commerce performance, built on modern UI cards and high-end visual aesthetics.">
   <link rel="stylesheet" href="index.css">
-  <!-- Chart.js for minimalist data visualizations -->
+  <!-- Chart.js for data visualization -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -14,149 +14,258 @@
   <!-- Left Sidebar Navigation -->
   <aside id="sidebar">
     <div class="brand">
-      <div class="brand-title">Flyhyer</div>
-      <div class="brand-subtitle">OPERATIONAL SYSTEM v1.0</div>
+      <div class="brand-icon">O</div>
+      <div class="brand-info">
+        <span class="brand-title">Olist Performance</span>
+        <span class="brand-subtitle">OPERATIONS DECK</span>
+      </div>
+    </div>
+
+    <!-- Search box -->
+    <div class="sidebar-search">
+      <input type="text" placeholder="Search operational logs..." disabled>
     </div>
     
-    <nav>
+    <nav style="margin-bottom: 24px;">
       <ul class="nav-list">
         <li class="nav-item active" data-tab="overview">
           <button type="button">
-            <span class="font-mono">[01]</span> OVERVIEW
+            <span>📊 Overview</span>
           </button>
         </li>
         <li class="nav-item" data-tab="revenue">
           <button type="button">
-            <span class="font-mono">[02]</span> DEMAND & REVENUE
+            <span>📈 Demand & Revenue</span>
           </button>
         </li>
         <li class="nav-item" data-tab="logistics">
           <button type="button">
-            <span class="font-mono">[03]</span> LOGISTICS & SLA
+            <span>🚚 Logistics & SLA</span>
           </button>
         </li>
         <li class="nav-item" data-tab="simulator">
           <button type="button">
-            <span class="font-mono">[04]</span> IMPACT SIMULATOR
+            <span>⚙️ Impact Simulator</span>
           </button>
         </li>
       </ul>
     </nav>
-    
-    <div class="sidebar-footer">
-      <div class="caption font-mono">WORKSPACE: OLIST_BR</div>
-      <div class="caption font-mono">STATUS: STABLE // OFFLINE</div>
-      <div class="caption font-mono">DATA PERIOD: 2016 - 2018</div>
+
+    <!-- Become Pro Access Promo Card -->
+    <div class="sidebar-promo">
+      <span class="sidebar-promo-title">Olist Data Hub</span>
+      <span class="sidebar-promo-desc">
+        Analyzing over 100,000 orders to optimize logistics and customer lifetime value (LTV).
+      </span>
+      <button type="button" class="sidebar-promo-btn" onclick="alert('Workspace: izamrosiawan/olist-brazilian-ecommerce-analytics')">
+        View Repository
+      </button>
     </div>
   </aside>
 
-  <!-- Main Scrollable Content Area -->
+  <!-- Main Content Area -->
   <main id="main-content">
     
+    <!-- Top Header bar -->
+    <header class="main-header">
+      <div class="main-header-search">
+        <input type="text" placeholder="Search something...">
+      </div>
+      
+      <div class="user-profile-row">
+        <div class="notification-bell" onclick="alert('Operational Status: All services running normally.')">
+          🔔
+        </div>
+        <div class="user-avatar" title="Izam Rosiawan">
+          IR
+        </div>
+      </div>
+    </header>
+
+    <!-- Campaign details title card -->
+    <div class="campaign-card">
+      <div class="campaign-header">
+        <div class="campaign-info">
+          <div class="campaign-avatar">
+            🇧🇷
+          </div>
+          <div class="campaign-title-group">
+            <h1>Olist Brazil Marketplace Performance</h1>
+            <p>Operational bottlenecks, shipping SLAs, and customer retention analysis</p>
+          </div>
+        </div>
+        <div class="campaign-status">
+          <span class="status-badge">Active</span>
+          <span class="campaign-meta-date font-mono">Period: 2016 - 2018</span>
+        </div>
+      </div>
+
+      <!-- Underlined subtab navigation buttons -->
+      <nav class="subtabs-nav">
+        <button type="button" class="subtab-btn active" data-tab="overview">Overview</button>
+        <button type="button" class="subtab-btn" data-tab="revenue">Demand & Revenue</button>
+        <button type="button" class="subtab-btn" data-tab="logistics">Logistics & SLA</button>
+        <button type="button" class="subtab-btn" data-tab="simulator">Impact Simulator</button>
+      </nav>
+    </div>
+
     <!-- ==================== TAB 1: OVERVIEW ==================== -->
     <section id="tab-overview" class="tab-content active">
-      <div class="page-header">
-        <div class="page-header-info">
-          <div class="page-title-badge">MANIFEST ID: BR-2018-09</div>
-          <h1 class="headline-display">Executive Performance Overview</h1>
-        </div>
-        <div class="caption font-mono">LATEST REFRESH: 16-JUL-2026</div>
-      </div>
-      
-      <!-- Key Operational KPI Cards -->
-      <div class="kpi-grid">
-        <div class="card">
-          <div class="card-header-row">
-            <span class="card-label">Revenue</span>
-            <span class="chip success">BRL</span>
+      <div class="bento-overview">
+        <!-- 2x2 KPI grid -->
+        <div class="kpis-vertical-grid">
+          <div class="kpi-mini-card">
+            <div class="kpi-icon-wrap revenue">💵</div>
+            <div>
+              <div class="kpi-mini-label">Total Revenue</div>
+              <div class="kpi-mini-value" id="kpi-revenue">—</div>
+              <div class="kpi-mini-caption">BRL Payments Processed</div>
+            </div>
           </div>
-          <div>
-            <div class="card-value" id="kpi-revenue">—</div>
-            <div class="card-subtext">Total payment values processed</div>
+          
+          <div class="kpi-mini-card">
+            <div class="kpi-icon-wrap orders">🛒</div>
+            <div>
+              <div class="kpi-mini-label">Total Orders</div>
+              <div class="kpi-mini-value" id="kpi-orders">—</div>
+              <div class="kpi-mini-caption font-mono">99,441 unique sales</div>
+            </div>
           </div>
-        </div>
-        
-        <div class="card">
-          <div class="card-header-row">
-            <span class="card-label">Orders</span>
-            <span class="chip">QTY</span>
+          
+          <div class="kpi-mini-card">
+            <div class="kpi-icon-wrap aov">🏷️</div>
+            <div>
+              <div class="kpi-mini-label">Average Ticket</div>
+              <div class="kpi-mini-value" id="kpi-aov">—</div>
+              <div class="kpi-mini-caption">BRL Average Order Value</div>
+            </div>
           </div>
-          <div>
-            <div class="card-value" id="kpi-orders">—</div>
-            <div class="card-subtext">Total unique customer purchases</div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div class="card-header-row">
-            <span class="card-label">Average Ticket</span>
-            <span class="chip">AOV</span>
-          </div>
-          <div>
-            <div class="card-value" id="kpi-aov">—</div>
-            <div class="card-subtext">Average Order Value in BRL</div>
+          
+          <div class="kpi-mini-card">
+            <div class="kpi-icon-wrap repeat">🔄</div>
+            <div>
+              <div class="kpi-mini-label">Repeat Purchase</div>
+              <div class="kpi-mini-value" id="kpi-repeat">—</div>
+              <div class="kpi-mini-caption">Marketplace customer rate</div>
+            </div>
           </div>
         </div>
-        
-        <div class="card">
-          <div class="card-header-row">
-            <span class="card-label">Repeat Rate</span>
-            <span class="chip alert" id="badge-repeat">3.12%</span>
+
+        <!-- Stylized Map Widget -->
+        <div class="map-visual-card">
+          <div class="map-header">
+            <span class="map-title">Regional Shipping Performance SLA</span>
+            <span class="chip">Geographic variation</span>
           </div>
-          <div>
-            <div class="card-value" id="kpi-repeat">—</div>
-            <div class="card-subtext">Percentage of multi-order buyers</div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div class="card-header-row">
-            <span class="card-label">Avg Shipping</span>
-            <span class="chip" id="badge-delivery">SLA</span>
-          </div>
-          <div>
-            <div class="card-value" id="kpi-delivery">—</div>
-            <div class="card-subtext">National average delivery days</div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div class="card-header-row">
-            <span class="card-label">Satisfaction</span>
-            <span class="chip success">RATING</span>
-          </div>
-          <div>
-            <div class="card-value" id="kpi-rating">—</div>
-            <div class="card-subtext">Average review score (1 to 5)</div>
+          <div class="map-container">
+            <!-- Stylized vector of Brazil map -->
+            <svg class="map-brazil-svg" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M120 180 C 140 100, 240 60, 310 110 C 370 150, 420 170, 440 240 C 460 300, 410 390, 360 410 C 320 420, 310 450, 270 440 C 230 430, 220 370, 190 350 C 160 330, 110 300, 100 240 C 95 190, 105 190, 120 180 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2"/>
+              <!-- Stylized circles of states inside Brazil outline -->
+              <circle cx="340" cy="350" r="14" fill="#cbd5e1" stroke="#fff" stroke-width="2"/> <!-- SP -->
+              <circle cx="370" cy="330" r="8" fill="#cbd5e1" stroke="#fff" stroke-width="2"/> <!-- RJ -->
+              <circle cx="320" cy="310" r="12" fill="#cbd5e1" stroke="#fff" stroke-width="2"/> <!-- MG -->
+              <circle cx="180" cy="180" r="22" fill="#fca5a5" stroke="#fff" stroke-width="2"/> <!-- AM -->
+              <circle cx="270" cy="100" r="6" fill="#fca5a5" stroke="#fff" stroke-width="2"/> <!-- AP -->
+            </svg>
+            
+            <!-- Pin labels overlaid on states -->
+            <div class="map-pin-label sp">
+              <span class="flag">📍</span> SP: 8.7 days (Fastest)
+            </div>
+            <div class="map-pin-label rj">
+              <span class="flag">📍</span> RJ: 2.2M BRL
+            </div>
+            <div class="map-pin-label am">
+              <span class="flag">⚠️</span> AM: 25.6 days (SLA Bottleneck)
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- Bottom Grid matching reference elements (List, Bar, Donut) -->
+      <div class="bento-bottom-row">
+        <!-- 1. Top categories list (styled like influencers card) -->
+        <div class="bento-card-inner">
+          <div class="bento-card-title-group">
+            <span class="bento-card-title">Product Category Drivers</span>
+            <span class="chip font-mono">AOV & Sales</span>
+          </div>
+          <div class="list-container" id="overview-category-list">
+            <!-- Populated dynamically via JS -->
+            <div class="list-item-row">
+              <div class="list-item-left">
+                <div class="list-item-avatar">01</div>
+                <div class="list-item-info">
+                  <span class="list-item-name">Health & Beauty</span>
+                  <span class="list-item-desc">High Volume Category</span>
+                </div>
+              </div>
+              <span class="list-item-value">1.25M BRL</span>
+            </div>
+            <div class="list-item-row">
+              <div class="list-item-left">
+                <div class="list-item-avatar">02</div>
+                <div class="list-item-info">
+                  <span class="list-item-name">Watches & Gifts</span>
+                  <span class="list-item-desc">High Ticket Category</span>
+                </div>
+              </div>
+              <span class="list-item-value">1.20M BRL</span>
+            </div>
+            <div class="list-item-row">
+              <div class="list-item-left">
+                <div class="list-item-avatar">03</div>
+                <div class="list-item-info">
+                  <span class="list-item-name">Bed Bath Table</span>
+                  <span class="list-item-desc">Core Household Category</span>
+                </div>
+              </div>
+              <span class="list-item-value">1.03M BRL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Avg Delivery time by review score (Vertical bar chart matching age graph) -->
+        <div class="bento-card-inner">
+          <div class="bento-card-title-group">
+            <span class="bento-card-title">Delivery SLA vs Review Score</span>
+            <span class="chip">SLA Impact</span>
+          </div>
+          <div class="chart-container" style="height: 180px;">
+            <canvas id="chart-reviews-delivery-mini"></canvas>
+          </div>
+        </div>
+
+        <!-- 3. Payment methods (donut widget) -->
+        <div class="bento-card-inner">
+          <div class="bento-card-title-group">
+            <span class="bento-card-title">Payment Channels</span>
+            <span class="chip">Percentage</span>
+          </div>
+          <div class="chart-container" style="height: 180px;">
+            <canvas id="chart-payment-methods-mini"></canvas>
+          </div>
+        </div>
+      </div>
       
-      <!-- Seasonality Chart -->
+      <!-- Big Monthly Revenue Trend Chart (styled fully modern) -->
       <div class="chart-card">
         <div class="chart-card-header">
           <div class="chart-title-group">
-            <h2 class="chart-title">Monthly E-Commerce Revenue Growth</h2>
-            <p class="chart-subtitle">Steady climb punctuated by the Black Friday peak in November 2017</p>
+            <h2 class="chart-title">E-Commerce Revenue Trend line</h2>
+            <p class="chart-subtitle">Steady climb from late 2016 with Black Friday peak in November 2017</p>
           </div>
           <span class="chip font-mono">LINE_GRAPH</span>
         </div>
-        <div class="chart-container chart-container-large">
+        <div class="chart-container chart-container-medium">
           <canvas id="chart-monthly-trend"></canvas>
         </div>
       </div>
     </section>
 
-    <!-- ==================== TAB 2: REVENUE & DEMAND ==================== -->
+    <!-- ==================== TAB 2: DEMAND & REVENUE ==================== -->
     <section id="tab-revenue" class="tab-content">
-      <div class="page-header">
-        <div class="page-header-info">
-          <div class="page-title-badge">MODULE ID: BR-DEMAND-02</div>
-          <h1 class="headline-display">Demand Hotspots & Category Drivers</h1>
-        </div>
-        <div class="caption font-mono">FILTER: ALL PRODUCTS</div>
-      </div>
-      
       <div class="visuals-grid-2">
         <!-- Top Categories Chart -->
         <div class="chart-card">
@@ -172,7 +281,7 @@
           </div>
         </div>
         
-        <!-- Payment Methods -->
+        <!-- Payment Methods Detailed -->
         <div class="chart-card">
           <div class="chart-card-header">
             <div class="chart-title-group">
@@ -182,7 +291,7 @@
             <span class="chip font-mono">PAY_METHODS</span>
           </div>
           <div class="chart-container chart-container-donut">
-            <canvas id="chart-payment-methods"></canvas>
+            <canvas id="chart-payment-methods-full"></canvas>
           </div>
         </div>
       </div>
@@ -204,7 +313,7 @@
                 <th>City</th>
                 <th style="text-align: right;">Orders</th>
                 <th style="text-align: right;">Total Revenue (BRL)</th>
-                <th style="text-align: right;">Market Share (%)</th>
+                <th style="text-align: right;" class="font-mono">Market Share</th>
               </tr>
             </thead>
             <tbody>
@@ -217,14 +326,6 @@
 
     <!-- ==================== TAB 3: LOGISTICS & SLA ==================== -->
     <section id="tab-logistics" class="tab-content">
-      <div class="page-header">
-        <div class="page-header-info">
-          <div class="page-title-badge">MODULE ID: BR-SLA-03</div>
-          <h1 class="headline-display">Shipping SLAs & Customer Satisfaction</h1>
-        </div>
-        <div class="caption font-mono">STATUS: SLA BREAKDOWN</div>
-      </div>
-      
       <div class="visuals-grid-2">
         <!-- Review Score vs Delivery Time -->
         <div class="chart-card">
@@ -292,126 +393,162 @@
 
     <!-- ==================== TAB 4: IMPACT SIMULATOR ==================== -->
     <section id="tab-simulator" class="tab-content">
-      <div class="page-header">
-        <div class="page-header-info">
-          <div class="page-title-badge">MODULE ID: BR-MODEL-04</div>
-          <h1 class="headline-display">Business Impact Simulator</h1>
-        </div>
-        <div class="caption font-mono">SIMULATION MODE: RUNNING</div>
-      </div>
-      
       <div class="simulator-layout">
         <!-- Sliders Controls -->
         <div class="simulator-controls chart-card">
-          <div class="chart-title-group" style="margin-bottom: var(--spacing-md);">
-            <h2 class="chart-title">Target Variables</h2>
+          <div class="chart-title-group" style="margin-bottom: 24px;">
+            <h2 class="chart-title">Simulation Parameters</h2>
             <p class="chart-subtitle">Adjust the operational parameters to simulate strategic changes and calculate potential revenue uplifts.</p>
           </div>
           
           <!-- Control 1: Repeat Purchase Rate -->
-          <div class="control-group">
-            <div class="control-label-row">
-              <span class="control-title">Repeat Purchase Rate (%)</span>
-              <span class="control-value-badge" id="sim-val-repeat">3.12%</span>
-            </div>
-            <input type="range" class="stark-slider" id="slider-repeat" min="3.12" max="15.00" step="0.05" value="3.12">
-            <div style="display: flex; justify-content: space-between;" class="caption font-mono">
+          <div class="slider-group-modern">
+            <label>
+              <span>Repeat Purchase Rate (%)</span>
+              <span id="sim-val-repeat">3.12%</span>
+            </label>
+            <input type="range" class="slider-modern" id="slider-repeat" min="3.12" max="15.00" step="0.05" value="3.12">
+            <div style="display: flex; justify-content: space-between; margin-top: 4px;" class="caption font-mono">
               <span>Baseline: 3.12%</span>
-              <span>Target: 15.00%</span>
+              <span>Target: 15.0%</span>
             </div>
           </div>
           
           <!-- Control 2: Northern State SLA -->
-          <div class="control-group">
-            <div class="control-label-row">
-              <span class="control-title">Northern SLA Reduction (Days)</span>
-              <span class="control-value-badge" id="sim-val-sla">25.6 Days</span>
-            </div>
-            <input type="range" class="stark-slider" id="slider-sla" min="10.0" max="25.6" step="0.1" value="25.6">
-            <div style="display: flex; justify-content: space-between;" class="caption font-mono">
+          <div class="slider-group-modern">
+            <label>
+              <span>Northern SLA Reduction (Days)</span>
+              <span id="sim-val-sla">25.6 Days</span>
+            </label>
+            <input type="range" class="slider-modern" id="slider-sla" min="10.0" max="25.6" step="0.1" value="25.6">
+            <div style="display: flex; justify-content: space-between; margin-top: 4px;" class="caption font-mono">
               <span>Fulfillment Hubs (10d)</span>
               <span>Baseline (25.6d)</span>
             </div>
           </div>
 
           <!-- Control 3: Budget Shift to High AOV Categories -->
-          <div class="control-group">
-            <div class="control-label-row">
-              <span class="control-title">Marketing Shift to High AOV (%)</span>
-              <span class="control-value-badge" id="sim-val-budget">0%</span>
-            </div>
-            <input type="range" class="stark-slider" id="slider-budget" min="0" max="100" step="5" value="0">
-            <div style="display: flex; justify-content: space-between;" class="caption font-mono">
+          <div class="slider-group-modern">
+            <label>
+              <span>Marketing Shift to High AOV (%)</span>
+              <span id="sim-val-budget">0%</span>
+            </label>
+            <input type="range" class="slider-modern" id="slider-budget" min="0" max="100" step="5" value="0">
+            <div style="display: flex; justify-content: space-between; margin-top: 4px;" class="caption font-mono">
               <span>Balanced (0%)</span>
               <span>Max High-Value Focus (100%)</span>
             </div>
           </div>
           
-          <button type="button" class="btn-secondary" id="btn-reset-simulator" style="margin-top: 12px; width: 100%;">
+          <button type="button" class="btn-modern-secondary" id="btn-reset-simulator" style="margin-top: 12px; width: 100%;">
             Reset Simulator
           </button>
         </div>
         
-        <!-- Output Manifest -->
-        <div class="manifest-card">
-          <div class="manifest-header">
-            <div>
-              <div class="manifest-title">Flyhyer operational manifest</div>
-              <div class="manifest-code" id="manifest-timestamp">DATE: 16-JUL-2026 // TIME: 13:35</div>
-            </div>
-            <div class="manifest-stamp" id="manifest-status">BASELINE</div>
+        <!-- Output Pass -->
+        <div class="manifest-pass">
+          <div class="manifest-pass-header">
+            <div class="manifest-pass-title">Olist simulated cargo pass</div>
+            <div class="manifest-pass-status" id="manifest-status">Baseline</div>
           </div>
           
           <div class="manifest-body">
             <!-- Row 1 -->
-            <div class="manifest-row">
-              <span class="label">Primary Base Revenue:</span>
+            <div class="manifest-pass-row">
+              <span class="label">Base Revenue:</span>
               <span class="value" id="manifest-base-revenue">16,008,872.12 BRL</span>
             </div>
             
             <!-- Row 2 -->
-            <div class="manifest-row">
+            <div class="manifest-pass-row">
               <span class="label">Loyalty Retention Gains:</span>
-              <span class="value positive" id="manifest-retention-gains">+0.00 BRL</span>
+              <span class="value" style="color: var(--color-success);" id="manifest-retention-gains">+0.00 BRL</span>
             </div>
             
             <!-- Row 3 -->
-            <div class="manifest-row">
+            <div class="manifest-pass-row">
               <span class="label">Logistics Review SLA Uplift:</span>
-              <span class="value positive" id="manifest-sla-gains">+0.00 BRL</span>
+              <span class="value" style="color: var(--color-success);" id="manifest-sla-gains">+0.00 BRL</span>
             </div>
             
             <!-- Row 4 -->
-            <div class="manifest-row">
+            <div class="manifest-pass-row">
               <span class="label">AOV Optimization Delta:</span>
-              <span class="value positive" id="manifest-aov-gains">+0.00 BRL</span>
+              <span class="value" id="manifest-aov-gains">+0.00 BRL</span>
             </div>
             
             <!-- Row 5 -->
-            <div class="manifest-row">
-              <span class="label">Generated Repeat Customers:</span>
+            <div class="manifest-pass-row">
+              <span class="label">New Repeat Customers:</span>
               <span class="value" id="manifest-new-customers">+0</span>
             </div>
             
             <!-- Row 6 -->
-            <div class="manifest-row">
+            <div class="manifest-pass-row">
               <span class="label">Projected Customer CSAT:</span>
               <span class="value" id="manifest-rating-score">4.09 / 5.00</span>
             </div>
             
             <!-- Final Total -->
-            <div class="manifest-row total">
+            <div class="manifest-pass-row total">
               <span class="label">PROJECTED REVENUE:</span>
               <span class="value" id="manifest-total-revenue">16,008,872.12 BRL</span>
             </div>
           </div>
           
-          <div class="manifest-footer">
-            <div class="caption font-mono" style="max-width: 60%;">
-              FLYHYER SYSTEM SIMULATED METRICS EST. +/- 5% MARGIN OF ERROR.
-            </div>
-            <button type="button" class="btn-primary" onclick="window.print()">
-              Print manifest
+          <!-- Barcode container -->
+          <div class="manifest-barcode-container">
+            <svg class="barcode-svg" viewBox="0 0 200 40" preserveAspectRatio="none">
+              <rect x="10" width="3" height="40" fill="black"/>
+              <rect x="15" width="1" height="40" fill="black"/>
+              <rect x="18" width="4" height="40" fill="black"/>
+              <rect x="24" width="2" height="40" fill="black"/>
+              <rect x="28" width="1" height="40" fill="black"/>
+              <rect x="31" width="3" height="40" fill="black"/>
+              <rect x="36" width="1" height="40" fill="black"/>
+              <rect x="40" width="4" height="40" fill="black"/>
+              <rect x="46" width="2" height="40" fill="black"/>
+              <rect x="50" width="1" height="40" fill="black"/>
+              <rect x="53" width="3" height="40" fill="black"/>
+              <rect x="58" width="1" height="40" fill="black"/>
+              <rect x="62" width="2" height="40" fill="black"/>
+              <rect x="66" width="4" height="40" fill="black"/>
+              <rect x="72" width="1" height="40" fill="black"/>
+              <rect x="75" width="3" height="40" fill="black"/>
+              <rect x="80" width="2" height="40" fill="black"/>
+              <rect x="84" width="1" height="40" fill="black"/>
+              <rect x="87" width="4" height="40" fill="black"/>
+              <rect x="93" width="2" height="40" fill="black"/>
+              <rect x="97" width="1" height="40" fill="black"/>
+              <rect x="100" width="3" height="40" fill="black"/>
+              <rect x="105" width="2" height="40" fill="black"/>
+              <rect x="109" width="1" height="40" fill="black"/>
+              <rect x="112" width="4" height="40" fill="black"/>
+              <rect x="118" width="2" height="40" fill="black"/>
+              <rect x="122" width="1" height="40" fill="black"/>
+              <rect x="125" width="3" height="40" fill="black"/>
+              <rect x="130" width="2" height="40" fill="black"/>
+              <rect x="134" width="4" height="40" fill="black"/>
+              <rect x="140" width="1" height="40" fill="black"/>
+              <rect x="143" width="3" height="40" fill="black"/>
+              <rect x="148" width="2" height="40" fill="black"/>
+              <rect x="152" width="1" height="40" fill="black"/>
+              <rect x="155" width="4" height="40" fill="black"/>
+              <rect x="161" width="2" height="40" fill="black"/>
+              <rect x="165" width="1" height="40" fill="black"/>
+              <rect x="168" width="3" height="40" fill="black"/>
+              <rect x="173" width="2" height="40" fill="black"/>
+              <rect x="177" width="1" height="40" fill="black"/>
+              <rect x="180" width="4" height="40" fill="black"/>
+              <rect x="186" width="2" height="40" fill="black"/>
+              <rect x="190" width="1" height="40" fill="black"/>
+            </svg>
+            <div class="caption font-mono" style="font-size: 8px; text-align: center; margin-top: 4px;">*FLYHYER-SIM-MAN-2026*</div>
+          </div>
+          
+          <div class="manifest-footer" style="border: none; padding-top: 12px;">
+            <button type="button" class="btn-modern-primary" onclick="window.print()" style="width: 100%;">
+              Print Manifest Receipt
             </button>
           </div>
         </div>

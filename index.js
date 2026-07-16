@@ -3,30 +3,59 @@ document.addEventListener('DOMContentLoaded', () => {
   let dashboardData = null;
   const charts = {};
 
-  // Tab Navigation Handling
+  // Tab Navigation Handling (Syncing Sidebar and Campaign subtabs)
   const navItems = document.querySelectorAll('.nav-item');
+  const subtabBtns = document.querySelectorAll('.subtab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
 
+  function switchTab(tabName) {
+    // 1. Update active sidebar item
+    navItems.forEach(nav => {
+      nav.classList.remove('active');
+      if (nav.getAttribute('data-tab') === tabName) {
+        nav.classList.add('active');
+      }
+    });
+
+    // 2. Update active campaign subtab button
+    subtabBtns.forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.getAttribute('data-tab') === tabName) {
+        btn.classList.add('active');
+      }
+    });
+
+    // 3. Update visible content panel
+    tabContents.forEach(content => {
+      content.classList.remove('active');
+      if (content.id === `tab-${tabName}`) {
+        content.classList.add('active');
+      }
+    });
+
+    // Trigger Chart updates in case of layout shifts
+    const activeCharts = charts[tabName];
+    if (activeCharts) {
+      activeCharts.forEach(chart => {
+        chart.resize();
+        chart.update();
+      });
+    }
+  }
+
+  // Bind Sidebar click handlers
   navItems.forEach(item => {
     item.querySelector('button').addEventListener('click', () => {
       const tabName = item.getAttribute('data-tab');
-      
-      // Update active nav class
-      navItems.forEach(nav => nav.classList.remove('active'));
-      item.classList.add('active');
-      
-      // Update visible content panel
-      tabContents.forEach(content => {
-        content.classList.remove('active');
-        if (content.id === `tab-${tabName}`) {
-          content.classList.add('active');
-        }
-      });
+      switchTab(tabName);
+    });
+  });
 
-      // Trigger Chart renders / updates in case of sizing glitches
-      if (charts[tabName]) {
-        charts[tabName].forEach(chart => chart.resize());
-      }
+  // Bind Campaign subtab click handlers
+  subtabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabName = btn.getAttribute('data-tab');
+      switchTab(tabName);
     });
   });
 
@@ -47,10 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // 2. Render Charts
       initCharts(data);
       
-      // 3. Populate Top Cities Table
+      // 3. Populate Category Drivers List
+      populateCategoryList(data.top_categories);
+
+      // 4. Populate Top Cities Table
       populateCitiesTable(data.top_cities, data.kpis.total_revenue);
       
-      // 4. Initialize Business Impact Simulator
+      // 5. Initialize Business Impact Simulator
       initSimulator(data.kpis);
     })
     .catch(error => {
@@ -78,12 +110,35 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('kpi-orders').textContent = formatNumber(kpis.total_orders);
     document.getElementById('kpi-aov').textContent = formatCurrency(kpis.aov);
     document.getElementById('kpi-repeat').textContent = `${kpis.repeat_purchase_rate.toFixed(2)}%`;
-    document.getElementById('kpi-delivery').textContent = `${kpis.average_delivery_time.toFixed(1)} Days`;
-    document.getElementById('kpi-rating').textContent = `${kpis.average_review_score.toFixed(2)} / 5.0`;
 
     // Baseline details in the manifest card (Simulator Tab)
     document.getElementById('manifest-base-revenue').textContent = formatCurrency(kpis.total_revenue);
     document.getElementById('manifest-total-revenue').textContent = formatCurrency(kpis.total_revenue);
+  }
+
+  // Populate Product Category Drivers (Influencer style list card)
+  function populateCategoryList(categories) {
+    const container = document.getElementById('overview-category-list');
+    container.innerHTML = '';
+    
+    // Display top 5 categories
+    categories.slice(0, 5).forEach((cat, index) => {
+      const row = document.createElement('div');
+      row.className = 'list-item-row';
+      row.innerHTML = `
+        <div class="list-item-left">
+          <div class="list-item-avatar">${String(index + 1).padStart(2, '0')}</div>
+          <div class="list-item-info">
+            <span class="list-item-name">${cat.category}</span>
+            <span class="list-item-desc">${
+              index === 0 ? 'Volume Champion' : index === 1 ? 'High Ticket Margin' : 'Core Segment'
+            }</span>
+          </div>
+        </div>
+        <span class="list-item-value">${formatCurrency(cat.revenue)}</span>
+      `;
+      container.appendChild(row);
+    });
   }
 
   // Populate Top Cities Table
@@ -105,34 +160,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Initialize Chart.js monochrome charts
+  // Initialize Chart.js modern charts
   function initCharts(data) {
     // Set custom Chart.js Defaults
-    Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
-    Chart.defaults.color = "#000000";
-    Chart.defaults.plugins.legend.labels.boxWidth = 12;
+    Chart.defaults.font.family = "'Inter', -apple-system, sans-serif";
+    Chart.defaults.color = "#64748b";
+    Chart.defaults.plugins.legend.labels.boxWidth = 10;
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
     
     // Grid styling helper
     const gridConfig = {
-      color: '#e5e7eb',
-      tickBorderDash: [4, 4],
-      borderColor: '#000000',
-      drawTicks: true
+      color: '#f1f5f9',
+      tickBorderDash: [0, 0],
+      borderColor: '#f1f5f9',
+      drawTicks: false
     };
 
-    // ----- A. Monthly Trend Line Chart (Overview Tab) -----
+    // ----- A. Monthly Trend Line Chart (Overview Tab & Bottom) -----
     const months = data.monthly_trend.map(d => d.month);
     const revenues = data.monthly_trend.map(d => d.revenue);
     
-    // Find index of Black Friday Peak (November 2017) to style it uniquely
     const bfIndex = months.indexOf('2017-11');
-    const pointBorderColors = months.map((m, i) => i === bfIndex ? '#d92d20' : '#000000');
-    const pointBackgroundColors = months.map((m, i) => i === bfIndex ? '#d92d20' : '#ffffff');
-    const pointRadii = months.map((m, i) => i === bfIndex ? 8 : 4);
-    const pointHoverRadii = months.map((m, i) => i === bfIndex ? 10 : 6);
+    const pointBorderColors = months.map((m, i) => i === bfIndex ? '#ef4444' : '#2563eb');
+    const pointBackgroundColors = months.map((m, i) => i === bfIndex ? '#ef4444' : '#ffffff');
+    const pointRadii = months.map((m, i) => i === bfIndex ? 8 : 3);
+    const pointHoverRadii = months.map((m, i) => i === bfIndex ? 10 : 5);
 
     const ctxTrend = document.getElementById('chart-monthly-trend').getContext('2d');
+    
+    // Create a beautiful premium blue gradient background
+    const gradient = ctxTrend.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(37, 99, 235, 0.25)');
+    gradient.addColorStop(1, 'rgba(37, 99, 235, 0.00)');
+
     const chartTrend = new Chart(ctxTrend, {
       type: 'line',
       data: {
@@ -140,15 +200,16 @@ document.addEventListener('DOMContentLoaded', () => {
         datasets: [{
           label: 'Monthly Revenue (BRL)',
           data: revenues,
-          borderColor: '#000000',
-          borderWidth: 2,
+          borderColor: '#2563eb',
+          borderWidth: 3,
+          backgroundColor: gradient,
+          fill: true,
           pointBorderColor: pointBorderColors,
           pointBackgroundColor: pointBackgroundColors,
           pointBorderWidth: 2,
           pointRadius: pointRadii,
           pointHoverRadius: pointHoverRadii,
-          fill: false,
-          tension: 0.1
+          tension: 0.2
         }]
       },
       options: {
@@ -157,10 +218,11 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#000000',
+            backgroundColor: '#1e293b',
             titleColor: '#ffffff',
             bodyColor: '#ffffff',
-            cornerRadius: 4,
+            padding: 12,
+            cornerRadius: 8,
             callbacks: {
               label: function(context) {
                 let label = context.dataset.label || '';
@@ -171,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   label += formatCurrency(context.parsed.y);
                 }
                 if (context.dataIndex === bfIndex) {
-                  label += ' [BLACK FRIDAY PEAK]';
+                  label += ' [BLACK FRIDAY SURGE]';
                 }
                 return label;
               }
@@ -184,7 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ticks: {
               font: { family: "'JetBrains Mono', monospace", size: 10 },
               callback: function(val, index) {
-                // Return only every 2nd month label to avoid overlap
                 return index % 2 === 0 ? this.getLabelForValue(val) : '';
               }
             }
@@ -202,10 +263,92 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     
-    // Add to chart garbage collector for tabs switching
     charts['overview'] = [chartTrend];
 
-    // ----- B. Top Categories Horizontal Bar Chart (Demand Tab) -----
+    // ----- B. Mini Delivery SLA Bar Chart (Overview Bottom Card) -----
+    const scores = data.satisfaction_delivery.map(d => d.score);
+    const delDaysByScore = data.satisfaction_delivery.map(d => d.average_days);
+    
+    // Gradient representation: Excellent (green), Average (blue), Poor (red)
+    const miniBarColors = scores.map(s => {
+      if (s >= 4) return '#10b981'; // Emerald Green
+      if (s === 3) return '#3b82f6'; // Blue
+      return '#ef4444';             // Rose Red
+    });
+
+    const ctxRevMini = document.getElementById('chart-reviews-delivery-mini').getContext('2d');
+    const chartRevMini = new Chart(ctxRevMini, {
+      type: 'bar',
+      data: {
+        labels: scores.map(s => `${s}★`),
+        datasets: [{
+          data: delDaysByScore,
+          backgroundColor: miniBarColors,
+          borderWidth: 0,
+          borderRadius: 4,
+          barThickness: 16
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1e293b',
+            callbacks: {
+              label: (ctx) => `Delivery: ${ctx.parsed.y.toFixed(1)} Days`
+            }
+          }
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: {
+            grid: gridConfig,
+            ticks: {
+              font: { size: 9 },
+              callback: (value) => `${value}d`
+            }
+          }
+        }
+      }
+    });
+
+    // ----- C. Mini Payment Methods Donut (Overview Bottom Card) -----
+    const methods = data.payment_methods.map(d => d.method);
+    const methodPercentages = data.payment_methods.map(d => d.percentage);
+
+    const ctxPayMini = document.getElementById('chart-payment-methods-mini').getContext('2d');
+    const chartPayMini = new Chart(ctxPayMini, {
+      type: 'doughnut',
+      data: {
+        labels: methods,
+        datasets: [{
+          data: methodPercentages,
+          backgroundColor: ['#2563eb', '#10b981', '#7c3aed', '#f59e0b'],
+          borderColor: '#ffffff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '70%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1e293b',
+            callbacks: {
+              label: (ctx) => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`
+            }
+          }
+        }
+      }
+    });
+
+    charts['overview'].push(chartRevMini, chartPayMini);
+
+    // ----- D. Top Categories Full Bar Chart (Demand Tab) -----
     const cats = data.top_categories.map(d => d.category);
     const catRevenues = data.top_categories.map(d => d.revenue);
 
@@ -217,10 +360,10 @@ document.addEventListener('DOMContentLoaded', () => {
         datasets: [{
           label: 'Total Revenue (BRL)',
           data: catRevenues,
-          backgroundColor: '#000000',
-          hoverBackgroundColor: '#333333',
+          backgroundColor: '#2563eb',
+          hoverBackgroundColor: '#1d4ed8',
           borderWidth: 0,
-          borderRadius: 4
+          borderRadius: 6
         }]
       },
       options: {
@@ -229,12 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
         maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
-          tooltip: {
-            backgroundColor: '#000000',
-            callbacks: {
-              label: (ctx) => `Revenue: ${formatCurrency(ctx.parsed.x)}`
-            }
-          }
+          tooltip: { backgroundColor: '#1e293b' }
         },
         scales: {
           x: {
@@ -246,26 +384,21 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           y: {
             grid: { display: false },
-            ticks: {
-              font: { size: 11 }
-            }
+            ticks: { font: { size: 10 } }
           }
         }
       }
     });
 
-    // ----- C. Payment Methods Donut Chart (Demand Tab) -----
-    const methods = data.payment_methods.map(d => d.method);
-    const methodPercentages = data.payment_methods.map(d => d.percentage);
-
-    const ctxPay = document.getElementById('chart-payment-methods').getContext('2d');
-    const chartPay = new Chart(ctxPay, {
+    // ----- E. Payment Methods Full Donut Chart (Demand Tab) -----
+    const ctxPayFull = document.getElementById('chart-payment-methods-full').getContext('2d');
+    const chartPayFull = new Chart(ctxPayFull, {
       type: 'doughnut',
       data: {
         labels: methods,
         datasets: [{
           data: methodPercentages,
-          backgroundColor: ['#000000', '#4b5563', '#9ca3af', '#e5e7eb'],
+          backgroundColor: ['#2563eb', '#10b981', '#7c3aed', '#f59e0b'],
           borderColor: '#ffffff',
           borderWidth: 2
         }]
@@ -277,30 +410,16 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: {
             position: 'right',
-            labels: {
-              font: { size: 12 },
-              padding: 15
-            }
+            labels: { font: { size: 12 }, padding: 15 }
           },
-          tooltip: {
-            backgroundColor: '#000000',
-            callbacks: {
-              label: (ctx) => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`
-            }
-          }
+          tooltip: { backgroundColor: '#1e293b' }
         }
       }
     });
 
-    charts['revenue'] = [chartCats, chartPay];
+    charts['revenue'] = [chartCats, chartPayFull];
 
-    // ----- D. Satisfaction vs Delivery Days Bar Chart (Logistics Tab) -----
-    const scores = data.satisfaction_delivery.map(d => d.score);
-    const delDaysByScore = data.satisfaction_delivery.map(d => d.average_days);
-    
-    // Color 1-star (worst) red to draw selective visual attention
-    const scoreBarColors = scores.map(s => s === 1 ? '#d92d20' : '#000000');
-
+    // ----- F. Reviews Delivery Full Bar Chart (Logistics Tab) -----
     const ctxRevDel = document.getElementById('chart-reviews-delivery').getContext('2d');
     const chartRevDel = new Chart(ctxRevDel, {
       type: 'bar',
@@ -308,9 +427,10 @@ document.addEventListener('DOMContentLoaded', () => {
         labels: scores.map(s => `${s} Star${s > 1 ? 's' : ''}`),
         datasets: [{
           data: delDaysByScore,
-          backgroundColor: scoreBarColors,
+          backgroundColor: miniBarColors,
           borderWidth: 0,
-          borderRadius: 4
+          borderRadius: 6,
+          barThickness: 32
         }]
       },
       options: {
@@ -318,12 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
         maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
-          tooltip: {
-            backgroundColor: '#000000',
-            callbacks: {
-              label: (ctx) => `Avg Delivery Time: ${ctx.parsed.y.toFixed(1)} Days`
-            }
-          }
+          tooltip: { backgroundColor: '#1e293b' }
         },
         scales: {
           x: { grid: { display: false } },
@@ -338,8 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // ----- E. State Delivery Horizontal SLA Chart (Logistics Tab) -----
-    // To keep it clean, show 5 fastest and 5 slowest states (matching notebook analysis)
+    // ----- G. State Delivery SLA Full Chart (Logistics Tab) -----
     const sortedStates = [...data.state_delivery];
     const fastest5 = sortedStates.slice(0, 5);
     const slowest5 = sortedStates.slice(-5).reverse();
@@ -349,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stateDays = combinedStates.map(d => d.average_days);
     const stateBarColors = combinedStates.map((d, i) => {
       if (d.state === '---') return 'transparent';
-      return i > 5 ? '#d92d20' : '#000000'; // highlight slow ones in red
+      return i > 5 ? '#ef4444' : '#10b981';
     });
 
     const ctxStateDel = document.getElementById('chart-state-delivery').getContext('2d');
@@ -369,15 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
         maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
-          tooltip: {
-            backgroundColor: '#000000',
-            callbacks: {
-              label: (ctx) => {
-                if (ctx.label === '---') return '';
-                return `Average SLA: ${ctx.parsed.x.toFixed(1)} Days`;
-              }
-            }
-          }
+          tooltip: { backgroundColor: '#1e293b' }
         },
         scales: {
           x: {
@@ -387,9 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
               callback: (value) => `${value}d`
             }
           },
-          y: {
-            grid: { display: false }
-          }
+          y: { grid: { display: false } }
         }
       }
     });
@@ -422,7 +526,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const now = new Date();
     outTimestamp.textContent = `DATE: ${now.getDate()}-${now.toLocaleString('en-US', { month: 'short' }).toUpperCase()}-${now.getFullYear()} // TIME: ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-    // Mathematical modeling equations based on the notebook clean metrics
     function updateSimulation() {
       const targetRepeat = parseFloat(sliderRepeat.value);
       const targetSla = parseFloat(sliderSla.value);
@@ -433,29 +536,24 @@ document.addEventListener('DOMContentLoaded', () => {
       valSla.textContent = `${targetSla.toFixed(1)} Days`;
       valBudget.textContent = `${targetBudgetShift}%`;
 
-      // 1. Customer Loyalty Calculations (Base repeat rate: 3.12%, customer count: 96,096)
+      // 1. Customer Loyalty Calculations
       const repeatDelta = targetRepeat - 3.12;
       const additionalOrders = Math.round(kpis.total_customers * (repeatDelta / 100.0));
       const retentionRevenueUplift = additionalOrders * kpis.aov;
 
-      // 2. Logistics SLA Review Rating Savings (Baseline SLA: 25.6 days in slow regions)
-      // Slow states account for roughly 3% of total volume (approx 3,000 orders). 
-      // Improving SLA saves cost of refunds, churn, and ad inefficiencies, calculated as 35,000 BRL per day saved.
+      // 2. Logistics SLA Review Rating Savings
       const slaReduction = 25.6 - targetSla;
       const slaRevenueUplift = slaReduction * 35000;
       
-      // SLA-Rating projection formula: reducing delivery delay increases rating
       const ratingImprovement = slaReduction * 0.015;
       const projectedRating = Math.min(5.00, kpis.average_review_score + ratingImprovement);
 
-      // 3. High AOV Budget Allocation Shift (Watches & Gifts focus)
-      // Shift increases Average Order Value but can cause minor volume contraction.
-      // Every 10% budget shift increases AOV by 2.5 BRL and contracts volume by 0.2%.
+      // 3. High AOV Budget Allocation Shift
       const newAov = kpis.aov + (targetBudgetShift / 100.0 * 25.0);
       const orderContractionMultiplier = 1.0 - (targetBudgetShift / 100.0 * 0.02);
       const aovRevenueUplift = (newAov * kpis.total_orders * orderContractionMultiplier) - kpis.total_revenue;
 
-      // Calculate Total simulated revenue
+      // Total simulated revenue
       const totalSimRevenue = kpis.total_revenue + retentionRevenueUplift + slaRevenueUplift + aovRevenueUplift;
 
       // Update Manifest output values
@@ -471,11 +569,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Status indicator highlight
       if (targetRepeat > 3.12 || targetSla < 25.6 || targetBudgetShift > 0) {
-        outStatus.textContent = "SIMULATED";
-        outStatus.className = "manifest-stamp alert";
+        outStatus.textContent = "Simulated";
+        outStatus.className = "manifest-pass-status";
       } else {
-        outStatus.textContent = "BASELINE";
-        outStatus.className = "manifest-stamp";
+        outStatus.textContent = "Baseline";
+        outStatus.className = "manifest-pass-status";
       }
     }
 
