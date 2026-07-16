@@ -205,9 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Set custom Chart.js Defaults with Space Grotesk display styling
-    Chart.defaults.font.family = "'Space Grotesk', 'Inter', -apple-system, sans-serif";
-    Chart.defaults.color = "#000000";
+    // Set custom Chart.js Defaults with SF Pro display styling
+    Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif";
+    Chart.defaults.color = "#1d1d1f";
     Chart.defaults.plugins.legend.labels.boxWidth = 12;
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
     
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gridConfig = {
       color: '#e5e7eb',
       tickBorderDash: [3, 3],
-      borderColor: '#000000',
+      borderColor: '#e5e7eb',
       drawTicks: true
     };
 
@@ -225,8 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Find index of Black Friday Peak (November 2017) to style it uniquely
     const bfIndex = months.indexOf('2017-11');
-    const pointBorderColors = months.map((m, i) => i === bfIndex ? '#d92d20' : '#000000');
-    const pointBackgroundColors = months.map((m, i) => i === bfIndex ? '#d92d20' : '#ffffff');
+    const pointBorderColors = months.map((m, i) => i === bfIndex ? '#d70015' : '#0071e3');
+    const pointBackgroundColors = months.map((m, i) => i === bfIndex ? '#d70015' : '#ffffff');
     const pointRadii = months.map((m, i) => i === bfIndex ? 8 : 4);
     const pointHoverRadii = months.map((m, i) => i === bfIndex ? 10 : 6);
 
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         datasets: [{
           label: 'Monthly Revenue (BRL)',
           data: revenues,
-          borderColor: '#000000',
+          borderColor: '#0071e3',
           borderWidth: 2,
           pointBorderColor: pointBorderColors,
           pointBackgroundColor: pointBackgroundColors,
@@ -255,10 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#000000',
+            backgroundColor: '#1d1d1f',
             titleColor: '#ffffff',
             bodyColor: '#ffffff',
-            cornerRadius: 0,
+            cornerRadius: 4,
             callbacks: {
               label: function(context) {
                 let label = context.dataset.label || '';
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
           x: {
             grid: { display: false },
             ticks: {
-              font: { family: "'JetBrains Mono', monospace", size: 10 },
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
               callback: function(val, index) {
                 return index % 2 === 0 ? this.getLabelForValue(val) : '';
               }
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
           y: {
             grid: gridConfig,
             ticks: {
-              font: { family: "'JetBrains Mono', monospace", size: 10 },
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
               callback: function(value) {
                 return (value / 1000).toFixed(0) + 'k BRL';
               }
@@ -313,10 +313,10 @@ document.addEventListener('DOMContentLoaded', () => {
         datasets: [{
           label: 'Total Revenue (BRL)',
           data: catRevenues,
-          backgroundColor: '#000000',
-          hoverBackgroundColor: '#333333',
+          backgroundColor: '#0071e3',
+          hoverBackgroundColor: '#0066cc',
           borderWidth: 0,
-          borderRadius: 0
+          borderRadius: 4
         }]
       },
       options: {
@@ -326,8 +326,8 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#000000',
-            cornerRadius: 0,
+            backgroundColor: '#1d1d1f',
+            cornerRadius: 4,
             callbacks: {
               label: (ctx) => `Revenue: ${formatCurrency(ctx.parsed.x)}`
             }
@@ -337,14 +337,14 @@ document.addEventListener('DOMContentLoaded', () => {
           x: {
             grid: gridConfig,
             ticks: {
-              font: { family: "'JetBrains Mono', monospace", size: 10 },
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
               callback: (value) => (value / 1000000).toFixed(1) + 'M BRL'
             }
           },
           y: {
             grid: { display: false },
             ticks: {
-              font: { size: 11 }
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 11 }
             }
           }
         }
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         labels: methods,
         datasets: [{
           data: methodPercentages,
-          backgroundColor: ['#000000', '#4b5563', '#9ca3af', '#e5e7eb'],
+          backgroundColor: ['#0071e3', '#32ade6', '#5fc9f8', '#e5e7eb'],
           borderColor: '#ffffff',
           borderWidth: 2
         }]
@@ -375,13 +375,13 @@ document.addEventListener('DOMContentLoaded', () => {
           legend: {
             position: 'right',
             labels: {
-              font: { size: 12 },
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 12 },
               padding: 15
             }
           },
           tooltip: {
-            backgroundColor: '#000000',
-            cornerRadius: 0,
+            backgroundColor: '#1d1d1f',
+            cornerRadius: 4,
             callbacks: {
               label: (ctx) => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`
             }
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----- D. Satisfaction vs Delivery Days Bar Chart (Logistics Tab) -----
     const scores = data.satisfaction_delivery.map(d => d.score);
     const delDaysByScore = data.satisfaction_delivery.map(d => d.average_days);
-    const scoreBarColors = scores.map(s => s === 1 ? '#d92d20' : '#000000');
+    const scoreBarColors = scores.map(s => s === 1 ? '#d70015' : '#0071e3');
 
     const ctxRevDel = document.getElementById('chart-reviews-delivery').getContext('2d');
     const chartRevDel = new Chart(ctxRevDel, {
@@ -406,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
           data: delDaysByScore,
           backgroundColor: scoreBarColors,
           borderWidth: 0,
-          borderRadius: 0
+          borderRadius: 4
         }]
       },
       options: {
@@ -415,19 +415,24 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#000000',
-            cornerRadius: 0,
+            backgroundColor: '#1d1d1f',
+            cornerRadius: 4,
             callbacks: {
               label: (ctx) => `Avg Delivery Time: ${ctx.parsed.y.toFixed(1)} Days`
             }
           }
         },
         scales: {
-          x: { grid: { display: false } },
+          x: { 
+            grid: { display: false },
+            ticks: {
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 }
+            }
+          },
           y: {
             grid: gridConfig,
             ticks: {
-              font: { family: "'JetBrains Mono', monospace", size: 10 },
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
               callback: (value) => `${value} Days`
             }
           }
@@ -445,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stateDays = combinedStates.map(d => d.average_days);
     const stateBarColors = combinedStates.map((d, i) => {
       if (d.state === '---') return 'transparent';
-      return i > 5 ? '#d92d20' : '#000000';
+      return i > 5 ? '#d70015' : '#0071e3';
     });
 
     const ctxStateDel = document.getElementById('chart-state-delivery').getContext('2d');
@@ -456,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         datasets: [{
           data: stateDays,
           backgroundColor: stateBarColors,
-          borderRadius: 0
+          borderRadius: 4
         }]
       },
       options: {
@@ -466,8 +471,8 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#000000',
-            cornerRadius: 0,
+            backgroundColor: '#1d1d1f',
+            cornerRadius: 4,
             callbacks: {
               label: (ctx) => {
                 if (ctx.label === '---') return '';
@@ -480,12 +485,15 @@ document.addEventListener('DOMContentLoaded', () => {
           x: {
             grid: gridConfig,
             ticks: {
-              font: { family: "'JetBrains Mono', monospace", size: 10 },
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
               callback: (value) => `${value}d`
             }
           },
           y: {
-            grid: { display: false }
+            grid: { display: false },
+            ticks: {
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 }
+            }
           }
         }
       }
