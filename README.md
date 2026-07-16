@@ -7,6 +7,13 @@
 <a name="english"></a>
 ## 🇬🇧 English Version
 
+### 🌐 Live Interactive Dashboard
+Experience the stark, premium Swiss Bento Grid operational dashboard built for this project. It includes live interactive charts, geo-SLA breakdowns, and a Business Impact Simulator deck.
+- 🔗 **GitHub Pages Link**: [https://izamrosiawan.github.io/olist-brazilian-ecommerce-analytics/](https://izamrosiawan.github.io/olist-brazilian-ecommerce-analytics/)
+- 💻 **Local Offline Access**: Simply double-click [index.html](index.html) to run it locally (zero CORS, works offline).
+
+---
+
 ### 🎯 Business Problem Statement
 In a highly competitive e-commerce landscape, marketplace platforms must optimize their logistics operations, identify high-margin revenue drivers, and increase customer retention. This project analyzes transaction records to resolve logistical bottlenecks and design retention programs that directly increase Customer Lifetime Value (LTV).
 
@@ -94,6 +101,13 @@ There is a clear negative correlation (**-0.31**) between delivery times and cus
 
 <a name="bahasa-indonesia"></a>
 ## 🇮🇩 Versi Bahasa Indonesia
+
+### 🌐 Live Dashboard Interaktif
+Rasakan antarmuka operasional premium bergaya Swiss Bento Grid yang dirancang khusus untuk proyek ini. Dilengkapi dengan grafik interaktif, analisis SLA geografis, dan deck Simulator Dampak Bisnis.
+- 🔗 **Link GitHub Pages**: [https://izamrosiawan.github.io/olist-brazilian-ecommerce-analytics/](https://izamrosiawan.github.io/olist-brazilian-ecommerce-analytics/)
+- 💻 **Akses Offline Lokal**: Cukup klik ganda [index.html](index.html) untuk menjalankannya secara lokal (zero CORS, bekerja offline).
+
+---
 
 ### 🎯 Business Problem Statement
 Dalam industri e-commerce yang kompetitif, platform marketplace harus mengoptimalkan operasional logistik, mengidentifikasi pendorong pendapatan berkinerja tinggi, dan meningkatkan retensi pelanggan. Proyek ini menganalisis data transaksi untuk mengatasi hambatan logistik dan merancang program retensi yang meningkatkan Customer Lifetime Value (LTV).
