@@ -1,6 +1,115 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Global variables to store dashboard data and Chart instances
-  let dashboardData = null;
+  // Embed data directly to prevent CORS fetch errors when opening HTML via file:// protocol
+  const dashboardData = {
+    "kpis": {
+      "total_orders": 99441,
+      "total_revenue": 16008872.12,
+      "aov": 160.98864774087147,
+      "repeat_purchase_rate": 3.1187562437562435,
+      "average_delivery_time": 12.322628908732218,
+      "median_delivery_time": 10.198090277777776,
+      "average_review_score": 4.08642062404257,
+      "total_customers": 96096,
+      "repeat_buyers": 2997
+    },
+    "monthly_trend": [
+      { "month": "2016-09", "revenue": 252.24 },
+      { "month": "2016-10", "revenue": 59090.48 },
+      { "month": "2016-12", "revenue": 19.62 },
+      { "month": "2017-01", "revenue": 138488.04 },
+      { "month": "2017-02", "revenue": 291908.01 },
+      { "month": "2017-03", "revenue": 449863.6 },
+      { "month": "2017-04", "revenue": 417788.03 },
+      { "month": "2017-05", "revenue": 592918.82 },
+      { "month": "2017-06", "revenue": 511276.38 },
+      { "month": "2017-07", "revenue": 592382.92 },
+      { "month": "2017-08", "revenue": 674396.32 },
+      { "month": "2017-09", "revenue": 727762.45 },
+      { "month": "2017-10", "revenue": 779677.88 },
+      { "month": "2017-11", "revenue": 1194882.8 },
+      { "month": "2017-12", "revenue": 878401.48 },
+      { "month": "2018-01", "revenue": 1115004.18 },
+      { "month": "2018-02", "revenue": 992463.34 },
+      { "month": "2018-03", "revenue": 1159652.12 },
+      { "month": "2018-04", "revenue": 1160785.48 },
+      { "month": "2018-05", "revenue": 1153982.15 },
+      { "month": "2018-06", "revenue": 1023880.5 },
+      { "month": "2018-07", "revenue": 1066540.75 },
+      { "month": "2018-08", "revenue": 1022425.32 }
+    ],
+    "top_categories": [
+      { "category": "Health Beauty", "revenue": 1258681.34 },
+      { "category": "Watches Gifts", "revenue": 1205005.68 },
+      { "category": "Bed Bath Table", "revenue": 1036988.68 },
+      { "category": "Sports Leisure", "revenue": 988048.97 },
+      { "category": "Computers Accessories", "revenue": 911954.32 },
+      { "category": "Furniture Decor", "revenue": 729762.49 },
+      { "category": "Cool Stuff", "revenue": 635290.85 },
+      { "category": "Housewares", "revenue": 632248.66 },
+      { "category": "Auto", "revenue": 592720.11 },
+      { "category": "Garden Tools", "revenue": 485256.46 },
+      { "category": "Toys", "revenue": 483946.6 },
+      { "category": "Baby", "revenue": 411764.89 },
+      { "category": "Perfumery", "revenue": 399124.87 },
+      { "category": "Telephony", "revenue": 323667.53 },
+      { "category": "Office Furniture", "revenue": 273960.7 }
+    ],
+    "top_cities": [
+      { "city": "Sao Paulo", "orders": 15540, "revenue": 2203373.09 },
+      { "city": "Rio De Janeiro", "orders": 6882, "revenue": 1161927.36 },
+      { "city": "Belo Horizonte", "orders": 2773, "revenue": 421765.12 },
+      { "city": "Brasilia", "orders": 2131, "revenue": 354216.78 },
+      { "city": "Curitiba", "orders": 1521, "revenue": 247392.48 },
+      { "city": "Campinas", "orders": 1444, "revenue": 216248.43 },
+      { "city": "Porto Alegre", "orders": 1379, "revenue": 224731.42 },
+      { "city": "Salvador", "orders": 1245, "revenue": 218071.5 },
+      { "city": "Guarulhos", "orders": 1189, "revenue": 165121.99 },
+      { "city": "Sao Bernardo Do Campo", "orders": 938, "revenue": 120434.84 }
+    ],
+    "state_delivery": [
+      { "state": "SP", "average_days": 8.654116048802692 },
+      { "state": "PR", "average_days": 11.91387570475448 },
+      { "state": "MG", "average_days": 11.938611429438959 },
+      { "state": "DF", "average_days": 12.918143658877838 },
+      { "state": "RJ", "average_days": 14.820671594714003 },
+      { "state": "SC", "average_days": 14.851220811499157 },
+      { "state": "RS", "average_days": 15.155897997559332 },
+      { "state": "ES", "average_days": 15.343542954617508 },
+      { "state": "GO", "average_days": 15.376393013597315 },
+      { "state": "MS", "average_days": 15.618319018465684 },
+      { "state": "TO", "average_days": 17.65806260982698 },
+      { "state": "MT", "average_days": 17.826486940455194 },
+      { "state": "PE", "average_days": 18.06893156098017 },
+      { "state": "PI", "average_days": 18.512998984816385 },
+      { "state": "RN", "average_days": 18.51655499782832 },
+      { "state": "BA", "average_days": 18.679880716760753 },
+      { "state": "RO", "average_days": 19.37203651310776 },
+      { "state": "AC", "average_days": 19.79110754985755 },
+      { "state": "PB", "average_days": 19.895521760163483 },
+      { "state": "CE", "average_days": 20.17100791125254 },
+      { "state": "SE", "average_days": 20.332147583389112 },
+      { "state": "MA", "average_days": 21.115056927538493 },
+      { "state": "PA", "average_days": 23.020543993873424 },
+      { "state": "RR", "average_days": 23.35747136939571 },
+      { "state": "AL", "average_days": 24.140201459390862 },
+      { "state": "AP", "average_days": 24.760546787317622 },
+      { "state": "AM", "average_days": 25.645075633359053 }
+    ],
+    "payment_methods": [
+      { "method": "Credit Card", "count": 76795, "percentage": 73.92451122897874 },
+      { "method": "Boleto", "count": 19784, "percentage": 19.044501987813213 },
+      { "method": "Voucher", "count": 5775, "percentage": 5.559138646361773 },
+      { "method": "Debit Card", "count": 1529, "percentage": 1.4718481368462597 }
+    ],
+    "satisfaction_delivery": [
+      { "score": 1, "average_days": 20.197268301955802 },
+      { "score": 2, "average_days": 16.30603910603081 },
+      { "score": 3, "average_days": 14.024905564177823 },
+      { "score": 4, "average_days": 12.15400748949547 },
+      { "score": 5, "average_days": 10.612183776266956 }
+    ]
+  };
+
   const charts = {};
 
   // Tab Navigation Handling
@@ -30,33 +139,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Load Aggregated Dashboard Data
-  fetch('dashboard_data.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to load dashboard data JSON.');
-      }
-      return response.json();
-    })
-    .then(data => {
-      dashboardData = data;
-      
-      // 1. Populate Overview KPIs
-      populateKPIs(data.kpis);
-      
-      // 2. Render Charts
-      initCharts(data);
-      
-      // 3. Populate Top Cities Table
-      populateCitiesTable(data.top_cities, data.kpis.total_revenue);
-      
-      // 4. Initialize Business Impact Simulator
-      initSimulator(data.kpis);
-    })
-    .catch(error => {
-      console.error('Error loading data:', error);
-      alert('Error loading dashboard analytics data. Check console for logs.');
-    });
+  // 1. Populate Overview KPIs
+  populateKPIs(dashboardData.kpis);
+  
+  // 2. Render Charts
+  initCharts(dashboardData);
+  
+  // 3. Populate Top Cities Table
+  populateCitiesTable(dashboardData.top_cities, dashboardData.kpis.total_revenue);
+  
+  // 4. Initialize Business Impact Simulator
+  initSimulator(dashboardData.kpis);
 
   // Format Helpers
   const formatCurrency = (val) => {
@@ -107,6 +200,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize Chart.js monochrome charts
   function initCharts(data) {
+    // Prevent errors if Chart.js fails to load
+    if (typeof Chart === 'undefined') {
+      console.error("Chart.js failed to load. Visualizations cannot be initialized.");
+      return;
+    }
+
     // Set custom Chart.js Defaults with Space Grotesk display styling
     Chart.defaults.font.family = "'Space Grotesk', 'Inter', -apple-system, sans-serif";
     Chart.defaults.color = "#000000";
@@ -160,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
             backgroundColor: '#000000',
             titleColor: '#ffffff',
             bodyColor: '#ffffff',
-            cornerRadius: 0, // Sharp tooltip borders
+            cornerRadius: 0,
             callbacks: {
               label: function(context) {
                 let label = context.dataset.label || '';
@@ -218,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
           backgroundColor: '#000000',
           hoverBackgroundColor: '#333333',
           borderWidth: 0,
-          borderRadius: 0 // Sharp corners on bars
+          borderRadius: 0
         }]
       },
       options: {
@@ -297,8 +396,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----- D. Satisfaction vs Delivery Days Bar Chart (Logistics Tab) -----
     const scores = data.satisfaction_delivery.map(d => d.score);
     const delDaysByScore = data.satisfaction_delivery.map(d => d.average_days);
-    
-    // Highlight low ratings in red to focus diagnostic attention
     const scoreBarColors = scores.map(s => s === 1 ? '#d92d20' : '#000000');
 
     const ctxRevDel = document.getElementById('chart-reviews-delivery').getContext('2d');
@@ -428,12 +525,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const targetSla = parseFloat(sliderSla.value);
       const targetBudgetShift = parseFloat(sliderBudget.value);
 
-      // Update badge displays
+      // Update display values
       valRepeat.textContent = `${targetRepeat.toFixed(2)}%`;
       valSla.textContent = `${targetSla.toFixed(1)} Days`;
       valBudget.textContent = `${targetBudgetShift}%`;
 
-      // 1. Customer Loyalty Calculations (Base repeat rate: 3.12%, customer count: 96,096)
+      // 1. Customer Loyalty Calculations
       const repeatDelta = targetRepeat - 3.12;
       const additionalOrders = Math.round(kpis.total_customers * (repeatDelta / 100.0));
       const retentionRevenueUplift = additionalOrders * kpis.aov;
