@@ -1,106 +1,6 @@
-# Olist Brasil E-Commerce Performance & Customer Behavior Analysis
-
-[English](#english) | [Bahasa Indonesia](#bahasa-indonesia)
+# Analisis Kinerja E-Commerce & Perilaku Pelanggan Olist Brasil
 
 ---
-
-<a name="english"></a>
-## 🇬🇧 English Version
-
-### 🌐 Live Interactive Dashboard
-Experience the stark, premium Swiss Bento Grid operational dashboard built for this project. It includes live interactive charts, geo-SLA breakdowns, and a Business Impact Simulator deck.
-- 🔗 **GitHub Pages Link**: [https://izamrosiawan.github.io/olist-brazilian-ecommerce-analytics/](https://izamrosiawan.github.io/olist-brazilian-ecommerce-analytics/)
-- 💻 **Local Offline Access**: Simply double-click [index.html](index.html) to run it locally (zero CORS, works offline).
-
----
-
-### 🎯 Business Problem Statement
-In a highly competitive e-commerce landscape, marketplace platforms must optimize their logistics operations, identify high-margin revenue drivers, and increase customer retention. This project analyzes transaction records to resolve logistical bottlenecks and design retention programs that directly increase Customer Lifetime Value (LTV).
-
----
-
-### 📌 Executive Summary (30-Second Read)
-* **Objective**: Analyzed **100,000+ transaction records** (late 2016 to mid 2018) from **Olist**, Brazil's leading e-commerce platform, to identify revenue drivers, optimize logistics, and improve customer satisfaction.
-* **Key Findings**:
-  - **Revenue Drivers**: High-performance categories dominate sales, with *Health & Beauty* (high volume) and *Watches & Gifts* (high AOV) generating over **1.2M BRL** each.
-  - **Regional Concentration**: São Paulo is the commercial hub, accounting for **15,540 orders** and over **2.2M BRL** in revenue.
-  - **Logistics Bottleneck**: Average national shipping time is **12.3 days**, but remote states like Amazonas (AM) average **25.6 days**.
-  - **Satisfaction & Speed**: Delivery delay is the primary driver of low review scores. 5-star orders arrive in **10.6 days** on average, whereas 1-star orders take **20.2 days** (negative correlation of **-0.31**).
-  - **Retention Gap**: Repeat purchase rate is extremely low at **3.12%** (over 96.8% are one-time buyers).
-* **Actionable Recommendations**:
-  - **Logistics SLA Optimization**: Establish regional fulfillment hubs or local carrier partnerships in Northern states (AM, AP) to reduce delivery times from 25+ days to under 15 days.
-  - **Targeted Inventory & Ads**: Allocate more marketing budget (ROAS-driven) and stock to high-margin/high-AOV categories (e.g., Watches & Gifts).
-  - **Customer Retention Program**: Implement automated email campaigns, personalized coupons for the second purchase, and a loyalty program to boost the repeat rate from 3.12% to a target of 8%.
-
----
-
-### 🛡️ Data Quality & Assumptions
-* **Missing Values**: Missing values in product specifications (e.g., dimensions, description lengths) were imputed using category-specific medians. Unfilled customer review messages were kept as-is since their missingness did not affect the numerical rating scores.
-* **Outlier Treatment**: Operational time logs containing negative delivery durations (due to manual carrier input errors) and orders with shipping times exceeding 60 days were removed to prevent distortion of averages.
-* **Assumptions**: We assume that carrier-logged timestamps are accurate, and that `delivered_to_customer_date` represents the actual date the customer received the parcel.
-
----
-
-### 📊 Key Insights & Visualizations
-
-#### 1. Revenue Drivers by Product Category
-A small group of product categories drives the majority of Olist's revenue. **Health & Beauty** and **Watches & Gifts** lead the platform, each contributing over **1.2M BRL**. While Health & Beauty is volume-driven, Watches & Gifts succeeds due to a higher Average Order Value (AOV).
-![Top Categories by Revenue](images/top_10_categories_revenue.png)
-
-#### 2. Regional Demand Hotspots
-Demand is heavily concentrated in Brazil's Southeast region. **São Paulo** represents the largest market, contributing **15,540 orders** and generating **2.2M BRL** in revenue. Rio de Janeiro follows as the second-largest market.
-![Top Cities by Orders and Revenue](images/top_cities_orders_revenue.png)
-
-#### 3. Seasonality & Black Friday Spike
-Sales grew steadily from 2017 to 2018. A massive surge occurred in **November 2017**, reaching **1.19M BRL**—a **53% month-over-month increase** driven by **Black Friday** promotions.
-![Monthly Sales Trend](images/sales_seasonality_trend.png)
-
-#### 4. Shipping SLA & Delivery Times
-While the national median delivery time is **10.2 days** (average **12.3 days**), regional disparities are severe:
-* **Southeast (Fastest)**: São Paulo averages **8.7 days**.
-* **North (Slowest)**: Amazonas (AM) averages **25.6 days** and Amapá (AP) averages **24.8 days**.
-![Delivery Days by State](images/delivery_time_by_state.png)
-
-#### 5. Payment Methods
-**Credit Cards** are the dominant payment method, accounting for **73.9%** of transactions, followed by **Boleto** at **19.0%**.
-![Payment Methods Distribution](images/payment_methods_distribution.png)
-
-#### 6. Satisfaction vs. Delivery Time
-There is a clear negative correlation (**-0.31**) between delivery times and customer review scores. Delayed deliveries are the main cause of 1-star ratings:
-* **5-Star Reviews**: Average delivery time of **10.6 days**.
-* **1-Star Reviews**: Average delivery time of **20.2 days**.
-![Delivery Time vs Review Score](images/review_score_vs_delivery_time.png)
-
----
-
-### ⚠️ Limitations & Next Steps
-* **Limitations**: The dataset lack marketing acquisition metrics (e.g., Customer Acquisition Cost / CAC, ad spend per channel), preventing us from calculating exact return on ad spend (ROAS) or marketing efficiency ratios.
-* **Next Steps**:
-  1. Integrate clickstream data to analyze pre-purchase customer behavior.
-  2. Implement a machine learning model to predict customer churn based on delivery delays.
-
----
-
-### 🔄 Reproducibility
-* **Environment**: Python 3.11.x (requirements specified in [requirements.txt](requirements.txt)).
-* **Execution Sequence**:
-  1. Extract and store CSV datasets in the `data/` folder.
-  2. Run the data preparation and cleaning cells in [notebook.ipynb](notebook.ipynb).
-  3. Execute the analysis cells sequentially.
-* **Random Seeds**: For reproducibility, `random_state = 42` is used for all train-test splits and data sampling.
-
----
-
-### 🔗 Key Notebook Directory
-- [Data Preprocessing & Cleaning](notebook.ipynb#4.-Pembersihan-Data-&-Validasi)
-- [Exploratory Data Analysis (EDA)](notebook.ipynb#5.-Exploratory-Data-Analysis-(EDA))
-- [Shipping & SLA Analysis](notebook.ipynb#D.-Analisis-Waktu-Pengiriman)
-- [Retention & Loyalty Analysis](notebook.ipynb#E.-Retensi-Pelanggan-&-Pembelian-Berulang)
-
----
-
-<a name="bahasa-indonesia"></a>
-## 🇮🇩 Versi Bahasa Indonesia
 
 ### 🌐 Live Dashboard Interaktif
 Rasakan antarmuka operasional premium bergaya Swiss Bento Grid yang dirancang khusus untuk proyek ini. Dilengkapi dengan grafik interaktif, analisis SLA geografis, dan deck Simulator Dampak Bisnis.
@@ -109,7 +9,7 @@ Rasakan antarmuka operasional premium bergaya Swiss Bento Grid yang dirancang kh
 
 ---
 
-### 🎯 Business Problem Statement
+### 🎯 Pernyataan Masalah Bisnis
 Dalam industri e-commerce yang kompetitif, platform marketplace harus mengoptimalkan operasional logistik, mengidentifikasi pendorong pendapatan berkinerja tinggi, dan meningkatkan retensi pelanggan. Proyek ini menganalisis data transaksi untuk mengatasi hambatan logistik dan merancang program retensi yang meningkatkan Customer Lifetime Value (LTV).
 
 ---

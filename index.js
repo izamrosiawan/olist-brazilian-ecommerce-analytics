@@ -110,7 +110,276 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   };
 
+  // Translations dictionary
+  const translations = {
+    en: {
+      "live-network": "LIVE NETWORK: ACTIVE",
+      "workspace-ticker": "WORKSPACE: OLIST_BR // SP_HUB_ACTIVE",
+      "avg-sla-ticker": "AVG SLA: 12.3d // LOYALTY RATE: 3.12%",
+      "brand-subtitle": "OPERATIONAL SYSTEM v1.0",
+      "nav-overview": "OVERVIEW",
+      "nav-revenue": "DEMAND & REVENUE",
+      "nav-logistics": "LOGISTICS & SLA",
+      "nav-simulator": "IMPACT SIMULATOR",
+      "footer-workspace": "WORKSPACE: OLIST_BR",
+      "footer-status": "STATUS: STABLE // OFFLINE",
+      "footer-period": "DATA PERIOD: 2016 - 2018",
+      "manifest-id": "MANIFEST ID: BR-2018-09",
+      "overview-title": "Executive Performance Overview",
+      "refresh-time-prefix": "LATEST REFRESH: ",
+      "kpi-label-revenue": "Revenue",
+      "kpi-sub-revenue": "Total payment values processed",
+      "kpi-label-orders": "Orders",
+      "kpi-sub-orders": "Total unique customer purchases",
+      "kpi-label-aov": "Average Ticket",
+      "kpi-sub-aov": "Average Order Value in BRL",
+      "kpi-label-repeat": "Repeat Rate",
+      "kpi-sub-repeat": "Percentage of multi-order buyers",
+      "kpi-label-delivery": "Avg Shipping",
+      "kpi-sub-delivery": "National average delivery days",
+      "kpi-label-rating": "Satisfaction",
+      "kpi-sub-rating": "Average review score (1 to 5)",
+      "chart-trend-title": "Monthly E-Commerce Revenue Growth",
+      "chart-trend-sub": "Steady climb punctuated by the Black Friday peak in November 2017",
+      "chip-line-graph": "LINE_GRAPH",
+      "module-revenue-id": "MODULE ID: BR-DEMAND-02",
+      "revenue-title": "Demand Hotspots & Category Drivers",
+      "filter-products": "FILTER: ALL PRODUCTS",
+      "chart-cats-title": "Revenue by Product Category",
+      "chart-cats-sub": "Watches and health/beauty drive major volume and AOV",
+      "chip-top-15": "TOP_15",
+      "chart-pay-title": "Payment Methods Distribution",
+      "chart-pay-sub": "Credit cards represent almost three-quarters of customer checkouts",
+      "chip-pay-methods": "PAY_METHODS",
+      "table-cities-title": "Top 10 Cities by Revenue & Volume",
+      "table-cities-sub": "São Paulo is the commercial core, followed by Rio de Janeiro and Belo Horizonte",
+      "chip-regional-perf": "REGIONAL_PERF",
+      "th-city": "City",
+      "th-orders": "Orders",
+      "th-revenue": "Total Revenue (BRL)",
+      "th-share": "Market Share",
+      "module-logistics-id": "MODULE ID: BR-SLA-03",
+      "logistics-title": "Shipping SLAs & Customer Satisfaction",
+      "status-sla": "STATUS: SLA BREAKDOWN",
+      "chart-reviews-title": "Average Delivery Days vs Review Score",
+      "chart-reviews-sub": "Clear negative correlation (-0.31): late orders trigger 1-star ratings",
+      "chip-satisfaction-gap": "SATISFACTION_GAP",
+      "chart-state-title": "Delivery SLA by Brazilian State",
+      "chart-state-sub": "Average delivery speed (days) across fast and slow states",
+      "chip-geo-sla": "GEO_SLA",
+      "diagnosis-title": "Operational Logistics Diagnosis",
+      "diagnosis-sub": "Analysis of shipping delays and customer impact",
+      "chip-action-required": "ACTION_REQUIRED",
+      "insight-north-title": "Northern Region SLA Bottleneck",
+      "insight-north-desc": "Average delivery times in remote states like Amazonas (AM) and Amapá (AP) average <strong>25.6</strong> and <strong>24.8 days</strong> respectively. Compare this with São Paulo (SP) at <strong>8.7 days</strong>.",
+      "insight-retention-title": "Customer Retention Deficit",
+      "insight-retention-desc": "Over <strong>96.8%</strong> of purchasers are one-time buyers. The repeat rate is static at <strong>3.12%</strong>. Solving logistics friction is the primary prerequisite to launch effective retention marketing.",
+      "insight-corr-title": "SLA-Rating Correlation",
+      "insight-corr-desc": "Orders resulting in 5-star ratings arrive in <strong>10.6 days</strong>. Orders resulting in 1-star ratings take <strong>20.2 days</strong> on average. Late shipping is the single largest structural source of customer churn.",
+      "module-model-id": "MODULE ID: BR-MODEL-04",
+      "simulator-title": "Business Impact Simulator",
+      "sim-mode": "SIMULATION MODE: RUNNING",
+      "sim-ctrl-title": "Target Variables",
+      "sim-ctrl-sub": "Adjust the operational parameters to simulate strategic changes and calculate potential revenue uplifts.",
+      "slider-repeat-title": "Repeat Purchase Rate (%)",
+      "slider-repeat-base": "Baseline: 3.12%",
+      "slider-repeat-target": "Target: 15.00%",
+      "slider-sla-title": "Northern SLA Reduction (Days)",
+      "slider-sla-target": "Fulfillment Hubs (10d)",
+      "slider-sla-base": "Baseline (25.6d)",
+      "slider-budget-title": "Marketing Shift to High AOV (%)",
+      "slider-budget-base": "Balanced (0%)",
+      "slider-budget-target": "Max High-Value Focus (100%)",
+      "btn-reset": "Reset Simulator",
+      "manifest-card-title": "Olist operational manifest",
+      "manifest-status-base": "BASELINE",
+      "manifest-status-sim": "SIMULATED",
+      "manifest-row-base": "Primary Base Revenue:",
+      "manifest-row-retention": "Loyalty Retention Gains:",
+      "manifest-row-sla": "Logistics Review SLA Uplift:",
+      "manifest-row-aov": "AOV Optimization Delta:",
+      "manifest-row-repeat-cust": "Generated Repeat Customers:",
+      "manifest-row-csat": "Projected Customer CSAT:",
+      "manifest-row-proj-revenue": "PROJECTED REVENUE:",
+      "manifest-footer-note": "OLIST SYSTEM SIMULATED METRICS EST. +/- 5% MARGIN OF ERROR.",
+      "btn-print": "Print manifest",
+      "sim-repeat-tooltip": "Simulates repeat purchase rate growth through CRM and loyalty systems.",
+      "sim-sla-tooltip": "Reduces shipping times in Northern states (AM/AP) by setting up regional hubs.",
+      "sim-budget-tooltip": "Shifts ad spend towards high average order value (AOV) product categories.",
+      "chart-legend-revenue": "Monthly Revenue (BRL)",
+      "chart-legend-top-revenue": "Total Revenue (BRL)",
+      "chart-legend-delivery-time": "Avg Delivery Time",
+      "chart-legend-sla": "Average SLA",
+      "user-role": "SYSTEM MONITOR",
+      "logs-panel-title": "Live Network Transactions & SLA Feed",
+      "logs-panel-sub": "Real-time simulation of operational checkpoints and logistics processing",
+      "chip-live-feed": "LIVE_FEED",
+      "manifest-gauge-label": "Revenue Growth Target"
+    },
+    id: {
+      "live-network": "JARINGAN AKTIF: ONLINE",
+      "workspace-ticker": "RUANG KERJA: OLIST_BR // HUB_SP_AKTIF",
+      "avg-sla-ticker": "RATA SLA: 12.3h // TINGKAT LOYALITAS: 3.12%",
+      "brand-subtitle": "SISTEM OPERASIONAL v1.0",
+      "nav-overview": "RINGKASAN",
+      "nav-revenue": "PERMINTAAN & PENDAPATAN",
+      "nav-logistics": "LOGISTIK & SLA",
+      "nav-simulator": "SIMULATOR DAMPAK",
+      "footer-workspace": "RUANG KERJA: OLIST_BR",
+      "footer-status": "STATUS: STABIL // OFFLINE",
+      "footer-period": "PERIODE DATA: 2016 - 2018",
+      "manifest-id": "ID MANIFEST: BR-2018-09",
+      "overview-title": "Ringkasan Kinerja Eksekutif",
+      "refresh-time-prefix": "REFRESH TERAKHIR: ",
+      "kpi-label-revenue": "Pendapatan",
+      "kpi-sub-revenue": "Total nilai pembayaran diproses",
+      "kpi-label-orders": "Pesanan",
+      "kpi-sub-orders": "Total pembelian unik pelanggan",
+      "kpi-label-aov": "Rata-rata Keranjang",
+      "kpi-sub-aov": "Rata-rata Nilai Pesanan (BRL)",
+      "kpi-label-repeat": "Tingkat Retensi",
+      "kpi-sub-repeat": "Persentase pembeli berulang",
+      "kpi-label-delivery": "Rata Pengiriman",
+      "kpi-sub-delivery": "Rata-rata hari pengiriman nasional",
+      "kpi-label-rating": "Kepuasan",
+      "kpi-sub-rating": "Rata-rata skor ulasan (1 s.d 5)",
+      "chart-trend-title": "Pertumbuhan Pendapatan E-Commerce Bulanan",
+      "chart-trend-sub": "Peningkatan stabil dengan puncak Black Friday di November 2017",
+      "chip-line-graph": "GRAFIK_GARIS",
+      "module-revenue-id": "ID MODUL: BR-DEMAND-02",
+      "revenue-title": "Titik Panas Permintaan & Kategori Utama",
+      "filter-products": "FILTER: SEMUA PRODUK",
+      "chart-cats-title": "Pendapatan berdasarkan Kategori Produk",
+      "chart-cats-sub": "Jam tangan dan kesehatan/kecantikan mendominasi volume & AOV",
+      "chip-top-15": "15_TERATAS",
+      "chart-pay-title": "Distribusi Metode Pembayaran",
+      "chart-pay-sub": "Kartu kredit mencakup hampir tiga perempat transaksi pelanggan",
+      "chip-pay-methods": "METODE_BAYAR",
+      "table-cities-title": "10 Kota Teratas berdasarkan Pendapatan & Volume",
+      "table-cities-sub": "São Paulo adalah pusat komersial, diikuti Rio de Janeiro dan Belo Horizonte",
+      "chip-regional-perf": "PERF_REGIONAL",
+      "th-city": "Kota",
+      "th-orders": "Pesanan",
+      "th-revenue": "Total Pendapatan (BRL)",
+      "th-share": "Pangsa Pasar",
+      "module-logistics-id": "ID MODUL: BR-SLA-03",
+      "logistics-title": "SLA Pengiriman & Kepuasan Pelanggan",
+      "status-sla": "STATUS: RINCIAN SLA",
+      "chart-reviews-title": "Rata-rata Hari Pengiriman vs Skor Ulasan",
+      "chart-reviews-sub": "Korelasi negatif jelas (-0.31): keterlambatan memicu ulasan bintang 1",
+      "chip-satisfaction-gap": "GAP_KEPUASAN",
+      "chart-state-title": "SLA Pengiriman per Negara Bagian Brasil",
+      "chart-state-sub": "Rata-rata kecepatan kirim (hari) di wilayah cepat dan lambat",
+      "chip-geo-sla": "SLA_GEOGRAFIS",
+      "diagnosis-title": "Diagnosis Logistik Operasional",
+      "diagnosis-sub": "Analisis keterlambatan pengiriman dan dampaknya pada pelanggan",
+      "chip-action-required": "BUTUH_TINDAKAN",
+      "insight-north-title": "Hambatan SLA Wilayah Utara",
+      "insight-north-desc": "Rata-rata pengiriman di negara bagian terpencil seperti Amazonas (AM) dan Amapá (AP) mencapai masing-masing <strong>25,6</strong> dan <strong>24,8 hari</strong>. Bandingkan dengan São Paulo (SP) di angka <strong>8,7 hari</strong>.",
+      "insight-retention-title": "Defisit Retensi Pelanggan",
+      "insight-retention-desc": "Lebih dari <strong>96,8%</strong> pembeli adalah pembeli satu kali. Tingkat pembelian ulang statis di <strong>3,12%</strong>. Mengatasi hambatan logistik adalah syarat utama sebelum meluncurkan pemasaran retensi.",
+      "insight-corr-title": "Korelasi SLA-Rating",
+      "insight-corr-desc": "Pesanan dengan ulasan bintang 5 sampai dalam <strong>10,6 hari</strong>. Ulasan bintang 1 memakan waktu rata-rata <strong>20,2 hari</strong>. Keterlambatan pengiriman adalah penyebab struktural terbesar dari churn pelanggan.",
+      "module-model-id": "ID MODUL: BR-MODEL-04",
+      "simulator-title": "Simulator Dampak Bisnis",
+      "sim-mode": "MODE SIMULASI: AKTIF",
+      "sim-ctrl-title": "Variabel Target",
+      "sim-ctrl-sub": "Sesuaikan parameter operasional untuk mensimulasikan perubahan strategis dan menghitung kenaikan pendapatan.",
+      "slider-repeat-title": "Tingkat Pembelian Berulang (%)",
+      "slider-repeat-base": "Dasar: 3.12%",
+      "slider-repeat-target": "Target: 15.00%",
+      "slider-sla-title": "Pengurangan SLA Wilayah Utara (Hari)",
+      "slider-sla-target": "Fulfillment Hub (10h)",
+      "slider-sla-base": "Dasar (25.6h)",
+      "slider-budget-title": "Pengalihan Pemasaran ke AOV Tinggi (%)",
+      "slider-budget-base": "Seimbang (0%)",
+      "slider-budget-target": "Fokus Nilai Tinggi Maksimal (100%)",
+      "btn-reset": "Reset Simulator",
+      "manifest-card-title": "Manifest Operasional Olist",
+      "manifest-status-base": "DASAR",
+      "manifest-status-sim": "SIMULASI",
+      "manifest-row-base": "Pendapatan Dasar Utama:",
+      "manifest-row-retention": "Loyalitas Retensi Keuntungan:",
+      "manifest-row-sla": "Peningkatan SLA Logistik:",
+      "manifest-row-aov": "Delta Optimasi AOV:",
+      "manifest-row-repeat-cust": "Tambahan Pelanggan Berulang:",
+      "manifest-row-csat": "Proyeksi CSAT Pelanggan:",
+      "manifest-row-proj-revenue": "PROYEKSI PENDAPATAN:",
+      "manifest-footer-note": "METRIK SIMULASI SISTEM OLIST DENGAN ESTIMASI +- 5% BATAS EROR.",
+      "btn-print": "Cetak Manifest",
+      "sim-repeat-tooltip": "Mensimulasikan pertumbuhan pembelian berulang lewat program CRM & loyalitas.",
+      "sim-sla-tooltip": "Memangkas waktu kirim wilayah Utara (AM/AP) dengan menempatkan gudang pemenuhan regional.",
+      "sim-budget-tooltip": "Menggeser fokus iklan digital pada produk bernilai tinggi (AOV tinggi).",
+      "chart-legend-revenue": "Pendapatan Bulanan (BRL)",
+      "chart-legend-top-revenue": "Total Pendapatan (BRL)",
+      "chart-legend-delivery-time": "Rata Waktu Pengiriman",
+      "chart-legend-sla": "Rata-rata SLA",
+      "user-role": "PEMANTAU SISTEM",
+      "logs-panel-title": "Aliran SLA & Transaksi Jaringan Langsung",
+      "logs-panel-sub": "Simulasi waktu-nyata pos pemeriksaan operasional dan pemrosesan logistik",
+      "chip-live-feed": "ALIRAN_LANGSUNG",
+      "manifest-gauge-label": "Target Pertumbuhan Pendapatan"
+    }
+  };
+
+  const categoryTranslations = {
+    id: {
+      "Health Beauty": "Kesehatan & Kecantikan",
+      "Watches Gifts": "Jam Tangan & Hadiah",
+      "Bed Bath Table": "Peralatan Kamar & Mandi",
+      "Sports Leisure": "Olahraga & Rekreasi",
+      "Computers Accessories": "Komputer & Aksesori",
+      "Furniture Decor": "Dekorasi Furnitur",
+      "Cool Stuff": "Barang Keren",
+      "Housewares": "Peralatan Rumah Tangga",
+      "Auto": "Otomotif",
+      "Garden Tools": "Peralatan Kebun",
+      "Toys": "Mainan Anak",
+      "Baby": "Perlengkapan Bayi",
+      "Perfumery": "Parfum",
+      "Telephony": "Telepon Seluler",
+      "Office Furniture": "Furnitur Kantor"
+    },
+    en: {
+      "Health Beauty": "Health & Beauty",
+      "Watches Gifts": "Watches & Gifts",
+      "Bed Bath Table": "Bed Bath Table",
+      "Sports Leisure": "Sports & Leisure",
+      "Computers Accessories": "Computers Accessories",
+      "Furniture Decor": "Furniture & Decor",
+      "Cool Stuff": "Cool Stuff",
+      "Housewares": "Housewares",
+      "Auto": "Auto",
+      "Garden Tools": "Garden Tools",
+      "Toys": "Toys",
+      "Baby": "Baby",
+      "Perfumery": "Perfumery",
+      "Telephony": "Telephony",
+      "Office Furniture": "Office Furniture"
+    }
+  };
+
+  const paymentTranslations = {
+    id: {
+      "Credit Card": "Kartu Kredit",
+      "Boleto": "Boleto",
+      "Voucher": "Voucher",
+      "Debit Card": "Kartu Debit"
+    },
+    en: {
+      "Credit Card": "Credit Card",
+      "Boleto": "Boleto",
+      "Voucher": "Voucher",
+      "Debit Card": "Debit Card"
+    }
+  };
+
+  let activeLang = 'en';
   const charts = {};
+  const chartInstances = {};
+
+  // Date constants
+  const now = new Date();
 
   // Format Helpers
   const formatCurrency = (val) => {
@@ -124,6 +393,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const formatNumber = (val) => {
     return new Intl.NumberFormat('pt-BR').format(val);
+  };
+
+  // Date Formatting for Multi-Language
+  const formatDateForTicker = (date, lang) => {
+    const monthsEN = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const monthsID = ["JAN", "PEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGS", "SEP", "OKT", "NOP", "DES"];
+    const months = lang === 'id' ? monthsID : monthsEN;
+    return `DATE: ${date.getDate().toString().padStart(2, '0')}-${months[date.getMonth()]}-${date.getFullYear()} // UTC-03:00`;
+  };
+
+  const formatRefreshTimestamp = (date, lang) => {
+    const label = translations[lang]["refresh-time-prefix"];
+    const monthsEN = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const monthsID = ["JAN", "PEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGS", "SEP", "OKT", "NOP", "DES"];
+    const months = lang === 'id' ? monthsID : monthsEN;
+    return `${label}${date.getDate().toString().padStart(2, '0')}-${months[date.getMonth()]}-${date.getFullYear()}`;
+  };
+
+  const formatManifestTimestamp = (date, lang) => {
+    const monthsEN = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const monthsID = ["JAN", "PEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGS", "SEP", "OKT", "NOP", "DES"];
+    const months = lang === 'id' ? monthsID : monthsEN;
+    const timeStr = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    return `DATE: ${date.getDate().toString().padStart(2, '0')}-${months[date.getMonth()]}-${date.getFullYear()} // TIME: ${timeStr}`;
   };
 
   // Tab Navigation Handling
@@ -148,7 +441,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Trigger Chart renders / updates in case of sizing glitches
       if (charts[tabName]) {
-        charts[tabName].forEach(chart => chart.resize());
+        charts[tabName].forEach(chart => {
+          if (chart && typeof chart.resize === 'function') {
+            chart.resize();
+          }
+        });
       }
     });
   });
@@ -156,21 +453,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. Populate Overview KPIs
   populateKPIs(dashboardData.kpis);
   
-  // 2. Render Charts
-  initCharts(dashboardData);
+  // 2. Render Charts (with default activeLang)
+  initCharts(dashboardData, activeLang);
   
   // 3. Populate Top Cities Table
   populateCitiesTable(dashboardData.top_cities, dashboardData.kpis.total_revenue);
   
   // 4. Initialize Business Impact Simulator
   initSimulator(dashboardData.kpis);
+
+  // 5. Initialize Language Toggle Listeners
+  initLanguageSwitcher();
+
+  // 6. Initialize Theme Management
+  initThemeManager();
+
+  // 7. Initialize Live Logging Ticker
+  initLogger();
+
   // Populate KPIs
   function populateKPIs(kpis) {
     document.getElementById('kpi-revenue').textContent = formatCurrency(kpis.total_revenue);
     document.getElementById('kpi-orders').textContent = formatNumber(kpis.total_orders);
     document.getElementById('kpi-aov').textContent = formatCurrency(kpis.aov);
     document.getElementById('kpi-repeat').textContent = `${kpis.repeat_purchase_rate.toFixed(2)}%`;
-    document.getElementById('kpi-delivery').textContent = `${kpis.average_delivery_time.toFixed(1)} Days`;
+    document.getElementById('kpi-delivery').textContent = `${kpis.average_delivery_time.toFixed(1)} ${activeLang === 'id' ? 'Hari' : 'Days'}`;
     document.getElementById('kpi-rating').textContent = `${kpis.average_review_score.toFixed(2)} / 5.0`;
 
     // Baseline details in the manifest card (Simulator Tab)
@@ -197,9 +504,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Initialize Chart.js monochrome charts
-  function initCharts(data) {
-    // Prevent errors if Chart.js fails to load
+  // Initialize Chart.js premium gradient charts
+  function initCharts(data, lang) {
     if (typeof Chart === 'undefined') {
       console.error("Chart.js failed to load. Visualizations cannot be initialized.");
       return;
@@ -207,23 +513,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set custom Chart.js Defaults with SF Pro display styling
     Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif";
-    Chart.defaults.color = "#1d1d1f";
-    Chart.defaults.plugins.legend.labels.boxWidth = 12;
-    Chart.defaults.plugins.legend.labels.usePointStyle = true;
+    
+    // Determine active colors based on theme
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    Chart.defaults.color = theme === 'dark' ? '#f5f5f7' : '#1d1d1f';
+    const gridColor = theme === 'dark' ? '#2c2c2e' : '#e5e7eb';
     
     // Grid styling helper
     const gridConfig = {
-      color: '#e5e7eb',
+      color: gridColor,
       tickBorderDash: [3, 3],
-      borderColor: '#e5e7eb',
+      borderColor: gridColor,
       drawTicks: true
     };
+
+    // Clean up existing instances
+    if (chartInstances.monthlyTrend) chartInstances.monthlyTrend.destroy();
+    if (chartInstances.topCategories) chartInstances.topCategories.destroy();
+    if (chartInstances.paymentMethods) chartInstances.paymentMethods.destroy();
+    if (chartInstances.reviewsDelivery) chartInstances.reviewsDelivery.destroy();
+    if (chartInstances.stateDelivery) chartInstances.stateDelivery.destroy();
 
     // ----- A. Monthly Trend Line Chart (Overview Tab) -----
     const months = data.monthly_trend.map(d => d.month);
     const revenues = data.monthly_trend.map(d => d.revenue);
     
-    // Find index of Black Friday Peak (November 2017) to style it uniquely
     const bfIndex = months.indexOf('2017-11');
     const pointBorderColors = months.map((m, i) => i === bfIndex ? '#d70015' : '#0071e3');
     const pointBackgroundColors = months.map((m, i) => i === bfIndex ? '#d70015' : '#ffffff');
@@ -231,21 +545,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const pointHoverRadii = months.map((m, i) => i === bfIndex ? 10 : 6);
 
     const ctxTrend = document.getElementById('chart-monthly-trend').getContext('2d');
-    const chartTrend = new Chart(ctxTrend, {
+    
+    // Modern gradient fill for line chart area
+    const gradientTrendFill = ctxTrend.createLinearGradient(0, 0, 0, 360);
+    if (theme === 'dark') {
+      gradientTrendFill.addColorStop(0, 'rgba(10, 132, 255, 0.4)');
+      gradientTrendFill.addColorStop(1, 'rgba(10, 132, 255, 0.0)');
+    } else {
+      gradientTrendFill.addColorStop(0, 'rgba(0, 113, 227, 0.25)');
+      gradientTrendFill.addColorStop(1, 'rgba(0, 113, 227, 0.0)');
+    }
+
+    const lineColor = theme === 'dark' ? '#0a84ff' : '#0071e3';
+
+    chartInstances.monthlyTrend = new Chart(ctxTrend, {
       type: 'line',
       data: {
         labels: months,
         datasets: [{
-          label: 'Monthly Revenue (BRL)',
+          label: translations[lang]["chart-legend-revenue"],
           data: revenues,
-          borderColor: '#0071e3',
+          borderColor: lineColor,
           borderWidth: 2,
           pointBorderColor: pointBorderColors,
           pointBackgroundColor: pointBackgroundColors,
           pointBorderWidth: 2,
           pointRadius: pointRadii,
           pointHoverRadius: pointHoverRadii,
-          fill: false,
+          fill: true,
+          backgroundColor: gradientTrendFill,
           tension: 0.1
         }]
       },
@@ -255,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#1d1d1f',
+            backgroundColor: theme === 'dark' ? '#2c2c2e' : '#1d1d1f',
             titleColor: '#ffffff',
             bodyColor: '#ffffff',
             cornerRadius: 4,
@@ -269,7 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   label += formatCurrency(context.parsed.y);
                 }
                 if (context.dataIndex === bfIndex) {
-                  label += ' [BLACK FRIDAY PEAK]';
+                  label += lang === 'id' ? ' [PUNCAK BLACK FRIDAY]' : ' [BLACK FRIDAY PEAK]';
                 }
                 return label;
               }
@@ -281,6 +609,7 @@ document.addEventListener('DOMContentLoaded', () => {
             grid: { display: false },
             ticks: {
               font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
+              color: Chart.defaults.color,
               callback: function(val, index) {
                 return index % 2 === 0 ? this.getLabelForValue(val) : '';
               }
@@ -290,6 +619,7 @@ document.addEventListener('DOMContentLoaded', () => {
             grid: gridConfig,
             ticks: {
               font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
+              color: Chart.defaults.color,
               callback: function(value) {
                 return (value / 1000).toFixed(0) + 'k BRL';
               }
@@ -298,23 +628,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
-    
-    charts['overview'] = [chartTrend];
 
     // ----- B. Top Categories Horizontal Bar Chart (Demand Tab) -----
-    const cats = data.top_categories.map(d => d.category);
+    const cats = data.top_categories.map(d => categoryTranslations[lang][d.category] || d.category);
     const catRevenues = data.top_categories.map(d => d.revenue);
 
     const ctxCats = document.getElementById('chart-top-categories').getContext('2d');
-    const chartCats = new Chart(ctxCats, {
+    
+    // Smooth horizontal gradient
+    const gradientCats = ctxCats.createLinearGradient(0, 0, 400, 0);
+    if (theme === 'dark') {
+      gradientCats.addColorStop(0, '#0a84ff');
+      gradientCats.addColorStop(1, '#5fc9f8');
+    } else {
+      gradientCats.addColorStop(0, '#0071e3');
+      gradientCats.addColorStop(1, '#5fc9f8');
+    }
+
+    chartInstances.topCategories = new Chart(ctxCats, {
       type: 'bar',
       data: {
         labels: cats,
         datasets: [{
-          label: 'Total Revenue (BRL)',
+          label: translations[lang]["chart-legend-top-revenue"],
           data: catRevenues,
-          backgroundColor: '#0071e3',
-          hoverBackgroundColor: '#0066cc',
+          backgroundColor: gradientCats,
+          hoverBackgroundColor: theme === 'dark' ? '#0064d2' : '#0066cc',
           borderWidth: 0,
           borderRadius: 4
         }]
@@ -326,10 +665,10 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#1d1d1f',
+            backgroundColor: theme === 'dark' ? '#2c2c2e' : '#1d1d1f',
             cornerRadius: 4,
             callbacks: {
-              label: (ctx) => `Revenue: ${formatCurrency(ctx.parsed.x)}`
+              label: (ctx) => `${translations[lang]["chart-legend-top-revenue"]}: ${formatCurrency(ctx.parsed.x)}`
             }
           }
         },
@@ -338,13 +677,15 @@ document.addEventListener('DOMContentLoaded', () => {
             grid: gridConfig,
             ticks: {
               font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
+              color: Chart.defaults.color,
               callback: (value) => (value / 1000000).toFixed(1) + 'M BRL'
             }
           },
           y: {
             grid: { display: false },
             ticks: {
-              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 11 }
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
+              color: Chart.defaults.color
             }
           }
         }
@@ -352,18 +693,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ----- C. Payment Methods Donut Chart (Demand Tab) -----
-    const methods = data.payment_methods.map(d => d.method);
+    const methods = data.payment_methods.map(d => paymentTranslations[lang][d.method] || d.method);
     const methodPercentages = data.payment_methods.map(d => d.percentage);
 
     const ctxPay = document.getElementById('chart-payment-methods').getContext('2d');
-    const chartPay = new Chart(ctxPay, {
+    
+    const donutColors = theme === 'dark' 
+      ? ['#0a84ff', '#30d158', '#ffd60a', '#3a3a3c']
+      : ['#0071e3', '#32ade6', '#5fc9f8', '#e5e7eb'];
+
+    chartInstances.paymentMethods = new Chart(ctxPay, {
       type: 'doughnut',
       data: {
         labels: methods,
         datasets: [{
           data: methodPercentages,
-          backgroundColor: ['#0071e3', '#32ade6', '#5fc9f8', '#e5e7eb'],
-          borderColor: '#ffffff',
+          backgroundColor: donutColors,
+          borderColor: theme === 'dark' ? '#1c1c1e' : '#ffffff',
           borderWidth: 2
         }]
       },
@@ -375,12 +721,13 @@ document.addEventListener('DOMContentLoaded', () => {
           legend: {
             position: 'right',
             labels: {
-              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 12 },
-              padding: 15
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 11 },
+              color: Chart.defaults.color,
+              padding: 12
             }
           },
           tooltip: {
-            backgroundColor: '#1d1d1f',
+            backgroundColor: theme === 'dark' ? '#2c2c2e' : '#1d1d1f',
             cornerRadius: 4,
             callbacks: {
               label: (ctx) => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`
@@ -390,18 +737,38 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    charts['revenue'] = [chartCats, chartPay];
-
     // ----- D. Satisfaction vs Delivery Days Bar Chart (Logistics Tab) -----
     const scores = data.satisfaction_delivery.map(d => d.score);
     const delDaysByScore = data.satisfaction_delivery.map(d => d.average_days);
-    const scoreBarColors = scores.map(s => s === 1 ? '#d70015' : '#0071e3');
-
+    
     const ctxRevDel = document.getElementById('chart-reviews-delivery').getContext('2d');
-    const chartRevDel = new Chart(ctxRevDel, {
+    
+    // Vertical gradients
+    const gradientRevNormal = ctxRevDel.createLinearGradient(0, 0, 0, 240);
+    if (theme === 'dark') {
+      gradientRevNormal.addColorStop(0, '#0a84ff');
+      gradientRevNormal.addColorStop(1, '#5fc9f8');
+    } else {
+      gradientRevNormal.addColorStop(0, '#0071e3');
+      gradientRevNormal.addColorStop(1, '#5fc9f8');
+    }
+
+    const gradientRevAlert = ctxRevDel.createLinearGradient(0, 0, 0, 240);
+    if (theme === 'dark') {
+      gradientRevAlert.addColorStop(0, '#ff453a');
+      gradientRevAlert.addColorStop(1, '#ff9f0a');
+    } else {
+      gradientRevAlert.addColorStop(0, '#d70015');
+      gradientRevAlert.addColorStop(1, '#ff9500');
+    }
+
+    const scoreBarColors = scores.map(s => s === 1 ? gradientRevAlert : gradientRevNormal);
+
+    const labelStars = lang === 'id' ? 'Bintang' : 'Star';
+    chartInstances.reviewsDelivery = new Chart(ctxRevDel, {
       type: 'bar',
       data: {
-        labels: scores.map(s => `${s} Star${s > 1 ? 's' : ''}`),
+        labels: scores.map(s => `${s} ${labelStars}`),
         datasets: [{
           data: delDaysByScore,
           backgroundColor: scoreBarColors,
@@ -415,10 +782,10 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#1d1d1f',
+            backgroundColor: theme === 'dark' ? '#2c2c2e' : '#1d1d1f',
             cornerRadius: 4,
             callbacks: {
-              label: (ctx) => `Avg Delivery Time: ${ctx.parsed.y.toFixed(1)} Days`
+              label: (ctx) => `${translations[lang]["chart-legend-delivery-time"]}: ${ctx.parsed.y.toFixed(1)} ${lang === 'id' ? 'Hari' : 'Days'}`
             }
           }
         },
@@ -426,14 +793,16 @@ document.addEventListener('DOMContentLoaded', () => {
           x: { 
             grid: { display: false },
             ticks: {
-              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 }
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
+              color: Chart.defaults.color
             }
           },
           y: {
             grid: gridConfig,
             ticks: {
               font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
-              callback: (value) => `${value} Days`
+              color: Chart.defaults.color,
+              callback: (value) => `${value} ${lang === 'id' ? 'Hari' : 'Days'}`
             }
           }
         }
@@ -448,13 +817,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const combinedStates = [...fastest5, { state: '---', average_days: 0 }, ...slowest5];
     const stateLabels = combinedStates.map(d => d.state);
     const stateDays = combinedStates.map(d => d.average_days);
-    const stateBarColors = combinedStates.map((d, i) => {
-      if (d.state === '---') return 'transparent';
-      return i > 5 ? '#d70015' : '#0071e3';
-    });
 
     const ctxStateDel = document.getElementById('chart-state-delivery').getContext('2d');
-    const chartStateDel = new Chart(ctxStateDel, {
+    
+    const gradientStateFast = ctxStateDel.createLinearGradient(0, 0, 300, 0);
+    if (theme === 'dark') {
+      gradientStateFast.addColorStop(0, '#0a84ff');
+      gradientStateFast.addColorStop(1, '#5fc9f8');
+    } else {
+      gradientStateFast.addColorStop(0, '#0071e3');
+      gradientStateFast.addColorStop(1, '#5fc9f8');
+    }
+
+    const gradientStateSlow = ctxStateDel.createLinearGradient(0, 0, 300, 0);
+    if (theme === 'dark') {
+      gradientStateSlow.addColorStop(0, '#ff453a');
+      gradientStateSlow.addColorStop(1, '#ff9f0a');
+    } else {
+      gradientStateSlow.addColorStop(0, '#d70015');
+      gradientStateSlow.addColorStop(1, '#ff9500');
+    }
+
+    const stateBarColors = combinedStates.map((d, i) => {
+      if (d.state === '---') return 'transparent';
+      return i > 5 ? gradientStateSlow : gradientStateFast;
+    });
+
+    chartInstances.stateDelivery = new Chart(ctxStateDel, {
       type: 'bar',
       data: {
         labels: stateLabels,
@@ -471,12 +860,12 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#1d1d1f',
+            backgroundColor: theme === 'dark' ? '#2c2c2e' : '#1d1d1f',
             cornerRadius: 4,
             callbacks: {
               label: (ctx) => {
                 if (ctx.label === '---') return '';
-                return `Average SLA: ${ctx.parsed.x.toFixed(1)} Days`;
+                return `${translations[lang]["chart-legend-sla"]}: ${ctx.parsed.x.toFixed(1)} ${lang === 'id' ? 'Hari' : 'Days'}`;
               }
             }
           }
@@ -486,20 +875,25 @@ document.addEventListener('DOMContentLoaded', () => {
             grid: gridConfig,
             ticks: {
               font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
-              callback: (value) => `${value}d`
+              color: Chart.defaults.color,
+              callback: (value) => `${value}h`
             }
           },
           y: {
             grid: { display: false },
             ticks: {
-              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 }
+              font: { family: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif", size: 10 },
+              color: Chart.defaults.color
             }
           }
         }
       }
     });
 
-    charts['logistics'] = [chartRevDel, chartStateDel];
+    // Save references to global registry for navigation resizes
+    charts['overview'] = [chartInstances.monthlyTrend];
+    charts['revenue'] = [chartInstances.topCategories, chartInstances.paymentMethods];
+    charts['logistics'] = [chartInstances.reviewsDelivery, chartInstances.stateDelivery];
   }
 
   // Business Impact Simulator
@@ -523,9 +917,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const outStatus = document.getElementById('manifest-status');
     const outTimestamp = document.getElementById('manifest-timestamp');
 
-    // Set simulator timestamp
-    const now = new Date();
-    outTimestamp.textContent = `DATE: ${now.getDate()}-${now.toLocaleString('en-US', { month: 'short' }).toUpperCase()}-${now.getFullYear()} // TIME: ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    // Gauge bar elements
+    const gaugeFill = document.getElementById('manifest-growth-fill');
+    const gaugePercentText = document.getElementById('manifest-growth-percent');
+
+    // Run dynamic clock
+    outTimestamp.textContent = formatManifestTimestamp(now, activeLang);
 
     function updateSimulation() {
       const targetRepeat = parseFloat(sliderRepeat.value);
@@ -534,7 +931,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Update display values
       valRepeat.textContent = `${targetRepeat.toFixed(2)}%`;
-      valSla.textContent = `${targetSla.toFixed(1)} Days`;
+      valSla.textContent = `${targetSla.toFixed(1)} ${activeLang === 'id' ? 'Hari' : 'Days'}`;
       valBudget.textContent = `${targetBudgetShift}%`;
 
       // 1. Customer Loyalty Calculations
@@ -568,12 +965,20 @@ document.addEventListener('DOMContentLoaded', () => {
       outRatingScore.textContent = `${projectedRating.toFixed(2)} / 5.00`;
       outTotalRevenue.textContent = formatCurrency(totalSimRevenue);
 
+      // 4. Update Target Progress Gauge
+      const growthPercent = ((totalSimRevenue - kpis.total_revenue) / kpis.total_revenue) * 100.0;
+      const targetMaxPercent = 20.0; // 20% max growth scale
+      const barFillWidth = Math.min(100, Math.max(0, (growthPercent / targetMaxPercent) * 100.0));
+      
+      gaugePercentText.textContent = `+${growthPercent.toFixed(2)}%`;
+      gaugeFill.style.width = `${barFillWidth.toFixed(1)}%`;
+
       // Status indicator highlight
       if (targetRepeat > 3.12 || targetSla < 25.6 || targetBudgetShift > 0) {
-        outStatus.textContent = "SIMULATED";
+        outStatus.textContent = translations[activeLang]["manifest-status-sim"];
         outStatus.className = "manifest-stamp alert";
       } else {
-        outStatus.textContent = "BASELINE";
+        outStatus.textContent = translations[activeLang]["manifest-status-base"];
         outStatus.className = "manifest-stamp";
       }
     }
@@ -590,7 +995,200 @@ document.addEventListener('DOMContentLoaded', () => {
       updateSimulation();
     });
 
+    // Make updateSimulation globally hookable for language toggles
+    window.triggerSimulatorUpdate = updateSimulation;
+
     // Run initial simulation
     updateSimulation();
+  }
+
+  // Language Switcher Controller
+  function initLanguageSwitcher() {
+    const btnEn = document.getElementById('btn-lang-en');
+    const btnId = document.getElementById('btn-lang-id');
+
+    function applyLanguage(lang) {
+      activeLang = lang;
+
+      // Toggle buttons style
+      if (lang === 'en') {
+        btnEn.classList.add('active');
+        btnId.classList.remove('active');
+      } else {
+        btnId.classList.add('active');
+        btnEn.classList.remove('active');
+      }
+
+      // Translate all data-translate elements
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+          // Check if element is a tooltip, translate its text attribute
+          if (el.classList.contains('tooltip')) {
+            el.setAttribute('data-tooltip-text', translations[lang][key]);
+          } else {
+            el.innerHTML = translations[lang][key];
+          }
+        }
+      });
+
+      // Update dynamic timestamps and elements
+      document.getElementById('refresh-timestamp').textContent = formatRefreshTimestamp(now, lang);
+      document.getElementById('ticker-date').textContent = formatDateForTicker(now, lang);
+      document.getElementById('kpi-delivery').textContent = `${dashboardData.kpis.average_delivery_time.toFixed(1)} ${lang === 'id' ? 'Hari' : 'Days'}`;
+
+      // Set tooltips explicitly for simulator sliders
+      document.querySelectorAll('.tooltip-icon').forEach(icon => {
+        const tooltipKey = icon.getAttribute('data-tooltip');
+        if (translations[lang] && translations[lang][tooltipKey]) {
+          icon.setAttribute('data-tooltip-text', translations[lang][tooltipKey]);
+        }
+      });
+
+      // Update ticker content details
+      const tickerSLA = document.getElementById('ticker-sla');
+      tickerSLA.textContent = lang === 'id' 
+        ? `RATA SLA: 12.3h // TINGKAT LOYALITAS: 3.12%`
+        : `AVG SLA: 12.3d // LOYALTY RATE: 3.12%`;
+
+      // Update dynamic greeting based on active language
+      applyGreeting(lang);
+
+      // Redraw charts with new language configurations
+      initCharts(dashboardData, lang);
+
+      // Trigger simulator recalculations
+      if (typeof window.triggerSimulatorUpdate === 'function') {
+        window.triggerSimulatorUpdate();
+      }
+    }
+
+    // Set defaults and bindings
+    btnEn.addEventListener('click', () => applyLanguage('en'));
+    btnId.addEventListener('click', () => applyLanguage('id'));
+
+    // Set current active state
+    applyLanguage(activeLang);
+  }
+
+  // User Greeting Setter
+  function applyGreeting(lang) {
+    const hour = now.getHours();
+    let greet = "";
+    if (lang === 'id') {
+      if (hour < 12) greet = "Selamat Pagi, Admin";
+      else if (hour < 15) greet = "Selamat Siang, Admin";
+      else if (hour < 18) greet = "Selamat Sore, Admin";
+      else greet = "Selamat Malam, Admin";
+    } else {
+      if (hour < 12) greet = "Good Morning, Admin";
+      else if (hour < 17) greet = "Good Afternoon, Admin";
+      else greet = "Good Evening, Admin";
+    }
+    document.getElementById('user-greeting').textContent = greet;
+  }
+
+  // Theme Manager (Dark/Light mode switch)
+  function initThemeManager() {
+    const btnTheme = document.getElementById('btn-theme-toggle');
+    const themeIcon = document.getElementById('theme-toggle-icon');
+    
+    // Get saved theme or system preference
+    let savedTheme = localStorage.getItem('theme') || 'light';
+    
+    const applyTheme = (theme) => {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+      
+      // Update charts scale/grid colors
+      initCharts(dashboardData, activeLang);
+    };
+    
+    applyTheme(savedTheme);
+    
+    btnTheme.addEventListener('click', () => {
+      let currentTheme = document.documentElement.getAttribute('data-theme');
+      let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+    });
+  }
+
+  // Live Logging Ticker Simulation
+  function initLogger() {
+    const container = document.getElementById('logger-container');
+    if (!container) return;
+    
+    const logTemplates = {
+      en: [
+        { level: 'info', text: 'São Paulo (SP) processing hub dispatched order #{{order}} successfully (Transit SLA: 8.7 days)' },
+        { level: 'success', text: 'Order #{{order}} delivered to customer in Curitiba (PR) // SLA matched: 11.9 days' },
+        { level: 'warn', text: 'Northern delivery alert: order #{{order}} to Amazonas (AM) transit exceeds SLA (25.6 days)' },
+        { level: 'success', text: 'Rio de Janeiro (RJ) express delivery cleared in 14.8 days for order #{{order}}' },
+        { level: 'info', text: 'Bahia (BA) dispatch terminal cleared order #{{order}} (Transit SLA: 18.6 days)' },
+        { level: 'info', text: 'Credit Card checkout processed for BRL {{revenue}}' },
+        { level: 'success', text: 'Boleto transaction verified for BRL {{revenue}}' },
+        { level: 'success', text: 'Repeat purchase detected for customer unique ID {{cust}}' },
+        { level: 'info', text: 'Customer loyalty coupon L2-RETENTION applied for order #{{order}}' }
+      ],
+      id: [
+        { level: 'info', text: 'Pusat pemrosesan São Paulo (SP) berhasil mengirimkan pesanan #{{order}} (SLA Transit: 8,7 hari)' },
+        { level: 'success', text: 'Pesanan #{{order}} berhasil diterima pelanggan di Curitiba (PR) // SLA sesuai: 11,9 hari' },
+        { level: 'warn', text: 'Peringatan pengiriman Utara: transit pesanan #{{order}} ke Amazonas (AM) melampaui SLA (25,6 hari)' },
+        { level: 'success', text: 'Pengiriman ekspres Rio de Janeiro (RJ) selesai dalam 14,8 hari untuk pesanan #{{order}}' },
+        { level: 'info', text: 'Terminal pengiriman Bahia (BA) memproses pesanan #{{order}} (SLA Transit: 18,6 hari)' },
+        { level: 'info', text: 'Pembayaran Kartu Kredit berhasil diproses sebesar BRL {{revenue}}' },
+        { level: 'success', text: 'Transaksi Boleto berhasil diverifikasi sebesar BRL {{revenue}}' },
+        { level: 'success', text: 'Pembelian berulang terdeteksi untuk ID unik pelanggan {{cust}}' },
+        { level: 'info', text: 'Kupon retensi pelanggan L2-LOYALTY diterapkan untuk pesanan #{{order}}' }
+      ]
+    };
+
+    const generateLog = () => {
+      const templateList = logTemplates[activeLang] || logTemplates['en'];
+      const selected = templateList[Math.floor(Math.random() * templateList.length)];
+      
+      const orderNum = Math.floor(1000 + Math.random() * 9000);
+      const revVal = (10 + Math.random() * 400).toFixed(2);
+      const custId = Math.random().toString(36).substring(2, 8).toUpperCase();
+      
+      let message = selected.text
+        .replace('{{order}}', orderNum)
+        .replace('{{revenue}}', revVal)
+        .replace('{{cust}}', custId);
+        
+      const time = new Date();
+      const timeStr = `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}:${time.getSeconds().toString().padStart(2, '0')}`;
+      
+      // Create log row elements
+      const logLine = document.createElement('div');
+      logLine.className = 'log-line';
+      logLine.innerHTML = `
+        <span class="log-timestamp">[${timeStr}]</span>
+        <span class="log-level ${selected.level}">${selected.level}</span>
+        <span class="log-text">${message}</span>
+      `;
+      
+      container.appendChild(logLine);
+      
+      // Scroll to bottom
+      const wrap = document.querySelector('.logger-wrap');
+      if (wrap) {
+        wrap.scrollTop = wrap.scrollHeight;
+      }
+      
+      // Keep feed tidy
+      if (container.children.length > 25) {
+        container.removeChild(container.firstChild);
+      }
+    };
+
+    // Fill initial logs
+    for (let i = 0; i < 4; i++) {
+      generateLog();
+    }
+    
+    // Dynamic periodic stream
+    setInterval(generateLog, 6000);
   }
 });
