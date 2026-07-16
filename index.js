@@ -112,6 +112,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const charts = {};
 
+  // Format Helpers
+  const formatCurrency = (val) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(val);
+  };
+
+  const formatNumber = (val) => {
+    return new Intl.NumberFormat('pt-BR').format(val);
+  };
+
   // Tab Navigation Handling
   const navItems = document.querySelectorAll('.nav-item');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -150,21 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 4. Initialize Business Impact Simulator
   initSimulator(dashboardData.kpis);
-
-  // Format Helpers
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(val);
-  };
-
-  const formatNumber = (val) => {
-    return new Intl.NumberFormat('pt-BR').format(val);
-  };
-
   // Populate KPIs
   function populateKPIs(kpis) {
     document.getElementById('kpi-revenue').textContent = formatCurrency(kpis.total_revenue);
