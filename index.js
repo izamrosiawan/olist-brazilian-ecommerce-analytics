@@ -214,7 +214,12 @@ document.addEventListener('DOMContentLoaded', () => {
       "logs-panel-title": "Live Network Transactions & SLA Feed",
       "logs-panel-sub": "Real-time simulation of operational checkpoints and logistics processing",
       "chip-live-feed": "LIVE_FEED",
-      "manifest-gauge-label": "Revenue Growth Target"
+      "manifest-gauge-label": "Revenue Growth Target",
+      "search-city-placeholder": "Search city...",
+      "inspector-badge": "CATEGORY INSPECTOR",
+      "inspect-stat-revenue": "Category Revenue",
+      "inspect-stat-share": "Platform Share",
+      "inspect-rec-title": "Operational Strategy"
     },
     id: {
       "live-network": "JARINGAN AKTIF: ONLINE",
@@ -288,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "slider-repeat-title": "Tingkat Pembelian Berulang (%)",
       "slider-repeat-base": "Dasar: 3.12%",
       "slider-repeat-target": "Target: 15.00%",
-      "slider-sla-title": "Pengurangan SLA Wilayah Utara (Hari)",
+      "slider-sla-title": "Pengurangan SLA Negara Bagian",
       "slider-sla-target": "Fulfillment Hub (10h)",
       "slider-sla-base": "Dasar (25.6h)",
       "slider-budget-title": "Pengalihan Pemasaran ke AOV Tinggi (%)",
@@ -308,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "manifest-footer-note": "METRIK SIMULASI SISTEM OLIST DENGAN ESTIMASI +- 5% BATAS EROR.",
       "btn-print": "Cetak Manifest",
       "sim-repeat-tooltip": "Mensimulasikan pertumbuhan pembelian berulang lewat program CRM & loyalitas.",
-      "sim-sla-tooltip": "Memangkas waktu kirim wilayah Utara (AM/AP) dengan menempatkan gudang pemenuhan regional.",
+      "sim-sla-tooltip": "Memangkas waktu kirim negara bagian yang dipilih dengan mendirikan gudang regional.",
       "sim-budget-tooltip": "Menggeser fokus iklan digital pada produk bernilai tinggi (AOV tinggi).",
       "chart-legend-revenue": "Pendapatan Bulanan (BRL)",
       "chart-legend-top-revenue": "Total Pendapatan (BRL)",
@@ -318,7 +323,12 @@ document.addEventListener('DOMContentLoaded', () => {
       "logs-panel-title": "Aliran SLA & Transaksi Jaringan Langsung",
       "logs-panel-sub": "Simulasi waktu-nyata pos pemeriksaan operasional dan pemrosesan logistik",
       "chip-live-feed": "ALIRAN_LANGSUNG",
-      "manifest-gauge-label": "Target Pertumbuhan Pendapatan"
+      "manifest-gauge-label": "Target Pertumbuhan Pendapatan",
+      "search-city-placeholder": "Cari kota...",
+      "inspector-badge": "INSPEKTUR KATEGORI",
+      "inspect-stat-revenue": "Pendapatan Kategori",
+      "inspect-stat-share": "Pangsa Platform",
+      "inspect-rec-title": "Strategi Operasional"
     }
   };
 
@@ -371,6 +381,60 @@ document.addEventListener('DOMContentLoaded', () => {
       "Boleto": "Boleto",
       "Voucher": "Voucher",
       "Debit Card": "Debit Card"
+    }
+  };
+
+  const stateMetadata = {
+    "AM": { orders: 148, revenue: 27966.38, name: "Amazonas", baseSLA: 25.645 },
+    "AP": { orders: 68, revenue: 13474.30, name: "Amapá", baseSLA: 24.760 },
+    "RR": { orders: 46, revenue: 7829.12, name: "Roraima", baseSLA: 23.357 },
+    "PA": { orders: 975, revenue: 178947.81, name: "Pará", baseSLA: 23.020 },
+    "AL": { orders: 413, revenue: 80314.15, name: "Alagoas", baseSLA: 24.140 },
+    "MA": { orders: 747, revenue: 119548.80, name: "Maranhão", baseSLA: 21.115 },
+    "SE": { orders: 350, revenue: 58947.21, name: "Sergipe", baseSLA: 20.332 },
+    "CE": { orders: 1336, revenue: 227258.90, name: "Ceará", baseSLA: 20.171 }
+  };
+
+  const categoryDetails = {
+    "Health Beauty": {
+      id: {
+        rec: "Kategori dengan volume tertinggi. Direkomendasikan untuk menempatkan inventaris di gudang regional São Paulo dan Rio untuk mempercepat pengiriman hingga < 3 hari, serta menawarkan paket bundling produk kecantikan untuk menaikkan AOV."
+      },
+      en: {
+        rec: "High volume category. Recommended to pre-stock inventory in São Paulo and Rio fulfillment hubs to achieve < 3 day SLA, and offer cosmetic product bundles to boost average transaction value."
+      },
+      aov: 130.40,
+      share: 7.86
+    },
+    "Watches Gifts": {
+      id: {
+        rec: "Kategori dengan nilai transaksi rata-rata (AOV) tertinggi. Paling diuntungkan jika dialokasikan budget iklan digital tambahan untuk menjangkau segmen premium dan memaksimalkan ROI kampanye."
+      },
+      en: {
+        rec: "Highest Average Order Value (AOV) driver. Highly recommended to shift digital ad spend to this segment to acquire premium clients and maximize platform campaign ROI."
+      },
+      aov: 201.20,
+      share: 7.53
+    },
+    "Bed Bath Table": {
+      id: {
+        rec: "Volume penjualan tinggi namun sering mengalami keterlambatan pengiriman karena dimensi paket yang besar. Gunakan kurir kargo khusus regional untuk menekan biaya pengiriman."
+      },
+      en: {
+        rec: "High volume but experiences shipping delays due to bulk sizes. Recommended to transition to regional cargo carrier networks to reduce freight costs and match SLAs."
+      },
+      aov: 110.10,
+      share: 6.48
+    },
+    "default": {
+      id: {
+        rec: "Segmen stabil. Optimalkan manajemen rantai pasokan seller dan sediakan dukungan promosi saat musim perayaan atau kampanye akhir bulan."
+      },
+      en: {
+        rec: "Stable segment. Optimize seller supply chain logistics and provide promotional marketing push during seasonality peaks."
+      },
+      aov: 140.00,
+      share: 3.50
     }
   };
 
@@ -470,6 +534,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 7. Initialize Live Logging Ticker
   initLogger();
+
+  // 8. Initialize City Table Search
+  initCitySearch();
 
   // Populate KPIs
   function populateKPIs(kpis) {
@@ -662,6 +729,14 @@ document.addEventListener('DOMContentLoaded', () => {
         indexAxis: 'y',
         responsive: true,
         maintainAspectRatio: false,
+        onClick: (event, elements) => {
+          if (elements && elements.length > 0) {
+            const index = elements[0].index;
+            const label = chartInstances.topCategories.data.labels[index];
+            const originalCat = data.top_categories[index];
+            showCategoryDetails(originalCat, label, activeLang);
+          }
+        },
         plugins: {
           legend: { display: false },
           tooltip: {
@@ -691,6 +766,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
+
+    // Close Category Inspector when clicking close button
+    const btnCloseInspect = document.getElementById('btn-inspector-close');
+    if (btnCloseInspect) {
+      btnCloseInspect.addEventListener('click', () => {
+        document.getElementById('category-inspector').classList.remove('active');
+      });
+    }
 
     // ----- C. Payment Methods Donut Chart (Demand Tab) -----
     const methods = data.payment_methods.map(d => paymentTranslations[lang][d.method] || d.method);
@@ -896,6 +979,27 @@ document.addEventListener('DOMContentLoaded', () => {
     charts['logistics'] = [chartInstances.reviewsDelivery, chartInstances.stateDelivery];
   }
 
+  // Visual Category Details display panel renderer
+  function showCategoryDetails(originalCat, label, lang) {
+    const inspector = document.getElementById('category-inspector');
+    if (!inspector) return;
+    
+    const nameEl = document.getElementById('inspect-name');
+    const revEl = document.getElementById('inspect-revenue');
+    const shareEl = document.getElementById('inspect-share');
+    const recEl = document.getElementById('inspect-rec-text');
+    
+    const details = categoryDetails[originalCat.category] || categoryDetails["default"];
+    const textObj = details[lang] || details['en'];
+    
+    nameEl.textContent = label;
+    revEl.textContent = formatCurrency(originalCat.revenue);
+    shareEl.textContent = `${details.share.toFixed(2)}%`;
+    recEl.textContent = textObj.rec;
+    
+    inspector.classList.add('active');
+  }
+
   // Business Impact Simulator
   function initSimulator(kpis) {
     const sliderRepeat = document.getElementById('slider-repeat');
@@ -921,13 +1025,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const gaugeFill = document.getElementById('manifest-growth-fill');
     const gaugePercentText = document.getElementById('manifest-growth-percent');
 
+    // State Selector Dropdown Elements
+    const selectState = document.getElementById('select-sla-state');
+    const labelState = document.getElementById('sim-state-label');
+    const labelBaseline = document.getElementById('sim-state-baseline');
+
     // Run dynamic clock
     outTimestamp.textContent = formatManifestTimestamp(now, activeLang);
+
+    // Bind selector dropdown events
+    selectState.addEventListener('change', () => {
+      const state = selectState.value;
+      const meta = stateMetadata[state];
+      
+      // Update slider bounds dynamically
+      sliderSla.max = meta.baseSLA.toFixed(1);
+      sliderSla.value = meta.baseSLA.toFixed(1);
+      
+      labelState.textContent = activeLang === 'id' ? `SLA AKTIF: ${meta.name}` : `ACTIVE SLA: ${meta.name}`;
+      labelBaseline.textContent = activeLang === 'id' ? `Dasar (${meta.baseSLA.toFixed(1)}h)` : `Baseline (${meta.baseSLA.toFixed(1)}d)`;
+      
+      updateSimulation();
+    });
 
     function updateSimulation() {
       const targetRepeat = parseFloat(sliderRepeat.value);
       const targetSla = parseFloat(sliderSla.value);
       const targetBudgetShift = parseFloat(sliderBudget.value);
+
+      const activeState = selectState.value;
+      const meta = stateMetadata[activeState];
 
       // Update display values
       valRepeat.textContent = `${targetRepeat.toFixed(2)}%`;
@@ -939,11 +1066,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const additionalOrders = Math.round(kpis.total_customers * (repeatDelta / 100.0));
       const retentionRevenueUplift = additionalOrders * kpis.aov;
 
-      // 2. Logistics SLA Review Rating Savings
-      const slaReduction = 25.6 - targetSla;
-      const slaRevenueUplift = slaReduction * 35000;
+      // 2. Logistics State-Specific SLA Reduction Gains
+      const stateBaseSla = meta.baseSLA;
+      const stateReduction = Math.max(0, stateBaseSla - targetSla);
       
-      const ratingImprovement = slaReduction * 0.015;
+      // Calculate impact on overall national average SLA
+      const nationalSlaReduction = (stateReduction * meta.orders) / kpis.total_orders;
+      
+      // Estimated cost savings of BRL 120 per day delayed per order
+      const slaRevenueUplift = stateReduction * meta.orders * 120;
+      
+      // SLA-Rating overall shift
+      const ratingImprovement = nationalSlaReduction * 0.4;
       const projectedRating = Math.min(5.00, kpis.average_review_score + ratingImprovement);
 
       // 3. High AOV Budget Allocation Shift
@@ -967,14 +1101,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 4. Update Target Progress Gauge
       const growthPercent = ((totalSimRevenue - kpis.total_revenue) / kpis.total_revenue) * 100.0;
-      const targetMaxPercent = 20.0; // 20% max growth scale
+      const targetMaxPercent = 10.0; // 10% max growth scale for visualization
       const barFillWidth = Math.min(100, Math.max(0, (growthPercent / targetMaxPercent) * 100.0));
       
       gaugePercentText.textContent = `+${growthPercent.toFixed(2)}%`;
       gaugeFill.style.width = `${barFillWidth.toFixed(1)}%`;
 
       // Status indicator highlight
-      if (targetRepeat > 3.12 || targetSla < 25.6 || targetBudgetShift > 0) {
+      if (targetRepeat > 3.12 || stateReduction > 0 || targetBudgetShift > 0) {
         outStatus.textContent = translations[activeLang]["manifest-status-sim"];
         outStatus.className = "manifest-stamp alert";
       } else {
@@ -989,14 +1123,26 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderBudget.addEventListener('input', updateSimulation);
 
     btnReset.addEventListener('click', () => {
+      selectState.value = "AM";
+      const meta = stateMetadata["AM"];
+      sliderSla.max = meta.baseSLA.toFixed(1);
+      sliderSla.value = meta.baseSLA.toFixed(1);
+      labelState.textContent = activeLang === 'id' ? `SLA AKTIF: ${meta.name}` : `ACTIVE SLA: ${meta.name}`;
+      labelBaseline.textContent = activeLang === 'id' ? `Dasar (${meta.baseSLA.toFixed(1)}h)` : `Baseline (${meta.baseSLA.toFixed(1)}d)`;
+      
       sliderRepeat.value = 3.12;
-      sliderSla.value = 25.6;
       sliderBudget.value = 0;
       updateSimulation();
     });
 
     // Make updateSimulation globally hookable for language toggles
     window.triggerSimulatorUpdate = updateSimulation;
+    window.triggerStateLabelUpdate = () => {
+      const state = selectState.value;
+      const meta = stateMetadata[state];
+      labelState.textContent = activeLang === 'id' ? `SLA AKTIF: ${meta.name}` : `ACTIVE SLA: ${meta.name}`;
+      labelBaseline.textContent = activeLang === 'id' ? `Dasar (${meta.baseSLA.toFixed(1)}h)` : `Baseline (${meta.baseSLA.toFixed(1)}d)`;
+    };
 
     // Run initial simulation
     updateSimulation();
@@ -1023,12 +1169,19 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('[data-translate]').forEach(el => {
         const key = el.getAttribute('data-translate');
         if (translations[lang] && translations[lang][key]) {
-          // Check if element is a tooltip, translate its text attribute
           if (el.classList.contains('tooltip')) {
             el.setAttribute('data-tooltip-text', translations[lang][key]);
           } else {
             el.innerHTML = translations[lang][key];
           }
+        }
+      });
+
+      // Translate inputs placeholder dynamically
+      document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-translate-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+          el.setAttribute('placeholder', translations[lang][key]);
         }
       });
 
@@ -1053,6 +1206,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Update dynamic greeting based on active language
       applyGreeting(lang);
+
+      // Trigger simulator label refresh
+      if (typeof window.triggerStateLabelUpdate === 'function') {
+        window.triggerStateLabelUpdate();
+      }
 
       // Redraw charts with new language configurations
       initCharts(dashboardData, lang);
@@ -1190,5 +1348,29 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Dynamic periodic stream
     setInterval(generateLog, 6000);
+  }
+
+  // Real-time Top Cities table Search filter handler
+  function initCitySearch() {
+    const searchInput = document.getElementById('search-city');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase().trim();
+      const tbody = document.querySelector('#table-top-cities tbody');
+      if (!tbody) return;
+      
+      const rows = tbody.querySelectorAll('tr');
+      rows.forEach(row => {
+        const cityName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        if (cityName.includes(query)) {
+          row.style.display = '';
+          row.style.opacity = '1';
+        } else {
+          row.style.display = 'none';
+          row.style.opacity = '0';
+        }
+      });
+    });
   }
 });

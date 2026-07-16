@@ -222,7 +222,7 @@
       
       <div class="visuals-grid-2">
         <!-- Top Categories Chart -->
-        <div class="chart-card glass">
+        <div class="chart-card glass" style="position: relative; overflow: hidden;">
           <div class="chart-card-header">
             <div class="chart-title-group">
               <h2 class="chart-title" data-translate="chart-cats-title">Revenue by Product Category</h2>
@@ -232,6 +232,30 @@
           </div>
           <div class="chart-container chart-container-medium">
             <canvas id="chart-top-categories"></canvas>
+          </div>
+          
+          <!-- Category Inspector Overlay Panel -->
+          <div class="category-inspector" id="category-inspector">
+            <button type="button" class="inspector-close" id="btn-inspector-close">&times;</button>
+            <div class="inspector-content">
+              <div class="inspector-badge" data-translate="inspector-badge">CATEGORY INSPECTOR</div>
+              <h3 class="inspector-title" id="inspect-name">Category</h3>
+              <div class="inspector-stats">
+                <div class="inspect-stat-item">
+                  <div class="inspect-stat-label" data-translate="inspect-stat-revenue">Category Revenue</div>
+                  <div class="inspect-stat-value" id="inspect-revenue">BRL 0</div>
+                </div>
+                <div class="inspect-stat-item">
+                  <div class="inspect-stat-label" data-translate="inspect-stat-share">Platform Share</div>
+                  <div class="inspect-stat-value" id="inspect-share">0%</div>
+                </div>
+              </div>
+              <div class="inspector-divider"></div>
+              <div class="inspector-recommendation">
+                <h4 class="inspect-rec-title" data-translate="inspect-rec-title">Operational Strategy</h4>
+                <p class="inspect-rec-text" id="inspect-rec-text">Click a bar to load metrics.</p>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -252,12 +276,20 @@
       
       <!-- Top Cities Table -->
       <div class="chart-card glass">
-        <div class="chart-card-header">
-          <div class="chart-title-group">
+        <div class="chart-card-header" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;">
+          <div class="chart-title-group" style="flex: 1; min-width: 280px;">
             <h2 class="chart-title" data-translate="table-cities-title">Top 10 Cities by Revenue & Volume</h2>
             <p class="chart-subtitle" data-translate="table-cities-sub">São Paulo is the commercial core, followed by Rio de Janeiro and Belo Horizonte</p>
           </div>
-          <span class="chip font-mono" data-translate="chip-regional-perf">REGIONAL_PERF</span>
+          
+          <!-- Dynamic Search bar -->
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="search-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-city" placeholder="Search city..." data-translate-placeholder="search-city-placeholder" />
+            </div>
+            <span class="chip font-mono" data-translate="chip-regional-perf">REGIONAL_PERF</span>
+          </div>
         </div>
         <div class="table-container">
           <table class="min-table" id="table-top-cities">
@@ -387,19 +419,36 @@
             </div>
           </div>
           
-          <!-- Control 2: Northern State SLA -->
+          <!-- Control 2: State SLA Selection & Reduction -->
           <div class="control-group">
-            <div class="control-label-row">
+            <div class="control-label-row" style="flex-wrap: wrap; gap: 8px;">
               <span class="control-title">
-                <span data-translate="slider-sla-title">Northern SLA Reduction (Days)</span>
+                <span data-translate="slider-sla-title">State-Specific SLA Reduction</span>
                 <span class="tooltip-icon tooltip" data-tooltip="sim-sla-tooltip">ⓘ</span>
               </span>
+              
+              <!-- State Selector Dropdown -->
+              <div class="state-select-wrap">
+                <select id="select-sla-state">
+                  <option value="AM" selected>AM (Amazonas)</option>
+                  <option value="AP">AP (Amapá)</option>
+                  <option value="RR">RR (Roraima)</option>
+                  <option value="PA">PA (Pará)</option>
+                  <option value="AL">AL (Alagoas)</option>
+                  <option value="MA">MA (Maranhão)</option>
+                  <option value="SE">SE (Sergipe)</option>
+                  <option value="CE">CE (Ceará)</option>
+                </select>
+              </div>
+            </div>
+            <div class="control-label-row" style="margin-top: 4px;">
+              <span class="caption font-mono" id="sim-state-label" style="text-transform: uppercase;">Active State SLA</span>
               <span class="control-value-badge" id="sim-val-sla">25.6 Days</span>
             </div>
             <input type="range" class="stark-slider" id="slider-sla" min="10.0" max="25.6" step="0.1" value="25.6">
             <div style="display: flex; justify-content: space-between;" class="caption font-mono">
               <span data-translate="slider-sla-target">Fulfillment Hubs (10d)</span>
-              <span data-translate="slider-sla-base">Baseline (25.6d)</span>
+              <span id="sim-state-baseline">Baseline (25.6d)</span>
             </div>
           </div>
 
