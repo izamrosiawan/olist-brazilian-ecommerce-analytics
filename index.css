@@ -1584,3 +1584,200 @@ h1.headline-display {
   transform: translateY(-50%);
   pointer-events: none;
 }
+
+/* ==========================================================================
+   SQL Playground Styles
+   ========================================================================== */
+
+.sql-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .sql-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar schema reference and query presets */
+.sql-controls {
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+}
+
+.schema-ref-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  font-size: 11px;
+  line-height: 1.5;
+  border-top: 1px solid var(--color-border-light);
+  padding-top: 16px;
+  color: var(--color-text);
+}
+
+.schema-table-item {
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--color-border-light);
+}
+
+.schema-table-item strong {
+  color: var(--color-primary);
+}
+
+.schema-table-item code {
+  color: var(--color-text-muted);
+}
+
+#select-preset-query {
+  width: 100%;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text);
+  padding: 8px 24px 8px 12px;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  transition: border-color var(--transition-fast);
+}
+
+#select-preset-query:hover, #select-preset-query:focus {
+  border-color: var(--color-primary);
+}
+
+/* SQL Code Editor & Terminal */
+.sql-terminal-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.sql-editor-card {
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+}
+
+.sql-editor-container {
+  margin: var(--spacing-md) 0;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: #0b0f19; /* dark coding terminal style */
+}
+
+#sql-editor {
+  width: 100%;
+  min-height: 160px;
+  padding: 16px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #c5cdd8;
+  font-size: 13px;
+  line-height: 1.6;
+  resize: vertical;
+  font-family: var(--font-mono);
+}
+
+/* Action controls */
+.sql-action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sql-status-text {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.sql-buttons-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* Results panel */
+.sql-results-card {
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sql-results-table-container {
+  overflow-x: auto;
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  margin-top: 12px;
+  flex: 1;
+}
+
+/* Loader & Error states */
+.sql-error-banner {
+  background-color: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid #ef4444;
+  color: #f87171;
+  padding: 12px 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: var(--radius-sm);
+  margin-top: 12px;
+  white-space: pre-wrap;
+}
+
+.sql-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px 24px;
+  flex: 1;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--color-primary);
+  animation: spin 0.8s linear infinite;
+}
+
+.sql-loader-text {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-align: center;
+  max-width: 380px;
+  line-height: 1.5;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Table styling fixes for SQL query outcomes */
+#table-sql-results th {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-surface);
+  z-index: 2;
+  box-shadow: 0 1px 0 var(--color-border-light);
+}
+

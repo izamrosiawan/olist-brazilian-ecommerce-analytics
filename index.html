@@ -6,8 +6,9 @@
   <title>Olist Operational System // Brazil Ecommerce Analytics</title>
   <meta name="description" content="A stark, high-contrast operational analytics dashboard for Olist Brazilian E-commerce performance, built on clean Swiss typography and white space.">
   <link rel="stylesheet" href="index.css">
-  <!-- Chart.js for minimalist data visualizations -->
+  <!-- Chart.js and SQL.js for visualizations and relational sandbox -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
 </head>
 <body>
 
@@ -82,6 +83,11 @@
         <li class="nav-item" data-tab="simulator">
           <button type="button" data-translate="nav-simulator">
             IMPACT SIMULATOR
+          </button>
+        </li>
+        <li class="nav-item" data-tab="sql">
+          <button type="button" data-translate="nav-sql">
+            SQL PLAYGROUND
           </button>
         </li>
       </ul>
@@ -596,6 +602,107 @@
               <button type="button" class="btn-primary" onclick="window.print()" data-translate="btn-print">
                 Print manifest
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: SQL PLAYGROUND ==================== -->
+    <section id="tab-sql" class="tab-content">
+      <div class="page-header">
+        <div class="page-header-info">
+          <div class="page-title-badge" data-translate="module-sql-id">MODULE ID: BR-SQL-05</div>
+          <h1 class="headline-display" data-translate="sql-title">SQL Operational Sandbox</h1>
+        </div>
+        <div class="caption font-mono" id="sql-db-status" data-translate="sql-db-status-unloaded">DATABASE: CLICK TO INITIALIZE</div>
+      </div>
+
+      <div class="sql-layout">
+        <!-- Sidebar Queries / Console Controls -->
+        <div class="sql-controls chart-card glass">
+          <div class="chart-title-group" style="margin-bottom: var(--spacing-md);">
+            <h2 class="chart-title" data-translate="sql-controls-title">Query Control</h2>
+            <p class="chart-subtitle" data-translate="sql-controls-sub">Select a pre-configured scenario or write a custom SQLite query to run against the Olist dataset.</p>
+          </div>
+
+          <div class="control-group">
+            <label for="select-preset-query" class="control-title" style="margin-bottom: 8px; display: block;" data-translate="sql-preset-label">Choose Preset Scenario</label>
+            <div class="state-select-wrap" style="width: 100%;">
+              <select id="select-preset-query" style="width: 100%;">
+                <option value="custom" selected data-translate="preset-opt-custom">-- Custom Query --</option>
+                <option value="mom_revenue" data-translate="preset-opt-mom">Scenario A: Month-over-Month Revenue Growth</option>
+                <option value="cohort_retention" data-translate="preset-opt-cohort">Scenario B: Customer Cohort Retention (First 3 Months)</option>
+                <option value="top_categories_reviews" data-translate="preset-opt-categories">Scenario C: Top 10 Product Categories by Revenue vs Rating</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-group" style="margin-top: 16px;">
+            <label class="control-title" style="margin-bottom: 8px; display: block;" data-translate="sql-schema-label">Quick Schema Reference</label>
+            <div class="schema-ref-container font-mono">
+              <div class="schema-table-item"><strong>orders</strong>: <code>order_id</code>, <code>customer_id</code>, <code>order_status</code>, <code>order_purchase_timestamp</code></div>
+              <div class="schema-table-item"><strong>order_items</strong>: <code>order_id</code>, <code>product_id</code>, <code>price</code>, <code>freight_value</code></div>
+              <div class="schema-table-item"><strong>customers</strong>: <code>customer_id</code>, <code>customer_unique_id</code>, <code>customer_city</code>, <code>customer_state</code></div>
+              <div class="schema-table-item"><strong>order_reviews</strong>: <code>review_id</code>, <code>order_id</code>, <code>review_score</code></div>
+              <div class="schema-table-item"><strong>products</strong>: <code>product_id</code>, <code>product_category_name</code></div>
+              <div class="schema-table-item"><strong>product_category_name_translation</strong>: <code>product_category_name</code>, <code>product_category_name_english</code></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SQL Editor and Output Terminal -->
+        <div class="sql-terminal-wrap">
+          <div class="chart-card glass sql-editor-card">
+            <div class="chart-card-header">
+              <div class="chart-title-group">
+                <h2 class="chart-title" data-translate="sql-editor-title">SQL Query Console</h2>
+                <p class="chart-subtitle" data-translate="sql-editor-sub">Write SQLite-compatible syntax. Remember to end queries with a semicolon.</p>
+              </div>
+              <span class="chip font-mono">SQLITE_V3</span>
+            </div>
+
+            <div class="sql-editor-container">
+              <textarea id="sql-editor" class="font-mono" spellcheck="false" placeholder="-- Type your custom SQL here...&#10;SELECT * FROM orders LIMIT 5;"></textarea>
+            </div>
+
+            <div class="sql-action-row">
+              <div class="sql-status-text font-mono" id="sql-execution-status" data-translate="sql-status-idle">Console ready.</div>
+              <div class="sql-buttons-group">
+                <button type="button" class="btn-secondary" id="btn-export-sql-csv" disabled data-translate="btn-export-csv">Export CSV</button>
+                <button type="button" class="btn-primary" id="btn-run-sql" data-translate="btn-run-query">Run Query</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Query Results Grid -->
+          <div class="chart-card glass sql-results-card" style="margin-top: 24px;">
+            <div class="chart-card-header">
+              <div class="chart-title-group">
+                <h2 class="chart-title" data-translate="sql-results-title">Output Dataset</h2>
+                <p class="chart-subtitle" id="sql-results-subtitle" data-translate="sql-results-sub">Execute a query to populate the result table.</p>
+              </div>
+              <span class="chip font-mono" id="sql-row-count-badge">0 ROWS</span>
+            </div>
+            
+            <!-- SQL Error banner -->
+            <div class="sql-error-banner font-mono" id="sql-error-banner" style="display: none;"></div>
+
+            <!-- Loader -->
+            <div class="sql-loader-container" id="sql-loader" style="display: none;">
+              <div class="spinner"></div>
+              <div class="sql-loader-text" id="sql-loader-text" data-translate="sql-loader-loading-db">Downloading operational database (68MB)... This might take a moment.</div>
+            </div>
+
+            <div class="table-container sql-results-table-container">
+              <table class="min-table" id="table-sql-results">
+                <thead>
+                  <!-- Generated dynamically -->
+                </thead>
+                <tbody>
+                  <!-- Generated dynamically -->
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

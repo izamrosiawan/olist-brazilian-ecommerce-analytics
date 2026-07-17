@@ -219,7 +219,27 @@ document.addEventListener('DOMContentLoaded', () => {
       "inspector-badge": "CATEGORY INSPECTOR",
       "inspect-stat-revenue": "Category Revenue",
       "inspect-stat-share": "Platform Share",
-      "inspect-rec-title": "Operational Strategy"
+      "inspect-rec-title": "Operational Strategy",
+      "nav-sql": "SQL PLAYGROUND",
+      "module-sql-id": "MODULE ID: BR-SQL-05",
+      "sql-title": "SQL Operational Sandbox",
+      "sql-db-status-unloaded": "DATABASE: CLICK TO INITIALIZE",
+      "sql-controls-title": "Query Control",
+      "sql-controls-sub": "Select a pre-configured scenario or write a custom SQLite query to run against the Olist dataset.",
+      "sql-preset-label": "Choose Preset Scenario",
+      "preset-opt-custom": "-- Custom Query --",
+      "preset-opt-mom": "Scenario A: Month-over-Month Revenue Growth",
+      "preset-opt-cohort": "Scenario B: Customer Cohort Retention (First 3 Months)",
+      "preset-opt-categories": "Scenario C: Top 10 Product Categories by Revenue vs Rating",
+      "sql-schema-label": "Quick Schema Reference",
+      "sql-editor-title": "SQL Query Console",
+      "sql-editor-sub": "Write SQLite-compatible syntax. Remember to end queries with a semicolon.",
+      "sql-status-idle": "Console ready.",
+      "btn-export-csv": "Export CSV",
+      "btn-run-query": "Run Query",
+      "sql-results-title": "Output Dataset",
+      "sql-results-sub": "Execute a query to populate the result table.",
+      "sql-loader-loading-db": "Downloading operational database (68MB)... This might take a moment."
     },
     id: {
       "live-network": "JARINGAN AKTIF: ONLINE",
@@ -328,7 +348,27 @@ document.addEventListener('DOMContentLoaded', () => {
       "inspector-badge": "INSPEKTUR KATEGORI",
       "inspect-stat-revenue": "Pendapatan Kategori",
       "inspect-stat-share": "Pangsa Platform",
-      "inspect-rec-title": "Strategi Operasional"
+      "inspect-rec-title": "Strategi Operasional",
+      "nav-sql": "SQL PLAYGROUND",
+      "module-sql-id": "ID MODUL: BR-SQL-05",
+      "sql-title": "Operational Sandbox SQL",
+      "sql-db-status-unloaded": "DATABASE: KLIK UNTUK INISIALISASI",
+      "sql-controls-title": "Kontrol Kueri",
+      "sql-controls-sub": "Pilih skenario konfigurasi atau tulis kueri SQLite kustom untuk dijalankan pada dataset Olist.",
+      "sql-preset-label": "Pilih Skenario Presets",
+      "preset-opt-custom": "-- Kueri Kustom --",
+      "preset-opt-mom": "Skenario A: Pertumbuhan Pendapatan Bulanan (MoM)",
+      "preset-opt-cohort": "Skenario B: Retensi Kohort Pelanggan (3 Bulan Pertama)",
+      "preset-opt-categories": "Skenario C: 10 Kategori Teratas berdasarkan Pendapatan vs Rating",
+      "sql-schema-label": "Referensi Cepat Skema",
+      "sql-editor-title": "Konsol Kueri SQL",
+      "sql-editor-sub": "Tulis sintaks SQLite yang kompatibel. Ingat untuk mengakhiri kueri dengan titik koma.",
+      "sql-status-idle": "Konsol siap.",
+      "btn-export-csv": "Ekspor CSV",
+      "btn-run-query": "Jalankan Kueri",
+      "sql-results-title": "Output Dataset",
+      "sql-results-sub": "Jalankan kueri untuk mengisi data tabel hasil.",
+      "sql-loader-loading-db": "Mengunduh database operasional (68MB)... Ini memerlukan waktu sesaat."
     }
   };
 
@@ -503,6 +543,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
+      // Lazy load SQLite database if SQL tab is activated
+      if (tabName === 'sql') {
+        loadSqlDatabase();
+      }
+
       // Trigger Chart renders / updates in case of sizing glitches
       if (charts[tabName]) {
         charts[tabName].forEach(chart => {
@@ -537,6 +582,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. Initialize City Table Search
   initCitySearch();
+
+  // 9. Initialize SQL Playground Manager
+  initSqlPlaygroundManager();
 
   // Populate KPIs
   function populateKPIs(kpis) {
@@ -1372,5 +1420,289 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+  }
+
+  // ==========================================================================
+  // SQL Playground Logic
+  // ==========================================================================
+
+  // SQL Playground State
+  let dbInstance = null;
+  let sqlJsInitialized = false;
+
+  const presetQueries = {
+    mom_revenue: `-- Scenario A: Month-over-Month Revenue Growth
+-- Calculates monthly total sales and compares it with the previous month's revenue
+-- using the LAG window function to compute month-over-month growth rate percentage.
+
+WITH MonthlyRevenue AS (
+    SELECT 
+        strftime('%Y-%m', o.order_purchase_timestamp) AS order_month,
+        SUM(p.payment_value) AS total_revenue
+    FROM orders o
+    JOIN order_payments p ON o.order_id = p.order_id
+    WHERE o.order_status = 'delivered'
+    GROUP BY 1
+),
+RevenueWithLag AS (
+    SELECT 
+        order_month,
+        total_revenue,
+        LAG(total_revenue, 1) OVER (ORDER BY order_month) AS previous_month_revenue
+    FROM MonthlyRevenue
+)
+SELECT 
+    order_month,
+    ROUND(total_revenue, 2) AS current_month_revenue,
+    ROUND(previous_month_revenue, 2) AS last_month_revenue,
+    ROUND(
+        ((total_revenue - previous_month_revenue) / previous_month_revenue * 100), 
+        2
+    ) AS mom_growth_percentage
+FROM RevenueWithLag
+ORDER BY order_month;`,
+
+    cohort_retention: `-- Scenario B: Customer Cohort Retention (First 3 Months)
+-- Identifies cohorts based on the user's first purchase month.
+-- Analyzes subsequent orders by those same users to compute retention for months 1, 2, and 3.
+
+WITH CustomerFirstPurchase AS (
+    SELECT 
+        c.customer_unique_id,
+        strftime('%Y-%m-01', MIN(o.order_purchase_timestamp)) AS cohort_month
+    FROM orders o
+    JOIN customers c ON o.customer_id = c.customer_id
+    WHERE o.order_status = 'delivered'
+    GROUP BY 1
+),
+Activity AS (
+    SELECT 
+        c.customer_unique_id,
+        cfp.cohort_month,
+        (
+            (CAST(strftime('%Y', o.order_purchase_timestamp) AS INTEGER) - CAST(strftime('%Y', cfp.cohort_month) AS INTEGER)) * 12 +
+            (CAST(strftime('%m', o.order_purchase_timestamp) AS INTEGER) - CAST(strftime('%m', cfp.cohort_month) AS INTEGER))
+        ) AS cohort_index
+    FROM orders o
+    JOIN customers c ON o.customer_id = c.customer_id
+    JOIN CustomerFirstPurchase cfp ON c.customer_unique_id = cfp.customer_unique_id
+    WHERE o.order_status = 'delivered'
+)
+SELECT 
+    cohort_month,
+    COUNT(DISTINCT customer_unique_id) AS cohort_size,
+    COUNT(DISTINCT CASE WHEN cohort_index = 1 THEN customer_unique_id END) AS month_1_retained,
+    COUNT(DISTINCT CASE WHEN cohort_index = 2 THEN customer_unique_id END) AS month_2_retained,
+    COUNT(DISTINCT CASE WHEN cohort_index = 3 THEN customer_unique_id END) AS month_3_retained
+FROM Activity
+GROUP BY 1
+ORDER BY 1;`,
+
+    top_categories_reviews: `-- Scenario C: Top 10 Product Categories by Revenue vs Rating
+-- Links products, categories, orders, payments, and reviews to list
+-- top selling categories, average scores, and percentage of bad reviews.
+
+SELECT 
+    t.product_category_name_english AS product_category,
+    COUNT(DISTINCT oi.order_id) AS total_orders,
+    ROUND(SUM(oi.price), 2) AS total_sales,
+    ROUND(AVG(r.review_score), 2) AS avg_review_score,
+    ROUND(
+        (COUNT(CASE WHEN r.review_score <= 2 THEN 1 END) * 100.0 / COUNT(r.review_id)), 
+        2
+    ) AS negative_review_percentage
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+LEFT JOIN product_category_name_translation t ON p.product_category_name = t.product_category_name
+JOIN order_reviews r ON oi.order_id = r.order_id
+GROUP BY 1
+HAVING COUNT(DISTINCT oi.order_id) >= 100
+ORDER BY total_sales DESC
+LIMIT 10;`
+  };
+
+  async function loadSqlDatabase() {
+    if (sqlJsInitialized) return;
+    sqlJsInitialized = true;
+
+    const loader = document.getElementById('sql-loader');
+    const loaderText = document.getElementById('sql-loader-text');
+    const statusBadge = document.getElementById('sql-db-status');
+    const btnRun = document.getElementById('btn-run-sql');
+    
+    loader.style.display = 'flex';
+    btnRun.disabled = true;
+    
+    statusBadge.textContent = activeLang === 'id' ? "DATABASE: MENGUNDUH..." : "DATABASE: DOWNLOADING...";
+    statusBadge.className = "caption font-mono alert";
+
+    try {
+      // 1. Init sql.js
+      loaderText.textContent = activeLang === 'id' ? "Menginisialisasi mesin SQLite WASM..." : "Initializing SQLite WASM engine...";
+      const SQL = await initSqlJs({
+        locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/${file}`
+      });
+
+      // 2. Fetch database
+      loaderText.textContent = activeLang === 'id' ? "Mengunduh database operasional (68MB)... Ini memerlukan waktu sesaat." : "Downloading database...";
+      const response = await fetch('data/olist_portfolio.db');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const buffer = await response.arrayBuffer();
+      dbInstance = new SQL.Database(new Uint8Array(buffer));
+
+      // Success
+      loader.style.display = 'none';
+      statusBadge.textContent = activeLang === 'id' ? "DATABASE: TERHUBUNG (ONLINE)" : "DATABASE: LOADED (ONLINE)";
+      statusBadge.className = "caption font-mono success";
+      
+      btnRun.disabled = false;
+      document.getElementById('sql-execution-status').textContent = activeLang === 'id' ? "Database terhubung. Silakan masukkan kueri Anda." : "Database connected. Ready for query input.";
+    } catch (err) {
+      console.error(err);
+      loader.style.display = 'none';
+      statusBadge.textContent = activeLang === 'id' ? "DATABASE: GAGAL" : "DATABASE: ERROR";
+      statusBadge.className = "caption font-mono alert";
+      
+      const errBanner = document.getElementById('sql-error-banner');
+      errBanner.textContent = `Error loading database: ${err.message}`;
+      errBanner.style.display = 'block';
+    }
+  }
+
+  function initSqlPlaygroundManager() {
+    const btnRun = document.getElementById('btn-run-sql');
+    const btnExport = document.getElementById('btn-export-sql-csv');
+    const selectPreset = document.getElementById('select-preset-query');
+    const editor = document.getElementById('sql-editor');
+
+    if (!btnRun) return;
+
+    btnRun.addEventListener('click', runSqlQuery);
+    btnExport.addEventListener('click', exportSqlToCsv);
+
+    selectPreset.addEventListener('change', () => {
+      const selected = selectPreset.value;
+      if (selected !== 'custom' && presetQueries[selected]) {
+        editor.value = presetQueries[selected];
+        runSqlQuery();
+      }
+    });
+  }
+
+  let lastQueryResults = null;
+
+  function runSqlQuery() {
+    if (!dbInstance) {
+      alert(activeLang === 'id' ? "Database belum siap!" : "Database is not loaded yet!");
+      return;
+    }
+
+    const editor = document.getElementById('sql-editor');
+    const query = editor.value.trim();
+    const resultsTable = document.getElementById('table-sql-results');
+    const errorBanner = document.getElementById('sql-error-banner');
+    const rowCountBadge = document.getElementById('sql-row-count-badge');
+    const execStatus = document.getElementById('sql-execution-status');
+    const btnExport = document.getElementById('btn-export-sql-csv');
+
+    errorBanner.style.display = 'none';
+    resultsTable.innerHTML = '';
+    rowCountBadge.textContent = "0 ROWS";
+    btnExport.disabled = true;
+    lastQueryResults = null;
+
+    if (!query) {
+      execStatus.textContent = activeLang === 'id' ? "Konsol kosong." : "Console is empty.";
+      return;
+    }
+
+    execStatus.textContent = activeLang === 'id' ? "Menjalankan kueri..." : "Running query...";
+    
+    // Defer execution slightly to let browser render query status
+    setTimeout(() => {
+      const startTime = performance.now();
+      try {
+        const res = dbInstance.exec(query);
+        const endTime = performance.now();
+        const elapsed = (endTime - startTime).toFixed(1);
+
+        if (res.length === 0) {
+          execStatus.textContent = activeLang === 'id' ? `Kueri berhasil dijalankan dalam ${elapsed}ms (0 baris).` : `Query completed in ${elapsed}ms (0 rows returned).`;
+          rowCountBadge.textContent = "0 ROWS";
+          return;
+        }
+
+        lastQueryResults = res[0];
+        const columns = res[0].columns;
+        const values = res[0].values;
+
+        // Render headers
+        const thead = document.createElement('thead');
+        const hRow = document.createElement('tr');
+        columns.forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          hRow.appendChild(th);
+        });
+        thead.appendChild(hRow);
+        resultsTable.appendChild(thead);
+
+        // Render body
+        const tbody = document.createElement('tbody');
+        values.forEach(row => {
+          const rRow = document.createElement('tr');
+          row.forEach(val => {
+            const td = document.createElement('td');
+            td.textContent = val === null ? 'NULL' : val;
+            rRow.appendChild(td);
+          });
+          tbody.appendChild(rRow);
+        });
+        resultsTable.appendChild(tbody);
+
+        rowCountBadge.textContent = `${values.length} ROWS`;
+        execStatus.textContent = activeLang === 'id' ? `Kueri selesai dalam ${elapsed}ms` : `Query completed in ${elapsed}ms`;
+        btnExport.disabled = false;
+
+      } catch (err) {
+        console.error(err);
+        execStatus.textContent = activeLang === 'id' ? "Kueri gagal." : "Query failed.";
+        errorBanner.textContent = err.message;
+        errorBanner.style.display = 'block';
+      }
+    }, 50);
+  }
+
+  function exportSqlToCsv() {
+    if (!lastQueryResults) return;
+
+    const columns = lastQueryResults.columns;
+    const values = lastQueryResults.values;
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    
+    // Header row
+    csvContent += columns.map(c => `"${c.replace(/"/g, '""')}"`).join(",") + "\r\n";
+    
+    // Data rows
+    values.forEach(row => {
+      const rowStr = row.map(v => {
+        if (v === null) return "NULL";
+        const valStr = String(v);
+        return `"${valStr.replace(/"/g, '""')}"`;
+      }).join(",");
+      csvContent += rowStr + "\r\n";
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "olist_query_results.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 });
