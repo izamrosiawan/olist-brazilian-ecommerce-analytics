@@ -94,6 +94,16 @@ Analisis menunjukkan korelasi negatif yang jelas (**-0,31**) antara waktu pengir
 
 ---
 
+### 💻 Portofolio Analisis SQL
+Selain analisis menggunakan Python, proyek ini juga dilengkapi dengan basis data relasional SQLite dan query SQL terstruktur untuk memproses metrik bisnis lanjutan:
+- 🛠️ **Skrip Database**: [build_database.py](scratch/build_database.py) — Mengimpor seluruh file CSV ke basis data SQLite lokal (`data/olist_portfolio.db`) dan membuat indeks otomatis untuk optimasi kinerja kueri.
+- 📈 **Pertumbuhan Penjualan Bulanan (MoM)**: [mom_revenue_growth.sql](sql/mom_revenue_growth.sql) — Menghitung tren pendapatan bulanan dan persentase pertumbuhan MoM menggunakan *Window Function* (`LAG`).
+- 👥 **Analisis Kohort Pelanggan**: [customer_cohort_analysis.sql](sql/customer_cohort_analysis.sql) — Melacak metrik retensi bulanan pengguna berdasarkan bulan pembelian pertamanya.
+- ⭐ **Performa Kategori & Sentimen**: [top_categories_review_score.sql](sql/top_categories_review_score.sql) — Menghubungkan performa penjualan dengan skor ulasan produk dan persentase review negatif.
+- 🚀 **Pengujian Cepat**: Jalankan skrip [run_queries.py](scratch/run_queries.py) untuk mengeksekusi semua query SQL langsung di atas database SQLite Anda.
+
+---
+
 ## 🗄️ Skema Dataset (ERD)
 Dataset ini terdiri dari 9 tabel yang saling terhubung, di-host di Kaggle:
 
