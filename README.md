@@ -1,4 +1,4 @@
-# Olist Brazilian E-Commerce RFM Analytics & Customer Segmentation
+﻿# Olist Brazilian E-Commerce RFM Analytics & Customer Segmentation
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-Analytics-orange.svg)](https://pandas.pydata.org/)
@@ -9,7 +9,7 @@ Repositori ini menyajikan analisis komprehensif segmentasi pelanggan (*Customer 
 
 ---
 
-## 📂 Struktur Proyek
+## Struktur Proyek
 
 ```
 ├── .gitignore          # Konfigurasi pengabaian cache Git
@@ -24,7 +24,7 @@ Repositori ini menyajikan analisis komprehensif segmentasi pelanggan (*Customer 
 
 ---
 
-## 📈 Metodologi & Formulasi RFM
+## Metodologi & Formulasi RFM
 
 Pengolahan data pada `notebook.ipynb` dan `src/rfm_engine.py` menerapkan segmentasi RFM standar:
 
@@ -34,7 +34,7 @@ Pengolahan data pada `notebook.ipynb` dan `src/rfm_engine.py` menerapkan segment
 
 ---
 
-## 💻 Implementasi Modular & Pengujian Otomatis
+## Implementasi Modular & Pengujian Otomatis
 
 Modul kalkulasi RFM tersedia di `src/rfm_engine.py`:
 
@@ -57,7 +57,7 @@ pytest tests/
 
 ---
 
-## 🚀 Cara Menjalankan
+## Cara Menjalankan
 
 1. **Pasang Dependensi**:
    ```bash
@@ -71,3 +71,4 @@ pytest tests/
 
 ---
 *Olist Brazilian E-Commerce Analytics Project.*
+
