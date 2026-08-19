@@ -140,7 +140,7 @@ Analisis pada `notebook.ipynb` dan `src/rfm_engine.py` menerapkan metodologi seg
 * **Frequency ($F$)**: Total jumlah pesanan unik yang diselesaikan (*delivered*) oleh pelanggan $i$:
   $$F_i = \sum \mathbb{I}(\text{status} = \text{'delivered'})$$
 * **Monetary ($M$)**: Total nilai belanja riil yang dibayarkan oleh pelanggan $i$:
-  $$M_i = \sum \text{Payment\_Value}$$
+  $$M_i = \sum \text{Payment Value}$$
 
 ### B. Segmentasi Klaster Pelanggan
 Pengelompokan kuantil skor $R, F, M$ ke dalam kuadran: *Champions*, *Loyal Customers*, *Potential Loyalists*, *At Risk*, dan *Lost*.
