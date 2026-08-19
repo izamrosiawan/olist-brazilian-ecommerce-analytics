@@ -18,7 +18,97 @@ Marketplace e-commerce menghadapi tantangan operasional yang kompleks dalam memp
 
 ---
 
-## 2. Struktur Proyek
+## 2. Skema Relasi Database (ERD)
+
+Dataset ini terdiri dari 9 tabel relasional yang saling terhubung:
+
+```mermaid
+erDiagram
+    olist_customers_dataset {
+        string customer_id PK
+        string customer_unique_id
+        string customer_zip_code_prefix FK
+        string customer_city
+        string customer_state
+    }
+    olist_orders_dataset {
+        string order_id PK
+        string customer_id FK
+        string order_status
+        timestamp order_purchase_timestamp
+        timestamp order_approved_at
+        timestamp order_delivered_carrier_date
+        timestamp order_delivered_customer_date
+        timestamp order_estimated_delivery_date
+    }
+    olist_order_items_dataset {
+        string order_id PK, FK
+        int order_item_id PK
+        string product_id FK
+        string seller_id FK
+        timestamp shipping_limit_date
+        float price
+        float freight_value
+    }
+    olist_order_payments_dataset {
+        string order_id PK, FK
+        int payment_sequential PK
+        string payment_type
+        int payment_installments
+        float payment_value
+    }
+    olist_order_reviews_dataset {
+        string review_id PK
+        string order_id FK
+        int review_score
+        string review_comment_title
+        string review_comment_message
+        timestamp review_creation_date
+        timestamp review_answer_timestamp
+    }
+    olist_products_dataset {
+        string product_id PK
+        string product_category_name FK
+        int product_name_length
+        int product_description_length
+        int product_photos_qty
+        float product_weight_g
+        float product_length_cm
+        float product_height_cm
+        float product_width_cm
+    }
+    olist_sellers_dataset {
+        string seller_id PK
+        string seller_zip_code_prefix FK
+        string seller_city
+        string seller_state
+    }
+    product_category_name_translation {
+        string product_category_name PK
+        string product_category_name_english
+    }
+    olist_geolocation_dataset {
+        string geolocation_zip_code_prefix PK
+        float geolocation_lat
+        float geolocation_lng
+        string geolocation_city
+        string geolocation_state
+    }
+
+    olist_customers_dataset ||--|| olist_orders_dataset : "customer_id"
+    olist_orders_dataset ||--|{ olist_order_items_dataset : "order_id"
+    olist_orders_dataset ||--|{ olist_order_payments_dataset : "order_id"
+    olist_orders_dataset ||--o| olist_order_reviews_dataset : "order_id"
+    olist_products_dataset ||--|{ olist_order_items_dataset : "product_id"
+    olist_sellers_dataset ||--|{ olist_order_items_dataset : "seller_id"
+    product_category_name_translation ||--|{ olist_products_dataset : "product_category_name"
+    olist_geolocation_dataset ||--|{ olist_customers_dataset : "customer_zip_code_prefix = geolocation_zip_code_prefix"
+    olist_geolocation_dataset ||--|{ olist_sellers_dataset : "seller_zip_code_prefix = geolocation_zip_code_prefix"
+```
+
+---
+
+## 3. Struktur Proyek
 
 ```
 ├── .gitignore          # Konfigurasi pengabaian cache Git
@@ -35,12 +125,12 @@ Marketplace e-commerce menghadapi tantangan operasional yang kompleks dalam memp
 ├── tests/              # Automated unit tests (Pytest)
 ├── notebook.ipynb      # Mesin pemrosesan: Pembersihan data, kalkulasi RFM, logistik, dan visualisasi
 ├── requirements.txt    # Pinned stable dependencies
-└── README.md           # Laporan utama: Pembahasan bisnis, rumus, tabel metrik, dan visualisasi
+└── README.md           # Laporan utama: Pembahasan bisnis, skema database, rumus, tabel metrik, dan visualisasi
 ```
 
 ---
 
-## 3. Metodologi & Formulasi Analisis RFM
+## 4. Metodologi & Formulasi Analisis RFM
 
 Analisis pada `notebook.ipynb` dan `src/rfm_engine.py` menerapkan metodologi segmentasi berikut:
 
@@ -57,7 +147,7 @@ Pengelompokan kuantil skor $R, F, M$ ke dalam kuadran: *Champions*, *Loyal Custo
 
 ---
 
-## 4. Hasil Kuantitatif & Pembahasan Visualisasi
+## 5. Hasil Kuantitatif & Pembahasan Visualisasi
 
 ### A. Tren Penjualan Musiman & Kategori Produk Terlaris
 Perkembangan volume penjualan bulanan dan kontribusi omzet per kategori barang.
@@ -85,7 +175,7 @@ Perbedaan durasi pengiriman antar wilayah dan preferensi alat bayar pelanggan.
 
 ---
 
-## 5. Implementasi Modular & Pengujian Otomatis
+## 6. Implementasi Modular & Pengujian Otomatis
 
 Modul kalkulasi RFM tersedia di `src/rfm_engine.py`:
 
@@ -108,7 +198,7 @@ pytest tests/
 
 ---
 
-## 6. Rekomendasi Bisnis & Operasional Marketplace
+## 7. Rekomendasi Bisnis & Operasional Marketplace
 
 1. **Pembangunan Fulfillment Center Regional**: Membangun *micro-warehouse* di wilayah Utara dan Timur Laut untuk memangkas waktu kirim dari 25 hari menjadi $<10$ hari, yang berpotensi menaikkan rating kepuasan pembeli sebesar 1.5 bintang.
 2. **Program Re-aktivasi Segmen At-Risk**: Berikan insentif voucher bebas ongkir (*free shipping*) khusus kepada segmen pelanggan bernilai moneter tinggi yang belum berbelanja dalam 90 hari terakhir.
@@ -116,7 +206,7 @@ pytest tests/
 
 ---
 
-## 7. Cara Menjalankan
+## 8. Cara Menjalankan
 
 1. **Pasang Dependensi**:
    ```bash
