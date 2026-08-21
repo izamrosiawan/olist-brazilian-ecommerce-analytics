@@ -137,24 +137,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function getSeabornTheme() {
+  function getThemeColors() {
     const isDark = currentTheme === 'dark';
     return {
-      textColor: isDark ? '#94a3b8' : '#333333',
-      titleColor: isDark ? '#f8fafc' : '#111111',
-      gridColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
+      textColor: isDark ? '#94a3b8' : '#71717a',
+      titleColor: isDark ? '#f8fafc' : '#09090b',
+      gridColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
       tooltipBg: isDark ? '#101726' : '#ffffff',
-      tooltipBorder: isDark ? '#1e293b' : '#d4d4d8',
-      // Seaborn Notebook Palette Matches
-      tealLine: '#008080',
-      notebookColors: ['#4F81BD', '#C0504D', '#9BBB59', '#8064A2', '#4BACC6'],
-      rdYlGn: ['#dc2626', '#f59e0b', '#eab308', '#84cc16', '#10b981'],
-      crestGradient: [
-        '#2b5c8f', '#316999', '#38779b', '#3f859d', '#46939f',
-        '#4da1a1', '#54afa3', '#5bbda5', '#62cba7', '#69d9a9',
-        '#70e7ab', '#77f5ad', '#84f7b5', '#91f9bd', '#9efbc5',
-        '#abfdcd', '#b8ffd5', '#c5ffdd', '#d2ffe5', '#dffff0'
-      ]
+      tooltipBorder: isDark ? '#1e293b' : '#e4e4e7',
+      primaryBlue: isDark ? '#38bdf8' : '#2563eb',
+      emerald: isDark ? '#10b981' : '#059669',
+      amber: isDark ? '#fbbf24' : '#d97706',
+      red: isDark ? '#f87171' : '#dc2626'
     };
   }
 
@@ -190,56 +184,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('monthlyTrendChart');
     if (!canvas) return;
 
-    const st = getSeabornTheme();
+    const tc = getThemeColors();
     const labels = dashboardData.monthly_trend.map(d => d.month);
     const data = dashboardData.monthly_trend.map(d => d.revenue / 1000);
 
-    // Matching notebook plot: linewidth 3, color #008080 (Teal), marker circle
     charts.monthlyTrend = new Chart(canvas.getContext('2d'), {
       type: 'line',
       data: {
         labels: labels,
         datasets: [{
-          label: 'Total Payments (BRL Ribuan)',
+          label: 'Total GMV (R$ Ribuan)',
           data: data,
-          borderColor: st.tealLine,
-          backgroundColor: 'rgba(0, 128, 128, 0.06)',
-          borderWidth: 3,
+          borderColor: tc.primaryBlue,
+          backgroundColor: 'rgba(37, 99, 235, 0.05)',
+          borderWidth: 2.5,
           fill: true,
-          tension: 0.1,
-          pointRadius: 4,
-          pointBackgroundColor: st.tealLine,
-          pointHoverRadius: 7,
-          pointHoverBackgroundColor: '#dc2626'
+          tension: 0.2,
+          pointRadius: 0,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: tc.primaryBlue
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        animation: { duration: 900, easing: 'easeOutQuart' },
+        animation: { duration: 1000, easing: 'easeOutQuart' },
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: st.tooltipBg,
-            titleColor: st.titleColor,
-            bodyColor: st.textColor,
-            borderColor: st.tooltipBorder,
+            backgroundColor: tc.tooltipBg,
+            titleColor: tc.titleColor,
+            bodyColor: tc.textColor,
+            borderColor: tc.tooltipBorder,
             borderWidth: 1,
             titleFont: { family: 'JetBrains Mono', size: 12 },
             bodyFont: { family: 'JetBrains Mono', size: 11 },
             callbacks: {
-              label: (ctx) => ` Total GMV: ${ctx.raw.toFixed(1)}K BRL`
+              label: (ctx) => ` R$ ${ctx.raw.toFixed(1)}K (BRL)`
             }
           }
         },
         scales: {
           x: {
-            grid: { display: true, color: st.gridColor, borderDash: [3, 3] },
-            ticks: { color: st.textColor, font: { family: 'JetBrains Mono', size: 10 }, maxTicksLimit: 8 }
+            grid: { display: false },
+            ticks: { color: tc.textColor, font: { family: 'JetBrains Mono', size: 10 }, maxTicksLimit: 8 }
           },
           y: {
-            grid: { display: true, color: st.gridColor, borderDash: [3, 3] },
-            ticks: { color: st.textColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => `${v}K BRL` }
+            grid: { color: tc.gridColor },
+            ticks: { color: tc.textColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => `R$ ${v}K` }
           }
         },
         onHover: (event, elements, chart) => {
@@ -260,21 +252,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('stateDeliveryChart');
     if (!canvas) return;
 
-    const st = getSeabornTheme();
+    const tc = getThemeColors();
     const labels = dashboardData.state_delivery.map(d => d.state);
     const days = dashboardData.state_delivery.map(d => d.average_days);
+    const colors = days.map(d => d < 12 ? tc.emerald : (d <= 18 ? tc.amber : tc.red));
 
-    // Matching notebook seaborn 'crest' palette
     charts.stateDelivery = new Chart(canvas.getContext('2d'), {
       type: 'bar',
       data: {
         labels: labels,
         datasets: [{
           data: days,
-          backgroundColor: st.crestGradient,
-          borderRadius: 4,
-          borderWidth: 0.5,
-          borderColor: 'rgba(0,0,0,0.1)'
+          backgroundColor: colors,
+          borderRadius: 6
         }]
       },
       options: {
@@ -284,10 +274,10 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: st.tooltipBg,
-            titleColor: st.titleColor,
-            bodyColor: st.textColor,
-            borderColor: st.tooltipBorder,
+            backgroundColor: tc.tooltipBg,
+            titleColor: tc.titleColor,
+            bodyColor: tc.textColor,
+            borderColor: tc.tooltipBorder,
             borderWidth: 1,
             callbacks: {
               label: (ctx) => ` Rata-rata: ${ctx.raw.toFixed(1)} Hari`
@@ -295,8 +285,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         },
         scales: {
-          x: { grid: { display: false }, ticks: { color: st.textColor, font: { family: 'JetBrains Mono', size: 10 } } },
-          y: { grid: { display: true, color: st.gridColor, borderDash: [3, 3] }, ticks: { color: st.textColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => `${v}d` } }
+          x: { grid: { display: false }, ticks: { color: tc.textColor, font: { family: 'JetBrains Mono', size: 10 } } },
+          y: { grid: { color: tc.gridColor }, ticks: { color: tc.textColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => `${v}d` } }
         }
       }
     });
@@ -306,21 +296,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('delayImpactChart');
     if (!canvas) return;
 
-    const st = getSeabornTheme();
+    const tc = getThemeColors();
     const labels = dashboardData.delay_impact.map(d => d.score);
     const days = dashboardData.delay_impact.map(d => d.avg_delivery_days);
 
-    // Matching notebook Seaborn 'RdYlGn' palette (Review Score vs Delivery Time)
     charts.delayImpact = new Chart(canvas.getContext('2d'), {
       type: 'bar',
       data: {
         labels: labels,
         datasets: [{
           data: days,
-          backgroundColor: st.rdYlGn,
-          borderRadius: 4,
-          borderWidth: 0.5,
-          borderColor: 'rgba(0,0,0,0.1)'
+          backgroundColor: [tc.red, tc.amber, '#94a3b8', tc.primaryBlue, tc.emerald],
+          borderRadius: 6
         }]
       },
       options: {
@@ -330,10 +317,10 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: st.tooltipBg,
-            titleColor: st.titleColor,
-            bodyColor: st.textColor,
-            borderColor: st.tooltipBorder,
+            backgroundColor: tc.tooltipBg,
+            titleColor: tc.titleColor,
+            bodyColor: tc.textColor,
+            borderColor: tc.tooltipBorder,
             borderWidth: 1,
             callbacks: {
               label: (ctx) => ` Rata-rata: ${ctx.raw.toFixed(1)} Hari Pengiriman`
@@ -341,8 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         },
         scales: {
-          x: { grid: { display: false }, ticks: { color: st.textColor, font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' } } },
-          y: { grid: { display: true, color: st.gridColor, borderDash: [3, 3] }, ticks: { color: st.textColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => `${v}d` } }
+          x: { grid: { display: false }, ticks: { color: tc.textColor } },
+          y: { grid: { color: tc.gridColor }, ticks: { color: tc.textColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => `${v}d` } }
         }
       }
     });
@@ -352,43 +339,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('rfmDonutChart');
     if (!canvas) return;
 
-    const st = getSeabornTheme();
+    const tc = getThemeColors();
     const labels = dashboardData.rfm_segments.map(d => d.segment);
     const data = dashboardData.rfm_segments.map(d => d.pct);
 
-    // Matching notebook exact 5-color palette: ['#4F81BD', '#C0504D', '#9BBB59', '#8064A2', '#4BACC6']
     charts.rfmDonut = new Chart(canvas.getContext('2d'), {
       type: 'doughnut',
       data: {
         labels: labels,
         datasets: [{
           data: data,
-          backgroundColor: st.notebookColors,
-          borderWidth: 2,
-          borderColor: st.tooltipBg
+          backgroundColor: [tc.primaryBlue, tc.emerald, tc.amber, '#6366f1', '#a1a1aa'],
+          borderWidth: 0
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: '65%',
-        animation: { duration: 900, easing: 'easeOutQuart' },
+        cutout: '70%',
+        animation: { duration: 1000, easing: 'easeOutQuart' },
         plugins: {
           legend: {
             position: 'right',
             labels: {
-              color: st.titleColor,
-              font: { family: 'Plus Jakarta Sans', size: 11, weight: '500' },
-              boxWidth: 10,
-              boxHeight: 10,
+              color: tc.titleColor,
+              font: { family: 'Plus Jakarta Sans', size: 11 },
+              boxWidth: 8,
+              boxHeight: 8,
               usePointStyle: true
             }
           },
           tooltip: {
-            backgroundColor: st.tooltipBg,
-            titleColor: st.titleColor,
-            bodyColor: st.textColor,
-            borderColor: st.tooltipBorder,
+            backgroundColor: tc.tooltipBg,
+            titleColor: tc.titleColor,
+            bodyColor: tc.textColor,
+            borderColor: tc.tooltipBorder,
             borderWidth: 1,
             callbacks: {
               label: (ctx) => ` ${ctx.raw}% (${dashboardData.rfm_segments[ctx.dataIndex].count.toLocaleString()} pembeli)`
