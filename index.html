@@ -1,714 +1,430 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Olist Operational System // Brazil Ecommerce Analytics</title>
-  <meta name="description" content="A stark, high-contrast operational analytics dashboard for Olist Brazilian E-commerce performance, built on clean Swiss typography and white space.">
+  <title>Anatomi Marketplace Kontinental: Logistik & Retensi E-Commerce Brazil (Olist)</title>
+  <meta name="description" content="Eksplorasi visual interaktif performa marketplace Olist Brazil: disparitas logistik 27 negara bagian, pola pendapatan bulanan, segmentasi RFM, dan simulator nilai bisnis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
-  <!-- Chart.js and SQL.js for visualizations and relational sandbox -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
 </head>
 <body>
 
-  <!-- Ambient background glow elements -->
-  <div class="ambient-glow">
-    <div class="glow-sphere glow-sphere-1"></div>
-    <div class="glow-sphere glow-sphere-2"></div>
-  </div>
-
-  <!-- Top Status Ticker -->
-  <div class="ticker-wrap">
-    <div class="ticker-item">
-      <span class="pulse-dot"></span> <span data-translate="live-network">LIVE NETWORK: ACTIVE</span>
-    </div>
-    <div class="ticker-item font-mono" id="ticker-workspace" data-translate="workspace-ticker">
-      WORKSPACE: OLIST_BR // SP_HUB_ACTIVE
-    </div>
-    <div class="ticker-item font-mono" id="ticker-sla" data-translate="avg-sla-ticker">
-      AVG SLA: 12.3d // LOYALTY RATE: 3.12%
-    </div>
-    <div class="ticker-item font-mono" id="ticker-date">
-      DATE: 16-JUL-2026 // UTC-03:00
-    </div>
-  </div>
-
-  <!-- Left Sidebar Navigation -->
-  <aside id="sidebar">
-    <!-- User Profile & Theme Switcher panel -->
-    <div class="user-profile-panel">
-      <div class="user-avatar-wrap">
-        <div class="avatar-glow"></div>
-        <div class="user-avatar">OP</div>
+  <!-- Floating Navigation Bar -->
+  <header class="navbar-wrapper">
+    <nav class="navbar-pill">
+      <div class="nav-brand">
+        <span class="brand-badge">OLIST DATA EXPLORER</span>
+        <span class="brand-title">E-Commerce Brazil</span>
       </div>
-      <div class="user-info">
-        <div class="user-greet" id="user-greeting">Good Evening, Admin</div>
-        <div class="user-role" data-translate="user-role">SYSTEM MONITOR</div>
-      </div>
-      <button type="button" class="theme-toggle-btn" id="btn-theme-toggle" aria-label="Toggle Dark Mode">
-        <span class="theme-icon" id="theme-toggle-icon">🌙</span>
-      </button>
-    </div>
 
-    <div class="brand">
-      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <div class="brand-title">Olist</div>
-        <!-- Language Switcher Toggle -->
-        <div class="lang-switcher">
-          <button type="button" class="lang-btn active" id="btn-lang-en">EN</button>
-          <button type="button" class="lang-btn" id="btn-lang-id">ID</button>
-        </div>
+      <div class="nav-links">
+        <a href="#section-logistics" class="nav-item">Logistik</a>
+        <a href="#section-revenue" class="nav-item">Pendapatan</a>
+        <a href="#section-retention" class="nav-item">Retensi RFM</a>
+        <a href="#section-simulator" class="nav-item">Simulator</a>
+        <a href="#section-sql" class="nav-item">SQL</a>
       </div>
-      <div class="brand-subtitle" data-translate="brand-subtitle">OPERATIONAL SYSTEM v1.0</div>
-    </div>
-    
-    <nav>
-      <ul class="nav-list">
-        <li class="nav-item active" data-tab="overview">
-          <button type="button" data-translate="nav-overview">
-            OVERVIEW
-          </button>
-        </li>
-        <li class="nav-item" data-tab="revenue">
-          <button type="button" data-translate="nav-revenue">
-            DEMAND & REVENUE
-          </button>
-        </li>
-        <li class="nav-item" data-tab="logistics">
-          <button type="button" data-translate="nav-logistics">
-            LOGISTICS & SLA
-          </button>
-        </li>
-        <li class="nav-item" data-tab="simulator">
-          <button type="button" data-translate="nav-simulator">
-            IMPACT SIMULATOR
-          </button>
-        </li>
-        <li class="nav-item" data-tab="sql">
-          <button type="button" data-translate="nav-sql">
-            SQL PLAYGROUND
-          </button>
-        </li>
-      </ul>
+
+      <div class="nav-actions">
+        <a href="https://github.com/izamrosiawan/olist-brazilian-ecommerce-analytics" target="_blank" class="icon-link-btn" title="GitHub Repository">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <button type="button" class="theme-toggle-btn" id="btn-theme-toggle" title="Ganti Mode Tema">◐</button>
+      </div>
     </nav>
-    
-    <div class="sidebar-footer">
-      <div class="caption font-mono" data-translate="footer-workspace">WORKSPACE: OLIST_BR</div>
-      <div class="caption font-mono" data-translate="footer-status">STATUS: STABLE // OFFLINE</div>
-      <div class="caption font-mono" data-translate="footer-period">DATA PERIOD: 2016 - 2018</div>
-    </div>
-  </aside>
+  </header>
 
-  <!-- Main Scrollable Content Area -->
-  <main id="main-content">
-    
-    <!-- ==================== TAB 1: OVERVIEW ==================== -->
-    <section id="tab-overview" class="tab-content active">
-      <div class="page-header">
-        <div class="page-header-info">
-          <div class="page-title-badge" data-translate="manifest-id">MANIFEST ID: BR-2018-09</div>
-          <h1 class="headline-display" data-translate="overview-title">Executive Performance Overview</h1>
-        </div>
-        <div class="caption font-mono" id="refresh-timestamp">LATEST REFRESH: 16-JUL-2026</div>
-      </div>
-      
-      <!-- Key Operational KPI Cards -->
-      <div class="kpi-grid">
-        <div class="card glass">
-          <div class="card-header-row">
-            <span class="card-label" data-translate="kpi-label-revenue">Revenue</span>
-            <span class="chip success">BRL</span>
-          </div>
-          <div>
-            <div class="card-value" id="kpi-revenue">—</div>
-            <div class="card-subtext" data-translate="kpi-sub-revenue">Total payment values processed</div>
-          </div>
-        </div>
-        
-        <div class="card glass">
-          <div class="card-header-row">
-            <span class="card-label" data-translate="kpi-label-orders">Orders</span>
-            <span class="chip">QTY</span>
-          </div>
-          <div>
-            <div class="card-value" id="kpi-orders">—</div>
-            <div class="card-subtext" data-translate="kpi-sub-orders">Total unique customer purchases</div>
-          </div>
-        </div>
-        
-        <div class="card glass">
-          <div class="card-header-row">
-            <span class="card-label" data-translate="kpi-label-aov">Average Ticket</span>
-            <span class="chip">AOV</span>
-          </div>
-          <div>
-            <div class="card-value" id="kpi-aov">—</div>
-            <div class="card-subtext" data-translate="kpi-sub-aov">Average Order Value in BRL</div>
-          </div>
-        </div>
-        
-        <div class="card glass">
-          <div class="card-header-row">
-            <span class="card-label" data-translate="kpi-label-repeat">Repeat Rate</span>
-            <span class="chip alert" id="badge-repeat">3.12%</span>
-          </div>
-          <div>
-            <div class="card-value" id="kpi-repeat">—</div>
-            <div class="card-subtext" data-translate="kpi-sub-repeat">Percentage of multi-order buyers</div>
-          </div>
-        </div>
-        
-        <div class="card glass">
-          <div class="card-header-row">
-            <span class="card-label" data-translate="kpi-label-delivery">Avg Shipping</span>
-            <span class="chip" id="badge-delivery">SLA</span>
-          </div>
-          <div>
-            <div class="card-value" id="kpi-delivery">—</div>
-            <div class="card-subtext" data-translate="kpi-sub-delivery">National average delivery days</div>
-          </div>
-        </div>
-        
-        <div class="card glass">
-          <div class="card-header-row">
-            <span class="card-label" data-translate="kpi-label-rating">Satisfaction</span>
-            <span class="chip success">RATING</span>
-          </div>
-          <div>
-            <div class="card-value" id="kpi-rating">—</div>
-            <div class="card-subtext" data-translate="kpi-sub-rating">Average review score (1 to 5)</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Seasonality Chart -->
-      <div class="chart-card glass">
-        <div class="chart-card-header">
-          <div class="chart-title-group">
-            <h2 class="chart-title" data-translate="chart-trend-title">Monthly E-Commerce Revenue Growth</h2>
-            <p class="chart-subtitle" data-translate="chart-trend-sub">Steady climb punctuated by the Black Friday peak in November 2017</p>
-          </div>
-          <span class="chip font-mono" data-translate="chip-line-graph">LINE_GRAPH</span>
-        </div>
-        <div class="chart-container chart-container-large">
-          <canvas id="chart-monthly-trend"></canvas>
-        </div>
+  <main class="page-container">
+
+    <!-- Hero Header & Quick Stats -->
+    <section class="hero-section reveal-on-scroll">
+      <div class="hero-badge-wrap">
+        <span class="live-dot-badge">
+          <span class="pulse-dot"></span>
+          Kajian Empiris 100.000 Transaksi (2016-2018)
+        </span>
       </div>
 
-      <!-- Live Operational Logs -->
-      <div class="chart-card glass" style="margin-top: 32px;">
-        <div class="chart-card-header">
-          <div class="chart-title-group">
-            <h2 class="chart-title" data-translate="logs-panel-title">Live Network Transactions & SLA Feed</h2>
-            <p class="chart-subtitle" data-translate="logs-panel-sub">Real-time simulation of operational checkpoints and logistics processing</p>
+      <h1 class="hero-main-title">
+        Anatomi Marketplace Kontinental: <br>
+        <span class="text-gradient">Logistik, Retensi & Nilai Bisnis Brazil</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Visualisasi komputasional berbasis data transaksi riil marketplace Olist: membedah disparitas pengiriman 4.000 km antar-negara bagian, anomali repeat purchase 3.12%, dan proyeksi pertumbuhan GMV.
+      </p>
+
+      <!-- Animated Key Metric Counters -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Total Volume Transaksi (GMV)</span>
+            <span class="metric-chip bg-emerald-light">99.441 Pesanan</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="pulse-dot"></span>
-            <span class="chip font-mono" data-translate="chip-live-feed">LIVE_FEED</span>
+          <div class="metric-number-wrap font-mono">
+            <span class="currency-prefix">R$</span>
+            <span class="counter-number text-emerald" data-target="16.01" data-decimals="2">0.00</span>
+            <span class="unit-suffix">M</span>
           </div>
+          <p class="metric-subtext">Akumulasi pembayaran berhasil diproses</p>
         </div>
-        <div class="logger-wrap">
-          <div class="logger-container" id="logger-container">
-            <!-- Simulated logs append here dynamically -->
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Rata-rata Waktu Pengiriman</span>
+            <span class="metric-chip bg-blue-light">Disparitas Tinggi</span>
           </div>
+          <div class="metric-number-wrap font-mono">
+            <span class="counter-number text-blue" data-target="12.3" data-decimals="1">0.0</span>
+            <span class="unit-suffix">Hari</span>
+          </div>
+          <p class="metric-subtext">Rentang: 8.6 hari (SP) vs 29.3 hari (Roraima)</p>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Tingkat Pembelian Ulang</span>
+            <span class="metric-chip bg-amber-light">Paradoks Retensi</span>
+          </div>
+          <div class="metric-number-wrap font-mono">
+            <span class="counter-number text-amber" data-target="3.12" data-decimals="2">0.00</span>
+            <span class="unit-suffix">%</span>
+          </div>
+          <p class="metric-subtext">96.88% pembeli bertransaksi 1 kali saja</p>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Skor Ulasan Konsumen</span>
+            <span class="metric-chip">Dari 5.0 Bintang</span>
+          </div>
+          <div class="metric-number-wrap font-mono">
+            <span class="counter-number" data-target="4.09" data-decimals="2">0.00</span>
+            <span class="unit-suffix">★</span>
+          </div>
+          <p class="metric-subtext">76.8% ulasan bernilai bintang 4 dan 5</p>
         </div>
       </div>
     </section>
 
-    <!-- ==================== TAB 2: REVENUE & DEMAND ==================== -->
-    <section id="tab-revenue" class="tab-content">
-      <div class="page-header">
-        <div class="page-header-info">
-          <div class="page-title-badge" data-translate="module-revenue-id">MODULE ID: BR-DEMAND-02</div>
-          <h1 class="headline-display" data-translate="revenue-title">Demand Hotspots & Category Drivers</h1>
+    <!-- SECTION 1: Logistics Disparity Explorer -->
+    <section id="section-logistics" class="content-section reveal-on-scroll">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-pill">01. GEOGRAFI LOGISTIK</span>
+          <h2 class="section-heading">Kesenjangan Pengiriman Antar-Negara Bagian</h2>
         </div>
-        <div class="caption font-mono" data-translate="filter-products">FILTER: ALL PRODUCTS</div>
+        <p class="section-caption">
+          Jarak tempuh dari hub utama São Paulo ke kawasan pelosok Amazon menciptakan disparitas waktu kirim hingga 300%.
+        </p>
       </div>
-      
-      <div class="visuals-grid-2">
-        <!-- Top Categories Chart -->
-        <div class="chart-card glass" style="position: relative; overflow: hidden;">
-          <div class="chart-card-header">
-            <div class="chart-title-group">
-              <h2 class="chart-title" data-translate="chart-cats-title">Revenue by Product Category</h2>
-              <p class="chart-subtitle" data-translate="chart-cats-sub">Watches and health/beauty drive major volume and AOV</p>
-            </div>
-            <span class="chip font-mono" data-translate="chip-top-15">TOP_15</span>
-          </div>
-          <div class="chart-container chart-container-medium">
-            <canvas id="chart-top-categories"></canvas>
-          </div>
-          
-          <!-- Category Inspector Overlay Panel -->
-          <div class="category-inspector" id="category-inspector">
-            <button type="button" class="inspector-close" id="btn-inspector-close">&times;</button>
-            <div class="inspector-content">
-              <div class="inspector-badge" data-translate="inspector-badge">CATEGORY INSPECTOR</div>
-              <h3 class="inspector-title" id="inspect-name">Category</h3>
-              <div class="inspector-stats">
-                <div class="inspect-stat-item">
-                  <div class="inspect-stat-label" data-translate="inspect-stat-revenue">Category Revenue</div>
-                  <div class="inspect-stat-value" id="inspect-revenue">BRL 0</div>
-                </div>
-                <div class="inspect-stat-item">
-                  <div class="inspect-stat-label" data-translate="inspect-stat-share">Platform Share</div>
-                  <div class="inspect-stat-value" id="inspect-share">0%</div>
-                </div>
-              </div>
-              <div class="inspector-divider"></div>
-              <div class="inspector-recommendation">
-                <h4 class="inspect-rec-title" data-translate="inspect-rec-title">Operational Strategy</h4>
-                <p class="inspect-rec-text" id="inspect-rec-text">Click a bar to load metrics.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Payment Methods -->
-        <div class="chart-card glass">
-          <div class="chart-card-header">
-            <div class="chart-title-group">
-              <h2 class="chart-title" data-translate="chart-pay-title">Payment Methods Distribution</h2>
-              <p class="chart-subtitle" data-translate="chart-pay-sub">Credit cards represent almost three-quarters of customer checkouts</p>
-            </div>
-            <span class="chip font-mono" data-translate="chip-pay-methods">PAY_METHODS</span>
-          </div>
-          <div class="chart-container chart-container-donut">
-            <canvas id="chart-payment-methods"></canvas>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Top Cities Table -->
-      <div class="chart-card glass">
-        <div class="chart-card-header" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;">
-          <div class="chart-title-group" style="flex: 1; min-width: 280px;">
-            <h2 class="chart-title" data-translate="table-cities-title">Top 10 Cities by Revenue & Volume</h2>
-            <p class="chart-subtitle" data-translate="table-cities-sub">São Paulo is the commercial core, followed by Rio de Janeiro and Belo Horizonte</p>
-          </div>
-          
-          <!-- Dynamic Search bar -->
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="search-wrap">
-              <span class="search-icon">🔍</span>
-              <input type="text" id="search-city" placeholder="Search city..." data-translate-placeholder="search-city-placeholder" />
-            </div>
-            <span class="chip font-mono" data-translate="chip-regional-perf">REGIONAL_PERF</span>
-          </div>
-        </div>
-        <div class="table-container">
-          <table class="min-table" id="table-top-cities">
-            <thead>
-              <tr>
-                <th class="font-mono">#</th>
-                <th data-translate="th-city">City</th>
-                <th style="text-align: right;" data-translate="th-orders">Orders</th>
-                <th style="text-align: right;" data-translate="th-revenue">Total Revenue (BRL)</th>
-                <th style="text-align: right;" class="font-mono" data-translate="th-share">Market Share</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Populate dynamically via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
 
-    <!-- ==================== TAB 3: LOGISTICS & SLA ==================== -->
-    <section id="tab-logistics" class="tab-content">
-      <div class="page-header">
-        <div class="page-header-info">
-          <div class="page-title-badge" data-translate="module-logistics-id">MODULE ID: BR-SLA-03</div>
-          <h1 class="headline-display" data-translate="logistics-title">Shipping SLAs & Customer Satisfaction</h1>
+      <!-- Interactive State Explorer Deck -->
+      <div class="explorer-card">
+        <div class="card-inner-top flex-between">
+          <div>
+            <h3 class="card-title">Pilih Wilayah untuk Inspeksi Langsung</h3>
+            <p class="card-subtitle">Klik tombol negara bagian di bawah untuk melihat rincian SLA dan skor kepuasan lokal</p>
+          </div>
+          <div class="legend-pills font-mono">
+            <span class="legend-tag tag-green">&lt;12 Hari (Cepat)</span>
+            <span class="legend-tag tag-amber">12-18 Hari (Sedang)</span>
+            <span class="legend-tag tag-red">&gt;18 Hari (Lambat)</span>
+          </div>
         </div>
-        <div class="caption font-mono" data-translate="status-sla">STATUS: SLA BREAKDOWN</div>
+
+        <!-- State Selector Pills -->
+        <div class="state-buttons-grid" id="state-selector-bar">
+          <button type="button" class="state-btn active" data-state="SP">SP (São Paulo)</button>
+          <button type="button" class="state-btn" data-state="RJ">RJ (Rio de Janeiro)</button>
+          <button type="button" class="state-btn" data-state="MG">MG (Minas Gerais)</button>
+          <button type="button" class="state-btn" data-state="PR">PR (Paraná)</button>
+          <button type="button" class="state-btn" data-state="RS">RS (Rio Grande do Sul)</button>
+          <button type="button" class="state-btn" data-state="BA">BA (Bahia)</button>
+          <button type="button" class="state-btn" data-state="PE">PE (Pernambuco)</button>
+          <button type="button" class="state-btn" data-state="AM">AM (Amazonas)</button>
+          <button type="button" class="state-btn" data-state="RR">RR (Roraima)</button>
+        </div>
+
+        <!-- Live Reactive Stats Banner -->
+        <div class="reactive-banner font-mono" id="state-detail-panel">
+          <div class="banner-item">
+            <span class="b-label">Wilayah Terpilih:</span>
+            <strong class="b-value text-blue" id="disp-state-name">São Paulo (SP)</strong>
+          </div>
+          <div class="banner-item">
+            <span class="b-label">Rata-rata Waktu Kirim:</span>
+            <span class="b-value text-emerald" id="disp-state-sla">8.65 Hari</span>
+          </div>
+          <div class="banner-item">
+            <span class="b-label">Volume Pesanan:</span>
+            <span class="b-value" id="disp-state-orders">41.746 Pesanan (41.9%)</span>
+          </div>
+          <div class="banner-item">
+            <span class="b-label">Skor Ulasan Rata-rata:</span>
+            <span class="b-value text-emerald" id="disp-state-rating">4.18 / 5.0</span>
+          </div>
+        </div>
+
+        <!-- Main Chart Container -->
+        <div class="chart-wrapper-main">
+          <canvas id="stateDeliveryChart"></canvas>
+        </div>
       </div>
-      
-      <div class="visuals-grid-2">
-        <!-- Review Score vs Delivery Time -->
-        <div class="chart-card glass">
-          <div class="chart-card-header">
-            <div class="chart-title-group">
-              <h2 class="chart-title" data-translate="chart-reviews-title">Average Delivery Days vs Review Score</h2>
-              <p class="chart-subtitle" data-translate="chart-reviews-sub">Clear negative correlation (-0.31): late orders trigger 1-star ratings</p>
-            </div>
-            <span class="chip font-mono" data-translate="chip-satisfaction-gap">SATISFACTION_GAP</span>
+
+      <!-- Split Cards: Delivery Delay Cliff -->
+      <div class="cards-grid-2">
+        <div class="visual-card">
+          <div class="card-inner-top">
+            <h3 class="card-title">Korelasi Keterlambatan vs Bintang Ulasan</h3>
+            <p class="card-subtitle">Pengaruh lamanya paket tiba terhadap anjloknya rating pembeli</p>
           </div>
-          <div class="chart-container chart-container-medium">
-            <canvas id="chart-reviews-delivery"></canvas>
+          <div class="chart-wrapper-compact">
+            <canvas id="delayImpactChart"></canvas>
           </div>
         </div>
-        
-        <!-- State Delivery Times -->
-        <div class="chart-card glass">
-          <div class="chart-card-header">
-            <div class="chart-title-group">
-              <h2 class="chart-title" data-translate="chart-state-title">Delivery SLA by Brazilian State</h2>
-              <p class="chart-subtitle" data-translate="chart-state-sub">Average delivery speed (days) across fast and slow states</p>
+
+        <div class="insight-highlight-card">
+          <div class="insight-badge font-mono">TEMUAN EMPIRIS</div>
+          <h4 class="insight-title">Tebing Kepuasan Konsumen (The Satisfaction Cliff)</h4>
+          <p class="insight-desc">
+            Pesanan dengan ulasan <strong>Bintang 1</strong> memiliki rata-rata waktu kirim <strong>20,2 hari</strong> (38,5% melewati estimasi yang dijanjikan). Sebaliknya, pesanan <strong>Bintang 5</strong> tiba dalam rata-rata <strong>10,6 hari</strong>.
+          </p>
+          <div class="micro-stats-row font-mono">
+            <div class="micro-stat">
+              <span class="ms-num text-red">38.5%</span>
+              <span class="ms-label">Terlambat pada Bintang 1</span>
             </div>
-            <span class="chip font-mono" data-translate="chip-geo-sla">GEO_SLA</span>
-          </div>
-          <div class="chart-container chart-container-medium">
-            <canvas id="chart-state-delivery"></canvas>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Logistics Bottleneck and Actions -->
-      <div class="chart-card glass">
-        <div class="chart-card-header">
-          <div class="chart-title-group">
-            <h2 class="chart-title" data-translate="diagnosis-title">Operational Logistics Diagnosis</h2>
-            <p class="chart-subtitle" data-translate="diagnosis-sub">Analysis of shipping delays and customer impact</p>
-          </div>
-          <span class="chip alert font-mono" data-translate="chip-action-required">ACTION_REQUIRED</span>
-        </div>
-        
-        <div class="insights-list">
-          <div class="insight-item critical" id="insight-northern">
-            <div class="insight-title" data-translate="insight-north-title">Northern Region SLA Bottleneck</div>
-            <div class="insight-description" data-translate="insight-north-desc">
-              Average delivery times in remote states like Amazonas (AM) and Amapá (AP) average <strong>25.6</strong> and <strong>24.8 days</strong> respectively. Compare this with São Paulo (SP) at <strong>8.7 days</strong>.
-            </div>
-          </div>
-          
-          <div class="insight-item" id="insight-retention">
-            <div class="insight-title" data-translate="insight-retention-title">Customer Retention Deficit</div>
-            <div class="insight-description" data-translate="insight-retention-desc">
-              Over <strong>96.8%</strong> of purchasers are one-time buyers. The repeat rate is static at <strong>3.12%</strong>. Solving logistics friction is the primary prerequisite to launch effective retention marketing.
-            </div>
-          </div>
-          
-          <div class="insight-item" id="insight-correlation">
-            <div class="insight-title" data-translate="insight-corr-title">SLA-Rating Correlation</div>
-            <div class="insight-description" data-translate="insight-corr-desc">
-              Orders resulting in 5-star ratings arrive in <strong>10.6 days</strong>. Orders resulting in 1-star ratings take <strong>20.2 days</strong> on average. Late shipping is the single largest structural source of customer churn.
+            <div class="micro-stat">
+              <span class="ms-num text-emerald">2.8%</span>
+              <span class="ms-label">Terlambat pada Bintang 5</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== TAB 4: IMPACT SIMULATOR ==================== -->
-    <section id="tab-simulator" class="tab-content">
-      <div class="page-header">
-        <div class="page-header-info">
-          <div class="page-title-badge" data-translate="module-model-id">MODULE ID: BR-MODEL-04</div>
-          <h1 class="headline-display" data-translate="simulator-title">Business Impact Simulator</h1>
+    <!-- SECTION 2: Revenue Evolution & Seasonality -->
+    <section id="section-revenue" class="content-section reveal-on-scroll">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-pill">02. DINAMIKA PENDAPATAN</span>
+          <h2 class="section-heading">Evolusi Pertumbuhan GMV & Lonjakan Black Friday</h2>
         </div>
-        <div class="caption font-mono" id="sim-mode-status" data-translate="sim-mode">SIMULATION MODE: RUNNING</div>
+        <p class="section-caption">
+          Trajektori penjualan bulanan dari fase rintisan September 2016 hingga puncak rekor November 2017.
+        </p>
       </div>
-      
-      <div class="simulator-layout">
-        <!-- Sliders Controls -->
-        <div class="simulator-controls chart-card glass">
-          <div class="chart-title-group" style="margin-bottom: var(--spacing-md);">
-            <h2 class="chart-title" data-translate="sim-ctrl-title">Target Variables</h2>
-            <p class="chart-subtitle" data-translate="sim-ctrl-sub">Adjust the operational parameters to simulate strategic changes and calculate potential revenue uplifts.</p>
-          </div>
-          
-          <!-- Control 1: Repeat Purchase Rate -->
-          <div class="control-group">
-            <div class="control-label-row">
-              <span class="control-title">
-                <span data-translate="slider-repeat-title">Repeat Purchase Rate (%)</span>
-                <span class="tooltip-icon tooltip" data-tooltip="sim-repeat-tooltip">ⓘ</span>
-              </span>
-              <span class="control-value-badge" id="sim-val-repeat">3.12%</span>
-            </div>
-            <input type="range" class="stark-slider" id="slider-repeat" min="3.12" max="15.00" step="0.05" value="3.12">
-            <div style="display: flex; justify-content: space-between;" class="caption font-mono">
-              <span data-translate="slider-repeat-base">Baseline: 3.12%</span>
-              <span data-translate="slider-repeat-target">Target: 15.00%</span>
-            </div>
-          </div>
-          
-          <!-- Control 2: State SLA Selection & Reduction -->
-          <div class="control-group">
-            <div class="control-label-row" style="flex-wrap: wrap; gap: 8px;">
-              <span class="control-title">
-                <span data-translate="slider-sla-title">State-Specific SLA Reduction</span>
-                <span class="tooltip-icon tooltip" data-tooltip="sim-sla-tooltip">ⓘ</span>
-              </span>
-              
-              <!-- State Selector Dropdown -->
-              <div class="state-select-wrap">
-                <select id="select-sla-state">
-                  <option value="AM" selected>AM (Amazonas)</option>
-                  <option value="AP">AP (Amapá)</option>
-                  <option value="RR">RR (Roraima)</option>
-                  <option value="PA">PA (Pará)</option>
-                  <option value="AL">AL (Alagoas)</option>
-                  <option value="MA">MA (Maranhão)</option>
-                  <option value="SE">SE (Sergipe)</option>
-                  <option value="CE">CE (Ceará)</option>
-                </select>
-              </div>
-            </div>
-            <div class="control-label-row" style="margin-top: 4px;">
-              <span class="caption font-mono" id="sim-state-label" style="text-transform: uppercase;">Active State SLA</span>
-              <span class="control-value-badge" id="sim-val-sla">25.6 Days</span>
-            </div>
-            <input type="range" class="stark-slider" id="slider-sla" min="10.0" max="25.6" step="0.1" value="25.6">
-            <div style="display: flex; justify-content: space-between;" class="caption font-mono">
-              <span data-translate="slider-sla-target">Fulfillment Hubs (10d)</span>
-              <span id="sim-state-baseline">Baseline (25.6d)</span>
-            </div>
-          </div>
 
-          <!-- Control 3: Budget Shift to High AOV Categories -->
-          <div class="control-group">
-            <div class="control-label-row">
-              <span class="control-title">
-                <span data-translate="slider-budget-title">Marketing Shift to High AOV (%)</span>
-                <span class="tooltip-icon tooltip" data-tooltip="sim-budget-tooltip">ⓘ</span>
-              </span>
-              <span class="control-value-badge" id="sim-val-budget">0%</span>
-            </div>
-            <input type="range" class="stark-slider" id="slider-budget" min="0" max="100" step="5" value="0">
-            <div style="display: flex; justify-content: space-between;" class="caption font-mono">
-              <span data-translate="slider-budget-base">Balanced (0%)</span>
-              <span data-translate="slider-budget-target">Max High-Value Focus (100%)</span>
-            </div>
+      <div class="explorer-card">
+        <div class="card-inner-top flex-between">
+          <div>
+            <h3 class="card-title">Kurva Nilai Transaksi Bruto Bulanan (BRL)</h3>
+            <p class="card-subtitle">Arahkan kursor pada titik grafik untuk membaca nilai GMV per bulan</p>
           </div>
-          
-          <button type="button" class="btn-secondary" id="btn-reset-simulator" style="margin-top: 12px; width: 100%;" data-translate="btn-reset">
-            Reset Simulator
-          </button>
+          <div class="hover-readout-pill font-mono" id="hover-revenue-readout">
+            Arahkan kursor ke grafik
+          </div>
         </div>
-        
-        <!-- Output Manifest -->
-        <div class="manifest-card glass">
-          <div class="manifest-header">
-            <div>
-              <div class="manifest-title" data-translate="manifest-card-title">Olist operational manifest</div>
-              <div class="manifest-code" id="manifest-timestamp">DATE: 16-JUL-2026 // TIME: 13:35</div>
-            </div>
-            <div class="manifest-stamp" id="manifest-status" data-translate="manifest-status-base">BASELINE</div>
-          </div>
-          
-          <div class="manifest-body">
-            <!-- Row 1 -->
-            <div class="manifest-row">
-              <span class="label" data-translate="manifest-row-base">Primary Base Revenue:</span>
-              <span class="value" id="manifest-base-revenue">16,008,872.12 BRL</span>
-            </div>
-            
-            <!-- Row 2 -->
-            <div class="manifest-row">
-              <span class="label" data-translate="manifest-row-retention">Loyalty Retention Gains:</span>
-              <span class="value positive" id="manifest-retention-gains">+0.00 BRL</span>
-            </div>
-            
-            <!-- Row 3 -->
-            <div class="manifest-row">
-              <span class="label" data-translate="manifest-row-sla">Logistics Review SLA Uplift:</span>
-              <span class="value positive" id="manifest-sla-gains">+0.00 BRL</span>
-            </div>
-            
-            <!-- Row 4 -->
-            <div class="manifest-row">
-              <span class="label" data-translate="manifest-row-aov">AOV Optimization Delta:</span>
-              <span class="value positive" id="manifest-aov-gains">+0.00 BRL</span>
-            </div>
-            
-            <!-- Row 5 -->
-            <div class="manifest-row">
-              <span class="label" data-translate="manifest-row-repeat-cust">Generated Repeat Customers:</span>
-              <span class="value" id="manifest-new-customers">+0</span>
-            </div>
-            
-            <!-- Row 6 -->
-            <div class="manifest-row">
-              <span class="label" data-translate="manifest-row-csat">Projected Customer CSAT:</span>
-              <span class="value" id="manifest-rating-score">4.09 / 5.00</span>
-            </div>
-            
-            <!-- Final Total -->
-            <div class="manifest-row total">
-              <span class="label" data-translate="manifest-row-proj-revenue">PROJECTED REVENUE:</span>
-              <span class="value" id="manifest-total-revenue">16,008,872.12 BRL</span>
-            </div>
 
-            <!-- Revenue Growth Progress Bar/Gauge -->
-            <div class="manifest-growth-gauge">
-              <div class="gauge-label-row">
-                <span class="gauge-label" data-translate="manifest-gauge-label">Revenue Growth Target</span>
-                <span class="gauge-percentage" id="manifest-growth-percent">0.00%</span>
-              </div>
-              <div class="gauge-track">
-                <div class="gauge-fill" id="manifest-growth-fill" style="width: 0%;"></div>
-              </div>
-            </div>
+        <div class="chart-wrapper-tall">
+          <canvas id="monthlyTrendChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: RFM Retention Paradox -->
+    <section id="section-retention" class="content-section reveal-on-scroll">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-pill">03. RETENSI PELANGGAN</span>
+          <h2 class="section-heading">Paradoks Pembelian Ulang 3.12% & Segmentasi RFM</h2>
+        </div>
+        <p class="section-caption">
+          Pemetaan 96.096 pelanggan unik dan diagnosis struktural mengapa mayoritas pembeli hanya bertransaksi satu kali.
+        </p>
+      </div>
+
+      <div class="cards-grid-2">
+        <div class="visual-card">
+          <div class="card-inner-top">
+            <h3 class="card-title">Distribusi 5 Klaster Pelanggan (RFM)</h3>
+            <p class="card-subtitle">Segmentasi berbasis Recency, Frequency, dan Monetary</p>
           </div>
-          
-          <!-- Barcode container -->
-          <div class="manifest-barcode-container">
-            <svg class="barcode-svg" viewBox="0 0 200 40" preserveAspectRatio="none">
-              <rect x="10" width="3" height="40" fill="currentColor"/>
-              <rect x="15" width="1" height="40" fill="currentColor"/>
-              <rect x="18" width="4" height="40" fill="currentColor"/>
-              <rect x="24" width="2" height="40" fill="currentColor"/>
-              <rect x="28" width="1" height="40" fill="currentColor"/>
-              <rect x="31" width="3" height="40" fill="currentColor"/>
-              <rect x="36" width="1" height="40" fill="currentColor"/>
-              <rect x="40" width="4" height="40" fill="currentColor"/>
-              <rect x="46" width="2" height="40" fill="currentColor"/>
-              <rect x="50" width="1" height="40" fill="currentColor"/>
-              <rect x="53" width="3" height="40" fill="currentColor"/>
-              <rect x="58" width="1" height="40" fill="currentColor"/>
-              <rect x="62" width="2" height="40" fill="currentColor"/>
-              <rect x="66" width="4" height="40" fill="currentColor"/>
-              <rect x="72" width="1" height="40" fill="currentColor"/>
-              <rect x="75" width="3" height="40" fill="currentColor"/>
-              <rect x="80" width="2" height="40" fill="currentColor"/>
-              <rect x="84" width="1" height="40" fill="currentColor"/>
-              <rect x="87" width="4" height="40" fill="currentColor"/>
-              <rect x="93" width="2" height="40" fill="currentColor"/>
-              <rect x="97" width="1" height="40" fill="currentColor"/>
-              <rect x="100" width="3" height="40" fill="currentColor"/>
-              <rect x="105" width="2" height="40" fill="currentColor"/>
-              <rect x="109" width="1" height="40" fill="currentColor"/>
-              <rect x="112" width="4" height="40" fill="currentColor"/>
-              <rect x="118" width="2" height="40" fill="currentColor"/>
-              <rect x="122" width="1" height="40" fill="currentColor"/>
-              <rect x="125" width="3" height="40" fill="currentColor"/>
-              <rect x="130" width="2" height="40" fill="currentColor"/>
-              <rect x="134" width="4" height="40" fill="currentColor"/>
-              <rect x="140" width="1" height="40" fill="currentColor"/>
-              <rect x="143" width="3" height="40" fill="currentColor"/>
-              <rect x="148" width="2" height="40" fill="currentColor"/>
-              <rect x="152" width="1" height="40" fill="currentColor"/>
-              <rect x="155" width="4" height="40" fill="currentColor"/>
-              <rect x="161" width="2" height="40" fill="currentColor"/>
-              <rect x="165" width="1" height="40" fill="currentColor"/>
-              <rect x="168" width="3" height="40" fill="currentColor"/>
-              <rect x="173" width="2" height="40" fill="currentColor"/>
-              <rect x="177" width="1" height="40" fill="currentColor"/>
-              <rect x="180" width="4" height="40" fill="currentColor"/>
-              <rect x="186" width="2" height="40" fill="currentColor"/>
-              <rect x="190" width="1" height="40" fill="currentColor"/>
-            </svg>
-            <div class="caption font-mono" style="font-size: 9px; margin-top: 4px;">*OLIST-SIM-MAN-2026*</div>
+          <div class="chart-wrapper-donut">
+            <canvas id="rfmDonutChart"></canvas>
           </div>
-          
-          <div class="manifest-footer">
-            <div class="manifest-footer-row">
-              <div class="caption font-mono" style="max-width: 60%; line-height: 1.2;" data-translate="manifest-footer-note">
-                OLIST SYSTEM SIMULATED METRICS EST. +/- 5% MARGIN OF ERROR.
-              </div>
-              <button type="button" class="btn-primary" onclick="window.print()" data-translate="btn-print">
-                Print manifest
-              </button>
-            </div>
+          <div class="callout-footer-box font-mono">
+            Segmen <strong>Champions (7.8%)</strong> dan <strong>Loyal Customers (19.2%)</strong> menyumbang nilai belanja tertinggi (CLV).
+          </div>
+        </div>
+
+        <div class="visual-card">
+          <div class="card-inner-top">
+            <h3 class="card-title">Kategori Produk dengan GMV Terbesar</h3>
+            <p class="card-subtitle">Dominasi barang tahan lama (durables) menjelaskan siklus pembelian ulang yang panjang</p>
+          </div>
+          <div class="table-scroll-wrap font-mono">
+            <table class="modern-table">
+              <thead>
+                <tr>
+                  <th>Kategori Produk</th>
+                  <th>Kontribusi GMV</th>
+                  <th>Pangsa Pasar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Health & Beauty</td><td class="text-emerald">R$ 1.26M</td><td class="text-emerald">7.86%</td></tr>
+                <tr><td>Watches & Gifts</td><td class="text-emerald">R$ 1.21M</td><td class="text-emerald">7.53%</td></tr>
+                <tr><td>Bed Bath & Table</td><td>R$ 1.04M</td><td>6.48%</td></tr>
+                <tr><td>Sports & Leisure</td><td>R$ 0.99M</td><td>6.17%</td></tr>
+                <tr><td>Computers & Acc.</td><td>R$ 0.91M</td><td>5.70%</td></tr>
+                <tr><td>Furniture & Decor</td><td>R$ 0.73M</td><td>4.56%</td></tr>
+                <tr><td>Housewares</td><td>R$ 0.63M</td><td>3.95%</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== TAB 5: SQL PLAYGROUND ==================== -->
-    <section id="tab-sql" class="tab-content">
-      <div class="page-header">
-        <div class="page-header-info">
-          <div class="page-title-badge" data-translate="module-sql-id">MODULE ID: BR-SQL-05</div>
-          <h1 class="headline-display" data-translate="sql-title">SQL Operational Sandbox</h1>
+    <!-- SECTION 4: Interactive Value Creation Simulator -->
+    <section id="section-simulator" class="content-section reveal-on-scroll">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-pill">04. SIMULATOR STRATEGIS</span>
+          <h2 class="section-heading">Kalkulator Proyeksi Dampak Operasional & Finansial</h2>
         </div>
-        <div class="caption font-mono" id="sql-db-status" data-translate="sql-db-status-unloaded">DATABASE: CLICK TO INITIALIZE</div>
+        <p class="section-caption">
+          Uji skenario bisnis: bagaimana reduksi waktu pengiriman dan peningkatan retensi mendongkrak total pendapatan platform.
+        </p>
       </div>
 
-      <div class="sql-layout">
-        <!-- Sidebar Queries / Console Controls -->
-        <div class="sql-controls chart-card glass">
-          <div class="chart-title-group" style="margin-bottom: var(--spacing-md);">
-            <h2 class="chart-title" data-translate="sql-controls-title">Query Control</h2>
-            <p class="chart-subtitle" data-translate="sql-controls-sub">Select a pre-configured scenario or write a custom SQLite query to run against the Olist dataset.</p>
+      <div class="simulator-wrapper">
+        <!-- Controls Column -->
+        <div class="sim-controls-card">
+          <div class="flex-between">
+            <h3 class="card-title">Tuas Parameter Intervensi</h3>
+            <button type="button" class="reset-action-btn font-mono" id="btn-reset-sim">Reset Baseline</button>
           </div>
 
-          <div class="control-group">
-            <label for="select-preset-query" class="control-title" style="margin-bottom: 8px; display: block;" data-translate="sql-preset-label">Choose Preset Scenario</label>
-            <div class="state-select-wrap" style="width: 100%;">
-              <select id="select-preset-query" style="width: 100%;">
-                <option value="custom" selected data-translate="preset-opt-custom">-- Custom Query --</option>
-                <option value="mom_revenue" data-translate="preset-opt-mom">Scenario A: Month-over-Month Revenue Growth</option>
-                <option value="cohort_retention" data-translate="preset-opt-cohort">Scenario B: Customer Cohort Retention (First 3 Months)</option>
-                <option value="top_categories_reviews" data-translate="preset-opt-categories">Scenario C: Top 10 Product Categories by Revenue vs Rating</option>
-              </select>
+          <div class="sliders-stack">
+            <div class="slider-box">
+              <div class="slider-header font-mono">
+                <span class="sl-title text-emerald">Target Repeat Purchase Rate</span>
+                <span class="sl-val" id="txt-sim-repeat">3.12%</span>
+              </div>
+              <input type="range" class="custom-range" id="slider-sim-repeat" min="3.12" max="15.0" step="0.2" value="3.12">
+              <span class="sl-hint">Baseline saat ini: 3.12%</span>
             </div>
-          </div>
 
-          <div class="control-group" style="margin-top: 16px;">
-            <label class="control-title" style="margin-bottom: 8px; display: block;" data-translate="sql-schema-label">Quick Schema Reference</label>
-            <div class="schema-ref-container font-mono">
-              <div class="schema-table-item"><strong>orders</strong>: <code>order_id</code>, <code>customer_id</code>, <code>order_status</code>, <code>order_purchase_timestamp</code></div>
-              <div class="schema-table-item"><strong>order_items</strong>: <code>order_id</code>, <code>product_id</code>, <code>price</code>, <code>freight_value</code></div>
-              <div class="schema-table-item"><strong>customers</strong>: <code>customer_id</code>, <code>customer_unique_id</code>, <code>customer_city</code>, <code>customer_state</code></div>
-              <div class="schema-table-item"><strong>order_reviews</strong>: <code>review_id</code>, <code>order_id</code>, <code>review_score</code></div>
-              <div class="schema-table-item"><strong>products</strong>: <code>product_id</code>, <code>product_category_name</code></div>
-              <div class="schema-table-item"><strong>product_category_name_translation</strong>: <code>product_category_name</code>, <code>product_category_name_english</code></div>
+            <div class="slider-box">
+              <div class="slider-header font-mono">
+                <span class="sl-title text-blue">Percepatan Pengiriman (Hari)</span>
+                <span class="sl-val" id="txt-sim-delivery">0 Hari</span>
+              </div>
+              <input type="range" class="custom-range" id="slider-sim-delivery" min="0" max="6" step="0.5" value="0">
+              <span class="sl-hint">Reduksi hari di jalan</span>
+            </div>
+
+            <div class="slider-box">
+              <div class="slider-header font-mono">
+                <span class="sl-title text-amber">Kenaikan Rata-rata Keranjang (AOV)</span>
+                <span class="sl-val" id="txt-sim-aov">0%</span>
+              </div>
+              <input type="range" class="custom-range" id="slider-sim-aov" min="0" max="25" step="1" value="0">
+              <span class="sl-hint">Strategi cross-selling produk</span>
             </div>
           </div>
         </div>
 
-        <!-- SQL Editor and Output Terminal -->
-        <div class="sql-terminal-wrap">
-          <div class="chart-card glass sql-editor-card">
-            <div class="chart-card-header">
-              <div class="chart-title-group">
-                <h2 class="chart-title" data-translate="sql-editor-title">SQL Query Console</h2>
-                <p class="chart-subtitle" data-translate="sql-editor-sub">Write SQLite-compatible syntax. Remember to end queries with a semicolon.</p>
-              </div>
-              <span class="chip font-mono">SQLITE_V3</span>
+        <!-- Outputs Column -->
+        <div class="sim-outputs-card font-mono">
+          <h3 class="card-title">Proyeksi Hasil Finansial Langsung</h3>
+          
+          <div class="readout-tiles-grid">
+            <div class="tile-cell">
+              <span class="tile-lbl">Baseline GMV</span>
+              <span class="tile-num">R$ 16.01M</span>
             </div>
 
-            <div class="sql-editor-container">
-              <textarea id="sql-editor" class="font-mono" spellcheck="false" placeholder="-- Type your custom SQL here...&#10;SELECT * FROM orders LIMIT 5;"></textarea>
+            <div class="tile-cell highlight-cell">
+              <span class="tile-lbl">Proyeksi Total GMV</span>
+              <span class="tile-num text-emerald" id="sim-projected-gmv">R$ 16.01M</span>
             </div>
 
-            <div class="sql-action-row">
-              <div class="sql-status-text font-mono" id="sql-execution-status" data-translate="sql-status-idle">Console ready.</div>
-              <div class="sql-buttons-group">
-                <button type="button" class="btn-secondary" id="btn-export-sql-csv" disabled data-translate="btn-export-csv">Export CSV</button>
-                <button type="button" class="btn-primary" id="btn-run-sql" data-translate="btn-run-query">Run Query</button>
-              </div>
+            <div class="tile-cell highlight-cell">
+              <span class="tile-lbl">Pertambahan Nilai (Delta)</span>
+              <span class="tile-num text-emerald" id="sim-delta-gmv">+R$ 0.00</span>
+            </div>
+
+            <div class="tile-cell">
+              <span class="tile-lbl">Estimasi Rating Kepuasan</span>
+              <span class="tile-num text-blue" id="sim-projected-rating">4.09 / 5.0</span>
             </div>
           </div>
 
-          <!-- Query Results Grid -->
-          <div class="chart-card glass sql-results-card" style="margin-top: 24px;">
-            <div class="chart-card-header">
-              <div class="chart-title-group">
-                <h2 class="chart-title" data-translate="sql-results-title">Output Dataset</h2>
-                <p class="chart-subtitle" id="sql-results-subtitle" data-translate="sql-results-sub">Execute a query to populate the result table.</p>
-              </div>
-              <span class="chip font-mono" id="sql-row-count-badge">0 ROWS</span>
-            </div>
-            
-            <!-- SQL Error banner -->
-            <div class="sql-error-banner font-mono" id="sql-error-banner" style="display: none;"></div>
-
-            <!-- Loader -->
-            <div class="sql-loader-container" id="sql-loader" style="display: none;">
-              <div class="spinner"></div>
-              <div class="sql-loader-text" id="sql-loader-text" data-translate="sql-loader-loading-db">Downloading operational database (68MB)... This might take a moment.</div>
-            </div>
-
-            <div class="table-container sql-results-table-container">
-              <table class="min-table" id="table-sql-results">
-                <thead>
-                  <!-- Generated dynamically -->
-                </thead>
-                <tbody>
-                  <!-- Generated dynamically -->
-                </tbody>
-              </table>
-            </div>
+          <div class="sim-footnote">
+            💡 Setiap reduksi 1 hari pengiriman menghasilkan peningkatan +0.08 poin skor kepuasan ulasan serta meningkatkan retensi pelanggan organik.
           </div>
         </div>
       </div>
     </section>
+
+    <!-- SECTION 5: SQL Production Methodology -->
+    <section id="section-sql" class="content-section reveal-on-scroll">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-pill">05. METODOLOGI SQL</span>
+          <h2 class="section-heading">Kueri Produksi Data Warehouse</h2>
+        </div>
+        <p class="section-caption">
+          Kueri SQL dengan Window Functions yang digunakan untuk memproses agregasi data 100.000 transaksi.
+        </p>
+      </div>
+
+      <div class="sql-card">
+        <div class="sql-nav-bar">
+          <button type="button" class="sql-tab-btn active" id="btn-q-logistics">1. Disparitas Logistik (SLA)</button>
+          <button type="button" class="sql-tab-btn" id="btn-q-growth">2. Pertumbuhan MoM (LAG)</button>
+          <button type="button" class="sql-tab-btn" id="btn-q-rfm">3. Segmentasi RFM (NTILE)</button>
+        </div>
+
+        <pre class="sql-pre font-mono" id="sql-code-display"><code>-- 1. Evaluasi Disparitas Pengiriman per Wilayah
+SELECT 
+    c.customer_state,
+    COUNT(o.order_id) AS total_orders,
+    ROUND(AVG(julianday(o.order_delivered_customer_date) - julianday(o.order_purchase_timestamp)), 1) AS avg_delivery_days,
+    ROUND(AVG(r.review_score), 2) AS avg_review_score
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+JOIN order_reviews r ON o.order_id = r.order_id
+WHERE o.order_status = 'delivered'
+GROUP BY c.customer_state
+ORDER BY total_orders DESC;</code></pre>
+      </div>
+    </section>
+
   </main>
+
+  <!-- Clean Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-meta">
+        <strong>Olist Brazilian E-Commerce Analytics</strong>
+        <p>Kajian Empiris 100.000 Transaksi Marketplace Brazil (2016-2018)</p>
+      </div>
+      <div class="footer-credits font-mono">
+        <span>IZAM ROSIAWAN</span>
+        <span>•</span>
+        <span>TELKOM UNIVERSITY</span>
+      </div>
+    </div>
+  </footer>
 
   <script src="index.js"></script>
 </body>

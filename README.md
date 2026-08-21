@@ -1,11 +1,14 @@
 # Olist Brazilian E-Commerce RFM Analytics, Logistics & Customer Lifetime Segmentation
 
+[![Live Dashboard](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-brightgreen.svg)](https://izamrosiawan.github.io/olist-brazilian-ecommerce-analytics/)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-Analytics-orange.svg)](https://pandas.pydata.org/)
 [![Domain](https://img.shields.io/badge/Domain-E--Commerce%20Analytics-green.svg)](#)
-[![Tests](https://img.shields.io/badge/Tests-Pytest%20Passing-brightgreen.svg)](#)
+[![CI Pipeline](https://img.shields.io/badge/CI-GitHub%20Actions%20Passing-brightgreen.svg)](#)
 
-Repositori ini menyajikan analisis komprehensif performa bisnis marketplace, segmentasi pelanggan (*Customer Segmentation* berbasis RFM: *Recency, Frequency, Monetary*), analisis kepuasan pelanggan (*Review Score Modeling*), dan pemetaan efisiensi logistik pengiriman antar-negara bagian pada dataset publik **Olist Brazilian E-Commerce** (100.000+ transaksi pesanan dari 2016 hingga 2018).
+> 🚀 **Live Interactive Dashboard**: Akses visualisasi analitik interaktif di [https://izamrosiawan.github.io/olist-brazilian-ecommerce-analytics/](https://izamrosiawan.github.io/olist-brazilian-ecommerce-analytics/)
+
+Repositori ini menyajikan analisis komprehensif performa bisnis marketplace, segmentasi pelanggan (*Customer Segmentation* berbasis RFM: *Recency, Frequency, Monetary*), analisis estimasi *Customer Lifetime Value* (CLV), analisis kepuasan pelanggan (*Review Score Modeling*), dan pemetaan efisiensi logistik pengiriman antar-negara bagian pada dataset publik **Olist Brazilian E-Commerce** (100.000+ transaksi pesanan dari 2016 hingga 2018).
 
 ---
 
