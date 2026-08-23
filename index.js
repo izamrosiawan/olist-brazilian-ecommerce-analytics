@@ -138,17 +138,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getThemeColors() {
-    const isDark = currentTheme === 'dark';
     return {
-      textColor: isDark ? '#94a3b8' : '#71717a',
-      titleColor: isDark ? '#f8fafc' : '#09090b',
-      gridColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
-      tooltipBg: isDark ? '#101726' : '#ffffff',
-      tooltipBorder: isDark ? '#1e293b' : '#e4e4e7',
-      primaryBlue: isDark ? '#38bdf8' : '#2563eb',
-      emerald: isDark ? '#10b981' : '#059669',
-      amber: isDark ? '#fbbf24' : '#d97706',
-      red: isDark ? '#f87171' : '#dc2626'
+      textColor: '#4b5563',
+      titleColor: '#111827',
+      gridColor: '#f1f3f5',
+      tooltipBg: '#ffffff',
+      tooltipBorder: '#e5e7eb',
+      primaryBlue: '#1d4ed8',
+      emerald: '#047857',
+      amber: '#d97706',
+      purple: '#7c3aed',
+      teal: '#0d9488',
+      slate: '#475569',
+      red: '#b91c1c'
     };
   }
 
@@ -349,8 +351,9 @@ document.addEventListener('DOMContentLoaded', () => {
         labels: labels,
         datasets: [{
           data: data,
-          backgroundColor: [tc.primaryBlue, tc.emerald, tc.amber, '#6366f1', '#a1a1aa'],
-          borderWidth: 0
+          backgroundColor: [tc.primaryBlue, tc.teal, tc.amber, tc.purple, tc.slate],
+          borderWidth: 2,
+          borderColor: '#ffffff'
         }]
       },
       options: {
