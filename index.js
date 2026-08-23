@@ -82,8 +82,40 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimatedCounters();
   initTheme();
   initCharts();
+  initStateSelector();
   initSimulator();
   initSQLExplorer();
+
+  function initStateSelector() {
+    const buttons = document.querySelectorAll('#state-selector-bar .segment-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const st = btn.dataset.state;
+        const info = dashboardData.state_details[st];
+        if (info) {
+          const nameEl = document.getElementById('disp-state-name');
+          const slaEl = document.getElementById('disp-state-sla');
+          if (nameEl) nameEl.textContent = info.name;
+          if (slaEl) slaEl.textContent = info.sla;
+        }
+
+        if (charts.stateDelivery) {
+          const tc = getThemeColors();
+          const labels = dashboardData.state_delivery.map(d => d.state);
+          const days = dashboardData.state_delivery.map(d => d.average_days);
+          const colors = days.map((d, i) => {
+            if (labels[i] === st) return '#1d4ed8'; // highlighted active state
+            return d < 12 ? 'rgba(5, 150, 105, 0.4)' : (d <= 18 ? 'rgba(217, 119, 6, 0.4)' : 'rgba(185, 28, 28, 0.4)');
+          });
+          charts.stateDelivery.data.datasets[0].backgroundColor = colors;
+          charts.stateDelivery.update();
+        }
+      });
+    });
+  }
 
   function initScrollReveal() {
     const reveals = document.querySelectorAll('.reveal-on-scroll');
