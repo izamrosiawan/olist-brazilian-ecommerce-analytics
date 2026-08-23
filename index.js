@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
           borderWidth: 2.5,
           fill: true,
           tension: 0.2,
-          pointRadius: 0,
+          pointRadius: 3,
           pointHoverRadius: 6,
           pointHoverBackgroundColor: tc.primaryBlue
         }]
@@ -252,18 +252,25 @@ document.addEventListener('DOMContentLoaded', () => {
         responsive: true,
         maintainAspectRatio: false,
         animation: { duration: 1000, easing: 'easeOutQuart' },
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: tc.tooltipBg,
-            titleColor: tc.titleColor,
-            bodyColor: tc.textColor,
-            borderColor: tc.tooltipBorder,
+            enabled: true,
+            backgroundColor: '#ffffff',
+            titleColor: '#0f172a',
+            bodyColor: '#334155',
+            borderColor: '#e2e8f0',
             borderWidth: 1,
-            titleFont: { family: 'JetBrains Mono', size: 12 },
+            padding: 10,
+            boxPadding: 4,
+            titleFont: { family: 'JetBrains Mono', size: 12, weight: '700' },
             bodyFont: { family: 'JetBrains Mono', size: 11 },
             callbacks: {
-              label: (ctx) => ` R$ ${ctx.raw.toFixed(1)}K (BRL)`
+              label: (ctx) => ` Total GMV: R$ ${ctx.raw.toFixed(1)}K (BRL)`
             }
           }
         },
@@ -275,16 +282,6 @@ document.addEventListener('DOMContentLoaded', () => {
           y: {
             grid: { color: tc.gridColor },
             ticks: { color: tc.textColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => `R$ ${v}K` }
-          }
-        },
-        onHover: (event, elements, chart) => {
-          const readout = document.getElementById('hover-revenue-readout');
-          if (!readout) return;
-          if (elements && elements.length > 0) {
-            const idx = elements[0].index;
-            const month = chart.data.labels[idx];
-            const val = chart.data.datasets[0].data[idx];
-            readout.textContent = `${month}  |  Total GMV: R$ ${val.toFixed(2)} Ribu`;
           }
         }
       }
@@ -314,14 +311,22 @@ document.addEventListener('DOMContentLoaded', () => {
         responsive: true,
         maintainAspectRatio: false,
         animation: { duration: 900, easing: 'easeOutQuart' },
+        interaction: {
+          mode: 'nearest',
+          intersect: false
+        },
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: tc.tooltipBg,
-            titleColor: tc.titleColor,
-            bodyColor: tc.textColor,
-            borderColor: tc.tooltipBorder,
+            enabled: true,
+            backgroundColor: '#ffffff',
+            titleColor: '#0f172a',
+            bodyColor: '#334155',
+            borderColor: '#e2e8f0',
             borderWidth: 1,
+            padding: 8,
+            titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: '600' },
+            bodyFont: { family: 'JetBrains Mono', size: 11 },
             callbacks: {
               label: (ctx) => ` Rata-rata: ${ctx.raw.toFixed(1)} Hari`
             }
@@ -357,16 +362,24 @@ document.addEventListener('DOMContentLoaded', () => {
         responsive: true,
         maintainAspectRatio: false,
         animation: { duration: 900, easing: 'easeOutQuart' },
+        interaction: {
+          mode: 'nearest',
+          intersect: false
+        },
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: tc.tooltipBg,
-            titleColor: tc.titleColor,
-            bodyColor: tc.textColor,
-            borderColor: tc.tooltipBorder,
+            enabled: true,
+            backgroundColor: '#ffffff',
+            titleColor: '#0f172a',
+            bodyColor: '#334155',
+            borderColor: '#e2e8f0',
             borderWidth: 1,
+            padding: 8,
+            titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: '600' },
+            bodyFont: { family: 'JetBrains Mono', size: 11 },
             callbacks: {
-              label: (ctx) => ` Rata-rata: ${ctx.raw.toFixed(1)} Hari Pengiriman`
+              label: (ctx) => ` Waktu Kirim: ${ctx.raw.toFixed(1)} Hari`
             }
           }
         },
