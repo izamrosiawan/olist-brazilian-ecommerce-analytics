@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anatomi Marketplace Kontinental: Logistik & Retensi E-Commerce Brazil (Olist)</title>
-  <meta name="description" content="Eksplorasi visual interaktif performa marketplace Olist Brazil: disparitas logistik 27 negara bagian, pola pendapatan bulanan, segmentasi RFM, dan simulator nilai bisnis.">
+  <title>Analisis Logistik & Retensi Pelanggan E-Commerce Brazil (Olist)</title>
+  <meta name="description" content="Eksplorasi visual interaktif performa marketplace Olist Brazil: disparitas logistik 27 negara bagian, tren pendapatan bulanan, segmentasi RFM, dan simulator nilai bisnis.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -17,7 +17,7 @@
   <header class="top-navbar">
     <div class="nav-container">
       <div style="display: flex; align-items: center;">
-        <span class="nav-brand-title">Olist Brazil Marketplace Analytics</span>
+        <span class="nav-brand-title">Analisis Marketplace Olist Brazil</span>
         <span class="nav-brand-subtitle">Logistik, Retensi RFM & Pertumbuhan GMV</span>
       </div>
 
@@ -33,387 +33,198 @@
     </div>
   </header>
 
-  <main class="page-container">
-
-    <!-- Hero Header & Quick Stats -->
-    <section class="hero-section reveal-on-scroll">
-      <div class="hero-badge-wrap">
-        <span class="live-dot-badge">
-          <span class="pulse-dot"></span>
-          Kajian Empiris 100.000 Transaksi (2016-2018)
-        </span>
-      </div>
-
-      <h1 class="hero-main-title">
-        Anatomi Marketplace Kontinental: <br>
-        <span class="text-gradient">Logistik, Retensi & Nilai Bisnis Brazil</span>
+  <main class="main-wrapper">
+    
+    <!-- Overview Header -->
+    <section class="overview-header">
+      <span class="overview-tag">Riset Data E-Commerce & Logistik Kontinental</span>
+      <h1 class="overview-title">
+        Anatomi Marketplace Kontinental: Logistik, Retensi, dan Nilai Bisnis Brazil (Olist)
       </h1>
-
-      <p class="hero-subtitle">
-        Visualisasi komputasional berbasis data transaksi riil marketplace Olist: membedah disparitas pengiriman 4.000 km antar-negara bagian, anomali repeat purchase 3.12%, dan proyeksi pertumbuhan GMV.
+      <p class="overview-desc">
+        Kajian komputasional terhadap 99.441 transaksi riil (2016-2018) pada 9 tabel relasional. Membedah disparitas rantai pasok antar-negara bagian di Brazil, anomali repeat purchase 3.12%, dan pemodelan segmentasi RFM.
       </p>
+    </section>
 
-      <!-- Animated Key Metric Counters -->
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-header">
-            <span class="metric-label">Total Volume Transaksi (GMV)</span>
-            <span class="metric-chip bg-emerald-light">99.441 Pesanan</span>
-          </div>
-          <div class="metric-number-wrap font-mono">
-            <span class="currency-prefix">R$</span>
-            <span class="counter-number text-emerald" data-target="16.01" data-decimals="2">0.00</span>
-            <span class="unit-suffix">M</span>
-          </div>
-          <p class="metric-subtext">Akumulasi pembayaran berhasil diproses</p>
-        </div>
+    <!-- Key Metrics 4-Column Grid -->
+    <section class="stat-cards-grid">
+      <div class="stat-card">
+        <span class="stat-card-label">Total Volume GMV</span>
+        <span class="stat-card-value font-mono" style="color: var(--color-emerald);" id="kpi-gmv">R$ 16.01M</span>
+        <p class="stat-card-note">Akumulasi 99.441 transaksi pesanan berhasil diproses.</p>
+      </div>
 
-        <div class="metric-card">
-          <div class="metric-header">
-            <span class="metric-label">Rata-rata Waktu Pengiriman</span>
-            <span class="metric-chip bg-blue-light">Disparitas Tinggi</span>
-          </div>
-          <div class="metric-number-wrap font-mono">
-            <span class="counter-number text-blue" data-target="12.3" data-decimals="1">0.0</span>
-            <span class="unit-suffix">Hari</span>
-          </div>
-          <p class="metric-subtext">Rentang: 8.6 hari (SP) vs 29.3 hari (Roraima)</p>
-        </div>
+      <div class="stat-card">
+        <span class="stat-card-label">Rata-rata Waktu Kirim</span>
+        <span class="stat-card-value font-mono" style="color: var(--color-blue);" id="kpi-delivery">12.3 Hari</span>
+        <p class="stat-card-note">Disparitas tajam: 8.65 hari (SP) vs 29.3 hari (RR).</p>
+      </div>
 
-        <div class="metric-card">
-          <div class="metric-header">
-            <span class="metric-label">Tingkat Pembelian Ulang</span>
-            <span class="metric-chip bg-amber-light">Paradoks Retensi</span>
-          </div>
-          <div class="metric-number-wrap font-mono">
-            <span class="counter-number text-amber" data-target="3.12" data-decimals="2">0.00</span>
-            <span class="unit-suffix">%</span>
-          </div>
-          <p class="metric-subtext">96.88% pembeli bertransaksi 1 kali saja</p>
-        </div>
+      <div class="stat-card">
+        <span class="stat-card-label">Tingkat Pembelian Ulang</span>
+        <span class="stat-card-value font-mono" style="color: var(--color-amber);" id="kpi-retention">3.12%</span>
+        <p class="stat-card-note">96.88% pelanggan tercatat hanya berbelanja satu kali.</p>
+      </div>
 
-        <div class="metric-card">
-          <div class="metric-header">
-            <span class="metric-label">Skor Ulasan Konsumen</span>
-            <span class="metric-chip">Dari 5.0 Bintang</span>
-          </div>
-          <div class="metric-number-wrap font-mono">
-            <span class="counter-number" data-target="4.09" data-decimals="2">0.00</span>
-            <span class="unit-suffix">★</span>
-          </div>
-          <p class="metric-subtext">76.8% ulasan bernilai bintang 4 dan 5</p>
-        </div>
+      <div class="stat-card">
+        <span class="stat-card-label">Skor Ulasan Konsumen</span>
+        <span class="stat-card-value font-mono" id="kpi-rating">4.09 / 5.0</span>
+        <p class="stat-card-note">76.8% pesanan memperoleh rating bintang 4 dan 5.</p>
       </div>
     </section>
 
-    <!-- SECTION 1: Logistics Disparity Explorer -->
-    <section id="section-logistics" class="content-section reveal-on-scroll">
-      <div class="section-header">
-        <div class="section-title-wrap">
-          <span class="section-pill">01. GEOGRAFI LOGISTIK</span>
-          <h2 class="section-heading">Kesenjangan Pengiriman Antar-Negara Bagian</h2>
-        </div>
-        <p class="section-caption">
-          Jarak tempuh dari hub utama São Paulo ke kawasan pelosok Amazon menciptakan disparitas waktu kirim hingga 300%.
-        </p>
+    <!-- Section 1: Trajectory GMV Monthly Evolution -->
+    <section class="content-section">
+      <div class="section-title-wrap">
+        <h2 class="section-h2">1. Evolusi Nilai Transaksi Bruto Bulanan (GMV)</h2>
+        <p class="section-p">Pertumbuhan volume transaksi marketplace dari fase rintisan (September 2016) hingga puncak rekor penjualan.</p>
       </div>
 
-      <!-- Interactive State Explorer Deck -->
-      <div class="explorer-card">
-        <div class="card-inner-top flex-between">
-          <div>
-            <h3 class="card-title">Pilih Wilayah untuk Inspeksi Langsung</h3>
-            <p class="card-subtitle">Klik tombol negara bagian di bawah untuk melihat rincian SLA dan skor kepuasan lokal</p>
-          </div>
-          <div class="legend-pills font-mono">
-            <span class="legend-tag tag-green">&lt;12 Hari (Cepat)</span>
-            <span class="legend-tag tag-amber">12-18 Hari (Sedang)</span>
-            <span class="legend-tag tag-red">&gt;18 Hari (Lambat)</span>
-          </div>
-        </div>
-
-        <!-- State Selector Pills -->
-        <div class="state-buttons-grid" id="state-selector-bar">
-          <button type="button" class="state-btn active" data-state="SP">SP (São Paulo)</button>
-          <button type="button" class="state-btn" data-state="RJ">RJ (Rio de Janeiro)</button>
-          <button type="button" class="state-btn" data-state="MG">MG (Minas Gerais)</button>
-          <button type="button" class="state-btn" data-state="PR">PR (Paraná)</button>
-          <button type="button" class="state-btn" data-state="RS">RS (Rio Grande do Sul)</button>
-          <button type="button" class="state-btn" data-state="BA">BA (Bahia)</button>
-          <button type="button" class="state-btn" data-state="PE">PE (Pernambuco)</button>
-          <button type="button" class="state-btn" data-state="AM">AM (Amazonas)</button>
-          <button type="button" class="state-btn" data-state="RR">RR (Roraima)</button>
-        </div>
-
-        <!-- Live Reactive Stats Banner -->
-        <div class="reactive-banner font-mono" id="state-detail-panel">
-          <div class="banner-item">
-            <span class="b-label">Wilayah Terpilih:</span>
-            <strong class="b-value text-blue" id="disp-state-name">São Paulo (SP)</strong>
-          </div>
-          <div class="banner-item">
-            <span class="b-label">Rata-rata Waktu Kirim:</span>
-            <span class="b-value text-emerald" id="disp-state-sla">8.65 Hari</span>
-          </div>
-          <div class="banner-item">
-            <span class="b-label">Volume Pesanan:</span>
-            <span class="b-value" id="disp-state-orders">41.746 Pesanan (41.9%)</span>
-          </div>
-          <div class="banner-item">
-            <span class="b-label">Skor Ulasan Rata-rata:</span>
-            <span class="b-value text-emerald" id="disp-state-rating">4.18 / 5.0</span>
-          </div>
-        </div>
-
-        <!-- Main Chart Container -->
-        <div class="chart-wrapper-main">
-          <canvas id="stateDeliveryChart"></canvas>
-        </div>
-      </div>
-
-      <!-- Split Cards: Delivery Delay Cliff & Notebook Brazil Logistics Map -->
-      <div class="cards-grid-2">
-        <div class="visual-card">
-          <div class="card-inner-top">
-            <h3 class="card-title">Korelasi Keterlambatan vs Bintang Ulasan</h3>
-            <p class="card-subtitle">Pengaruh lamanya paket tiba terhadap anjloknya rating pembeli</p>
-          </div>
-          <div class="chart-wrapper-compact">
-            <canvas id="delayImpactChart"></canvas>
-          </div>
-        </div>
-
-        <div class="insight-highlight-card">
-          <div class="insight-badge font-mono">TEMUAN EMPIRIS MARKETPLACE</div>
-          <h4 class="insight-title">Tebing Kepuasan Konsumen (The Satisfaction Cliff)</h4>
-          <p class="insight-desc">
-            Pesanan dengan ulasan <strong>Bintang 1</strong> memiliki rata-rata waktu kirim <strong>20,2 hari</strong> (38,5% melewati estimasi janji). Sebaliknya, pesanan <strong>Bintang 5</strong> tiba dalam rata-rata <strong>10,6 hari</strong>.
-          </p>
-          <div class="micro-stats-row font-mono">
-            <div class="micro-stat">
-              <span class="ms-num text-red">38.5%</span>
-              <span class="ms-label">Terlambat pada Bintang 1</span>
-            </div>
-            <div class="micro-stat">
-              <span class="ms-num text-emerald">2.8%</span>
-              <span class="ms-label">Terlambat pada Bintang 5</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 2: Revenue Evolution & Seasonality -->
-    <section id="section-revenue" class="content-section reveal-on-scroll">
-      <div class="section-header">
-        <div class="section-title-wrap">
-          <span class="section-pill">02. DINAMIKA PENDAPATAN</span>
-          <h2 class="section-heading">Evolusi Pertumbuhan GMV & Lonjakan Black Friday</h2>
-        </div>
-        <p class="section-caption">
-          Trajektori penjualan bulanan dari fase rintisan September 2016 hingga puncak rekor November 2017.
-        </p>
-      </div>
-
-      <div class="explorer-card">
-        <div class="card-inner-top flex-between">
-          <div>
-            <h3 class="card-title">Kurva Nilai Transaksi Bruto Bulanan (BRL)</h3>
-            <p class="card-subtitle">Perkembangan total nilai transaksi marketplace dari waktu ke waktu</p>
-          </div>
-        </div>
-
-        <div class="chart-wrapper-tall">
+      <div class="panel-card">
+        <div class="chart-box-large">
           <canvas id="monthlyTrendChart"></canvas>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 3: RFM Retention Paradox -->
-    <section id="section-retention" class="content-section reveal-on-scroll">
-      <div class="section-header">
-        <div class="section-title-wrap">
-          <span class="section-pill">03. RETENSI PELANGGAN</span>
-          <h2 class="section-heading">Paradoks Pembelian Ulang 3.12% & Segmentasi RFM</h2>
-        </div>
-        <p class="section-caption">
-          Pemetaan 96.096 pelanggan unik dan diagnosis struktural mengapa mayoritas pembeli hanya bertransaksi satu kali.
-        </p>
+    <!-- Section 2: Logistics Disparity & Delay Impact -->
+    <section class="content-section">
+      <div class="section-title-wrap">
+        <h2 class="section-h2">2. Geografi Logistik & Pengaruh Keterlambatan Pengiriman</h2>
+        <p class="section-p">Korelasi langsung antara waktu tempuh pengiriman dengan anjloknya skor ulasan konsumen.</p>
       </div>
 
-      <div class="cards-grid-2">
-        <div class="visual-card">
-          <div class="card-inner-top">
-            <h3 class="card-title">Distribusi 5 Klaster Pelanggan (RFM)</h3>
-            <p class="card-subtitle">Segmentasi berbasis Recency, Frequency, dan Monetary</p>
+      <div class="two-col-grid">
+        
+        <!-- Left: State Delivery SLA Explorer -->
+        <div class="panel-card">
+          <div class="section-title-wrap">
+            <div class="section-h2" style="font-size: 16px;">Waktu Kirim Rata-rata per Negara Bagian (Hari)</div>
+            <p class="section-p">Pilih negara bagian untuk inspeksi performa logistik</p>
           </div>
-          <div class="chart-wrapper-donut">
+
+          <!-- State Selector Buttons -->
+          <div class="segmented-button-group" id="state-selector-bar" style="flex-wrap: wrap;">
+            <button type="button" class="segment-btn active" data-state="SP">SP</button>
+            <button type="button" class="segment-btn" data-state="RJ">RJ</button>
+            <button type="button" class="segment-btn" data-state="MG">MG</button>
+            <button type="button" class="segment-btn" data-state="PR">PR</button>
+            <button type="button" class="segment-btn" data-state="RS">RS</button>
+            <button type="button" class="segment-btn" data-state="BA">BA</button>
+            <button type="button" class="segment-btn" data-state="PE">PE</button>
+            <button type="button" class="segment-btn" data-state="AM">AM</button>
+            <button type="button" class="segment-btn" data-state="RR">RR</button>
+          </div>
+
+          <!-- State Live Readout Info Box -->
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 12px; background-color: var(--bg-subtle); border-radius: 10px; border: 1px solid var(--border-subtle);" class="font-mono">
+            <div>
+              <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Wilayah</span>
+              <div style="font-size: 13px; font-weight: 700; color: var(--color-blue);" id="disp-state-name">Sao Paulo (SP)</div>
+            </div>
+            <div>
+              <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Waktu Kirim</span>
+              <div style="font-size: 13px; font-weight: 700; color: var(--color-emerald);" id="disp-state-sla">8.65 Hari</div>
+            </div>
+          </div>
+
+          <div class="chart-box-medium">
+            <canvas id="stateDeliveryChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Right: Delay Cliff & Correlation -->
+        <div class="panel-card">
+          <div class="section-title-wrap">
+            <div class="section-h2" style="font-size: 16px;">Pengaruh Waktu Kirim terhadap Bintang Ulasan</div>
+            <p class="section-p">Penurunan rating ulasan saat waktu kirim melebihi estimasi</p>
+          </div>
+
+          <div class="chart-box-medium">
+            <canvas id="delayImpactChart"></canvas>
+          </div>
+
+          <div style="padding: 12px 14px; background-color: var(--bg-subtle); border-radius: 10px; border: 1px solid var(--border-subtle); font-size: 12.5px; color: var(--text-secondary);">
+            <strong>Temuan Empiris:</strong> Pesanan dengan ulasan <strong>Bintang 1</strong> memiliki rata-rata waktu kirim <strong>20,2 hari</strong> (38.5% melewati batas estimasi), sedangkan pesanan <strong>Bintang 5</strong> tiba dalam rata-rata <strong>10,6 hari</strong>.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Customer Retention & RFM Segmentation -->
+    <section class="content-section">
+      <div class="section-title-wrap">
+        <h2 class="section-h2">3. Retensi Pelanggan & Segmentasi RFM</h2>
+        <p class="section-p">Distribusi segmen Recency, Frequency, Monetary dari 96.096 pembeli unik.</p>
+      </div>
+
+      <div class="two-col-grid">
+        
+        <!-- Left: RFM Donut Chart -->
+        <div class="panel-card">
+          <div class="section-title-wrap">
+            <div class="section-h2" style="font-size: 16px;">Proporsi Segmen Pelanggan (RFM)</div>
+            <p class="section-p">Klasifikasi kuantil pelanggan berdasarkan riwayat belanja</p>
+          </div>
+
+          <div class="chart-box-medium">
             <canvas id="rfmDonutChart"></canvas>
           </div>
-          <div class="callout-footer-box font-mono">
-            Segmen <strong>Champions (7.8%)</strong> dan <strong>Loyal Customers (19.2%)</strong> menyumbang nilai belanja tertinggi (CLV).
-          </div>
         </div>
 
-        <div class="visual-card">
-          <div class="card-inner-top">
-            <h3 class="card-title">Kategori Produk dengan GMV Terbesar</h3>
-            <p class="card-subtitle">Dominasi barang tahan lama (durables) menjelaskan siklus pembelian ulang yang panjang</p>
-          </div>
-          <div class="table-scroll-wrap font-mono">
-            <table class="modern-table">
-              <thead>
-                <tr>
-                  <th>Kategori Produk</th>
-                  <th>Kontribusi GMV</th>
-                  <th>Pangsa Pasar</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Health & Beauty</td><td class="text-emerald">R$ 1.26M</td><td class="text-emerald">7.86%</td></tr>
-                <tr><td>Watches & Gifts</td><td class="text-emerald">R$ 1.21M</td><td class="text-emerald">7.53%</td></tr>
-                <tr><td>Bed Bath & Table</td><td>R$ 1.04M</td><td>6.48%</td></tr>
-                <tr><td>Sports & Leisure</td><td>R$ 0.99M</td><td>6.17%</td></tr>
-                <tr><td>Computers & Acc.</td><td>R$ 0.91M</td><td>5.70%</td></tr>
-                <tr><td>Furniture & Decor</td><td>R$ 0.73M</td><td>4.56%</td></tr>
-                <tr><td>Housewares</td><td>R$ 0.63M</td><td>3.95%</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 4: Interactive Value Creation Simulator -->
-    <section id="section-simulator" class="content-section reveal-on-scroll">
-      <div class="section-header">
-        <div class="section-title-wrap">
-          <span class="section-pill">04. SIMULATOR STRATEGIS</span>
-          <h2 class="section-heading">Kalkulator Proyeksi Dampak Operasional & Finansial</h2>
-        </div>
-        <p class="section-caption">
-          Uji skenario bisnis: bagaimana reduksi waktu pengiriman dan peningkatan retensi mendongkrak total pendapatan platform.
-        </p>
-      </div>
-
-      <div class="simulator-wrapper">
-        <!-- Controls Column -->
-        <div class="sim-controls-card">
-          <div class="flex-between">
-            <h3 class="card-title">Tuas Parameter Intervensi</h3>
-            <button type="button" class="reset-action-btn font-mono" id="btn-reset-sim">Reset Baseline</button>
+        <!-- Right: Business Simulator -->
+        <div class="panel-card">
+          <div class="section-title-wrap">
+            <div class="section-h2" style="font-size: 16px;">Simulator Dampak Bisnis Logistik</div>
+            <p class="section-p">Simulasikan reduksi waktu kirim terhadap potensi kenaikan kepuasan dan GMV</p>
           </div>
 
-          <div class="sliders-stack">
-            <div class="slider-box">
-              <div class="slider-header font-mono">
-                <span class="sl-title text-emerald">Target Repeat Purchase Rate</span>
-                <span class="sl-val" id="txt-sim-repeat">3.12%</span>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600;">
+                <span>Target Pengurangan Waktu Kirim:</span>
+                <span class="font-mono" id="sim-sla-val">2 Hari</span>
               </div>
-              <input type="range" class="custom-range" id="slider-sim-repeat" min="3.12" max="15.0" step="0.2" value="3.12">
-              <span class="sl-hint">Baseline saat ini: 3.12%</span>
+              <input type="range" class="clean-slider" id="sim-sla-slider" min="0" max="6" value="2">
             </div>
 
-            <div class="slider-box">
-              <div class="slider-header font-mono">
-                <span class="sl-title text-blue">Percepatan Pengiriman (Hari)</span>
-                <span class="sl-val" id="txt-sim-delivery">0 Hari</span>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600;">
+                <span>Target Peningkatan Repeat Order:</span>
+                <span class="font-mono" id="sim-ret-val">+1.5%</span>
               </div>
-              <input type="range" class="custom-range" id="slider-sim-delivery" min="0" max="6" step="0.5" value="0">
-              <span class="sl-hint">Reduksi hari di jalan</span>
-            </div>
-
-            <div class="slider-box">
-              <div class="slider-header font-mono">
-                <span class="sl-title text-amber">Kenaikan Rata-rata Keranjang (AOV)</span>
-                <span class="sl-val" id="txt-sim-aov">0%</span>
-              </div>
-              <input type="range" class="custom-range" id="slider-sim-aov" min="0" max="25" step="1" value="0">
-              <span class="sl-hint">Strategi cross-selling produk</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Outputs Column -->
-        <div class="sim-outputs-card font-mono">
-          <h3 class="card-title">Proyeksi Hasil Finansial Langsung</h3>
-          
-          <div class="readout-tiles-grid">
-            <div class="tile-cell">
-              <span class="tile-lbl">Baseline GMV</span>
-              <span class="tile-num">R$ 16.01M</span>
-            </div>
-
-            <div class="tile-cell highlight-cell">
-              <span class="tile-lbl">Proyeksi Total GMV</span>
-              <span class="tile-num text-emerald" id="sim-projected-gmv">R$ 16.01M</span>
-            </div>
-
-            <div class="tile-cell highlight-cell">
-              <span class="tile-lbl">Pertambahan Nilai (Delta)</span>
-              <span class="tile-num text-emerald" id="sim-delta-gmv">+R$ 0.00</span>
-            </div>
-
-            <div class="tile-cell">
-              <span class="tile-lbl">Estimasi Rating Kepuasan</span>
-              <span class="tile-num text-blue" id="sim-projected-rating">4.09 / 5.0</span>
+              <input type="range" class="clean-slider" id="sim-ret-slider" min="0" max="5" value="1.5" step="0.5">
             </div>
           </div>
 
-          <div class="sim-footnote">
-            💡 Setiap reduksi 1 hari pengiriman menghasilkan peningkatan +0.08 poin skor kepuasan ulasan serta meningkatkan retensi pelanggan organik.
+          <!-- Dynamic Readout Box -->
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 14px; background-color: var(--bg-subtle); border-radius: 12px; border: 1px solid var(--border-subtle);" class="font-mono">
+            <div>
+              <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Estimasi Rating Baru</span>
+              <div style="font-size: 18px; font-weight: 700; color: var(--color-emerald);" id="sim-res-rating">4.21 / 5.0</div>
+            </div>
+            <div>
+              <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Potensi Tambahan GMV</span>
+              <div style="font-size: 18px; font-weight: 700; color: var(--color-blue);" id="sim-res-gmv">+R$ 480.2K</div>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- SECTION 5: SQL Production Methodology -->
-    <section id="section-sql" class="content-section reveal-on-scroll">
-      <div class="section-header">
-        <div class="section-title-wrap">
-          <span class="section-pill">05. METODOLOGI SQL</span>
-          <h2 class="section-heading">Kueri Produksi Data Warehouse</h2>
-        </div>
-        <p class="section-caption">
-          Kueri SQL dengan Window Functions yang digunakan untuk memproses agregasi data 100.000 transaksi.
-        </p>
-      </div>
-
-      <div class="sql-card">
-        <div class="sql-nav-bar">
-          <button type="button" class="sql-tab-btn active" id="btn-q-logistics">1. Disparitas Logistik (SLA)</button>
-          <button type="button" class="sql-tab-btn" id="btn-q-growth">2. Pertumbuhan MoM (LAG)</button>
-          <button type="button" class="sql-tab-btn" id="btn-q-rfm">3. Segmentasi RFM (NTILE)</button>
         </div>
 
-        <pre class="sql-pre font-mono" id="sql-code-display"><code>-- 1. Evaluasi Disparitas Pengiriman per Wilayah
-SELECT 
-    c.customer_state,
-    COUNT(o.order_id) AS total_orders,
-    ROUND(AVG(julianday(o.order_delivered_customer_date) - julianday(o.order_purchase_timestamp)), 1) AS avg_delivery_days,
-    ROUND(AVG(r.review_score), 2) AS avg_review_score
-FROM orders o
-JOIN customers c ON o.customer_id = c.customer_id
-JOIN order_reviews r ON o.order_id = r.order_id
-WHERE o.order_status = 'delivered'
-GROUP BY c.customer_state
-ORDER BY total_orders DESC;</code></pre>
       </div>
     </section>
 
   </main>
 
-  <!-- Clean Footer -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div class="footer-meta">
-        <strong>Olist Brazilian E-Commerce Analytics</strong>
-        <p>Kajian Empiris 100.000 Transaksi Marketplace Brazil (2016-2018)</p>
+  <!-- Clean Institutional Footer -->
+  <footer class="clean-footer">
+    <div class="footer-inner-box">
+      <div>
+        <span>Kajian Komputasional E-Commerce Brazil (Olist 100k Orders)</span>
       </div>
-      <div class="footer-credits font-mono">
-        <span>IZAM ROSIAWAN</span>
-        <span>•</span>
-        <span>TELKOM UNIVERSITY</span>
+      <div class="font-mono">
+        <span>Izam Rosiawan • Universitas Telkom Surabaya</span>
       </div>
     </div>
   </footer>
