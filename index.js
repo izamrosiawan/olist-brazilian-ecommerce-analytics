@@ -195,27 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  function initStateSelector() {
-    const buttons = document.querySelectorAll('#state-selector-bar .state-btn');
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const stateKey = btn.dataset.state;
-        const data = dashboardData.state_details[stateKey];
-        if (data) {
-          document.getElementById('disp-state-name').textContent = data.name;
-          const slaEl = document.getElementById('disp-state-sla');
-          slaEl.textContent = data.sla;
-          slaEl.className = `b-value ${data.color}`;
-          document.getElementById('disp-state-orders').textContent = data.orders;
-          document.getElementById('disp-state-rating').textContent = data.rating;
-        }
-      });
-    });
-  }
-
   function initCharts() {
     renderMonthlyTrendChart();
     renderStateDeliveryChart();
