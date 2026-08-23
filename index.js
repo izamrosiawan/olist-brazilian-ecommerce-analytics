@@ -82,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimatedCounters();
   initTheme();
   initCharts();
-  initStateSelector();
   initSimulator();
   initSQLExplorer();
 
@@ -405,53 +404,39 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function initSimulator() {
-    const sliderRepeat = document.getElementById('slider-sim-repeat');
-    const sliderDelivery = document.getElementById('slider-sim-delivery');
-    const sliderAOV = document.getElementById('slider-sim-aov');
-    const btnReset = document.getElementById('btn-reset-sim');
+    const sliderSLA = document.getElementById('sim-sla-slider');
+    const sliderRet = document.getElementById('sim-ret-slider');
 
-    if (!sliderRepeat || !sliderDelivery || !sliderAOV) return;
+    if (!sliderSLA || !sliderRet) return;
 
     function recalculate() {
-      const repeatVal = parseFloat(sliderRepeat.value);
-      const deliveryReduction = parseFloat(sliderDelivery.value);
-      const aovIncreasePct = parseFloat(sliderAOV.value);
+      const slaVal = parseFloat(sliderSLA.value);
+      const retVal = parseFloat(sliderRet.value);
 
-      document.getElementById('txt-sim-repeat').textContent = `${repeatVal.toFixed(2)}%`;
-      document.getElementById('txt-sim-delivery').textContent = `-${deliveryReduction.toFixed(1)} Hari`;
-      document.getElementById('txt-sim-aov').textContent = `+${aovIncreasePct}%`;
+      const txtSLA = document.getElementById('sim-sla-val');
+      const txtRet = document.getElementById('sim-ret-val');
+      if (txtSLA) txtSLA.textContent = `${slaVal} Hari`;
+      if (txtRet) txtRet.textContent = `+${retVal.toFixed(1)}%`;
 
-      const baseGMV = 16008872.12;
       const baseOrders = 99441;
       const baseAOV = 160.99;
-
-      const extraRepeatOrders = baseOrders * ((repeatVal - 3.12) / 100);
-      const newAOV = baseAOV * (1 + aovIncreasePct / 100);
-      const newOrders = baseOrders + extraRepeatOrders;
-      const projectedGMV = newOrders * newAOV;
-      const deltaGMV = projectedGMV - baseGMV;
+      const extraOrders = baseOrders * (retVal / 100);
+      const deltaGMV = extraOrders * baseAOV;
 
       const baseRating = 4.09;
-      const ratingLift = (deliveryReduction * 0.08) + ((repeatVal - 3.12) * 0.02);
-      const projectedRating = Math.min(5.0, baseRating + ratingLift);
+      const ratingLift = (slaVal * 0.06) + (retVal * 0.02);
+      const newRating = Math.min(5.0, baseRating + ratingLift);
 
-      document.getElementById('sim-projected-gmv').textContent = `R$ ${(projectedGMV / 1e6).toFixed(2)}M`;
-      document.getElementById('sim-delta-gmv').textContent = `+R$ ${(deltaGMV / 1e6).toFixed(2)}M`;
-      document.getElementById('sim-projected-rating').textContent = `${projectedRating.toFixed(2)} / 5.0`;
+      const ratingEl = document.getElementById('sim-res-rating');
+      const gmvEl = document.getElementById('sim-res-gmv');
+
+      if (ratingEl) ratingEl.textContent = `${newRating.toFixed(2)} / 5.0`;
+      if (gmvEl) gmvEl.textContent = `+R$ ${(deltaGMV / 1000).toFixed(1)}K`;
     }
 
-    sliderRepeat.addEventListener('input', recalculate);
-    sliderDelivery.addEventListener('input', recalculate);
-    sliderAOV.addEventListener('input', recalculate);
-
-    if (btnReset) {
-      btnReset.addEventListener('click', () => {
-        sliderRepeat.value = 3.12;
-        sliderDelivery.value = 0;
-        sliderAOV.value = 0;
-        recalculate();
-      });
-    }
+    sliderSLA.addEventListener('input', recalculate);
+    sliderRet.addEventListener('input', recalculate);
+    recalculate();
   }
 
   function initSQLExplorer() {
