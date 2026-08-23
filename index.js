@@ -100,30 +100,40 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function initAnimatedCounters() {
-    const counters = document.querySelectorAll('.counter-number');
-    counters.forEach(counter => {
-      const target = parseFloat(counter.getAttribute('data-target'));
-      const decimals = parseInt(counter.getAttribute('data-decimals') || '0', 10);
-      const duration = 1200;
-      const startTime = performance.now();
-
-      function updateCounter(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1.0);
-        const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-        const currentVal = target * easeProgress;
-        
-        counter.textContent = currentVal.toFixed(decimals);
-
-        if (progress < 1.0) {
-          requestAnimationFrame(updateCounter);
-        } else {
-          counter.textContent = target.toFixed(decimals);
+    const counters = document.querySelectorAll('.stat-card-value[data-target]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
         }
-      }
+      });
+    }, { threshold: 0.5 });
 
-      requestAnimationFrame(updateCounter);
-    });
+    counters.forEach(c => observer.observe(c));
+  }
+
+  function animateCounter(el) {
+    const target = parseFloat(el.getAttribute('data-target'));
+    const decimals = parseInt(el.getAttribute('data-decimals') || '2', 10);
+    const prefix = el.getAttribute('data-prefix') || '';
+    const suffix = el.getAttribute('data-suffix') || '';
+    const duration = 1200;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1.0);
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      const val = target * ease;
+      el.textContent = `${prefix}${val.toFixed(decimals)}${suffix}`;
+      if (progress < 1.0) {
+        requestAnimationFrame(update);
+      } else {
+        el.textContent = `${prefix}${target.toFixed(decimals)}${suffix}`;
+      }
+    }
+    requestAnimationFrame(update);
   }
 
   function initTheme() {
