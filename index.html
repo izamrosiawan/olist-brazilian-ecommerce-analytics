@@ -3,228 +3,434 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analisis Logistik & Retensi Pelanggan E-Commerce Brazil (Olist)</title>
-  <meta name="description" content="Eksplorasi visual interaktif performa marketplace Olist Brazil: disparitas logistik 27 negara bagian, tren pendapatan bulanan, segmentasi RFM, dan simulator nilai bisnis.">
+  <title>Olist Brazil E-Commerce Analytics — Logistics & Customer Intelligence</title>
+  <meta name="description" content="Computational study of 99,441 real e-commerce transactions across Brazil: state logistics disparity, delivery delay simulations, and RFM customer segmentation.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="index.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
-  <header class="top-navbar">
-    <div class="nav-container">
-      <div style="display: flex; align-items: center;">
-        <span class="nav-brand-title">Analisis Marketplace Olist Brazil</span>
-        <span class="nav-brand-subtitle">Logistik, Retensi RFM & Pertumbuhan GMV</span>
-      </div>
+  <header class="nav-wrapper">
+    <nav class="floating-nav">
+      <a href="#" class="nav-brand">
+        <div class="brand-icon">
+          <i data-lucide="package" style="width: 16px; height: 16px;"></i>
+        </div>
+        <div class="brand-title">OLIST <span>LOGISTICS</span></div>
+      </a>
 
-      <div class="nav-actions">
-        <a href="https://portfolio-hub-coral-eight.vercel.app/" class="nav-link-btn">
-          ← Kembali ke Portfolio Hub
-        </a>
-        <a href="https://github.com/izamrosiawan/olist-brazilian-ecommerce-analytics" target="_blank" class="nav-link-btn nav-link-primary" rel="noreferrer">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          <span>GitHub</span>
-        </a>
-      </div>
-    </div>
+      <ul class="nav-menu">
+        <li><a href="#hero-chapter" class="nav-link active">Overview</a></li>
+        <li><a href="#pillars-chapter" class="nav-link">Marketplace Pillars</a></li>
+        <li><a href="#simulator-chapter" class="nav-link">Delay Simulator</a></li>
+        <li><a href="#analytics-chapter" class="nav-link">Logistics Analytics</a></li>
+        <li><a href="#research-chapter" class="nav-link">Methodology</a></li>
+      </ul>
+
+      <a href="notebook.ipynb" class="nav-action-btn" target="_blank" title="Open Jupyter Notebook">
+        <i data-lucide="file-code" style="width: 15px; height: 15px;"></i>
+      </a>
+    </nav>
   </header>
 
-  <main class="main-wrapper">
-    
-    <!-- Overview Header -->
-    <section class="overview-header reveal-on-scroll">
-      <span class="overview-tag">Riset Data E-Commerce & Logistik Kontinental</span>
-      <h1 class="overview-title">
-        Anatomi Marketplace Kontinental: Logistik, Retensi, dan Nilai Bisnis Brazil (Olist)
+  <section class="hero-chapter" id="hero-chapter">
+    <canvas id="hero-canvas"></canvas>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="pulse-dot"></span>
+        <span>CONTINENTAL E-COMMERCE BENCHMARK & LOGISTICS STUDY</span>
+      </div>
+
+      <h1 class="hero-h1">
+        Continental Logistics <br>
+        <span class="hero-highlight">& Marketplace Intelligence</span>
       </h1>
-      <p class="overview-desc">
-        Kajian komputasional terhadap 99.441 transaksi riil (2016-2018) pada 9 tabel relasional. Membedah disparitas rantai pasok antar-negara bagian di Brazil, anomali repeat purchase 3.12%, dan pemodelan segmentasi RFM.
+
+      <p class="hero-subtext">
+        Kajian komputasional terhadap 99.441 transaksi riil (2016-2018) pada 9 tabel relasional. Membedah disparitas rantai pasok 27 negara bagian Brazil, retensi 3.12%, dan pemodelan kepuasan pengiriman.
       </p>
-    </section>
 
-    <!-- Key Metrics 4-Column Grid -->
-    <section class="stat-cards-grid reveal-on-scroll">
-      <div class="stat-card">
-        <span class="stat-card-label">Total Volume GMV</span>
-        <span class="stat-card-value font-mono" style="color: var(--color-emerald);" id="kpi-gmv" data-target="16.01" data-prefix="R$ " data-suffix="M" data-decimals="2">R$ 16.01M</span>
-        <p class="stat-card-note">Akumulasi 99.441 transaksi pesanan berhasil diproses.</p>
+      <div class="hero-actions">
+        <a href="#simulator-chapter" class="btn-island-primary">
+          <span>Launch Delay Simulator</span>
+          <div class="btn-island-icon-pod">
+            <i data-lucide="calculator" style="width: 14px; height: 14px;"></i>
+          </div>
+        </a>
+        <a href="#analytics-chapter" class="btn-island-secondary">
+          <span>Explore Logistics Data</span>
+          <div class="btn-island-icon-pod-subtle">
+            <i data-lucide="bar-chart-3" style="width: 14px; height: 14px;"></i>
+          </div>
+        </a>
       </div>
 
-      <div class="stat-card">
-        <span class="stat-card-label">Rata-rata Waktu Kirim</span>
-        <span class="stat-card-value font-mono" style="color: var(--color-blue);" id="kpi-delivery" data-target="12.3" data-prefix="" data-suffix=" Hari" data-decimals="1">12.3 Hari</span>
-        <p class="stat-card-note">Disparitas tajam: 8.65 hari (SP) vs 29.3 hari (RR).</p>
-      </div>
-
-      <div class="stat-card">
-        <span class="stat-card-label">Tingkat Pembelian Ulang</span>
-        <span class="stat-card-value font-mono" style="color: var(--color-amber);" id="kpi-retention" data-target="3.12" data-prefix="" data-suffix="%" data-decimals="2">3.12%</span>
-        <p class="stat-card-note">96.88% pelanggan tercatat hanya berbelanja satu kali.</p>
-      </div>
-
-      <div class="stat-card">
-        <span class="stat-card-label">Skor Ulasan Konsumen</span>
-        <span class="stat-card-value font-mono" id="kpi-rating" data-target="4.09" data-prefix="" data-suffix=" / 5.0" data-decimals="2">4.09 / 5.0</span>
-        <p class="stat-card-note">76.8% pesanan memperoleh rating bintang 4 dan 5.</p>
-      </div>
-    </section>
-
-    <!-- Section 1: Trajectory GMV Monthly Evolution -->
-    <section class="content-section reveal-on-scroll">
-      <div class="section-title-wrap">
-        <h2 class="section-h2">1. Evolusi Nilai Transaksi Bruto Bulanan (GMV)</h2>
-        <p class="section-p">Pertumbuhan volume transaksi marketplace dari fase rintisan (September 2016) hingga puncak rekor penjualan.</p>
-      </div>
-
-      <div class="panel-card">
-        <div class="chart-box-large">
-          <canvas id="monthlyTrendChart"></canvas>
+      <div class="double-bezel-hero-deck">
+        <div class="hero-deck-core">
+          <div class="telemetry-col">
+            <span class="telemetry-num">R$ 16.01M</span>
+            <span class="telemetry-desc">Total GMV Volume</span>
+          </div>
+          <div class="telemetry-col">
+            <span class="telemetry-num">99,441</span>
+            <span class="telemetry-desc">Processed Orders</span>
+          </div>
+          <div class="telemetry-col">
+            <span class="telemetry-num">12.3 Days</span>
+            <span class="telemetry-desc">Average Delivery</span>
+          </div>
+          <div class="telemetry-col">
+            <span class="telemetry-num">4.09 / 5.0</span>
+            <span class="telemetry-desc">Customer CSAT</span>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Section 2: Logistics Disparity & Delay Impact -->
-    <section class="content-section reveal-on-scroll">
-      <div class="section-title-wrap">
-        <h2 class="section-h2">2. Geografi Logistik & Pengaruh Keterlambatan Pengiriman</h2>
-        <p class="section-p">Korelasi langsung antara waktu tempuh pengiriman dengan anjloknya skor ulasan konsumen.</p>
+  <div class="stream-ticker-section">
+    <div class="stream-ticker-track">
+      <span class="ticker-item"><span class="ticker-dot"></span> FASTEST STATE: S&Atilde;O PAULO (8.65 DAYS AVG)</span>
+      <span class="ticker-item"><span class="ticker-dot"></span> SLOWEST STATE: RORAIMA (29.3 DAYS AVG)</span>
+      <span class="ticker-item"><span class="ticker-dot"></span> REPEAT PURCHASE RATE: 3.12% MARKETPLACE BENCHMARK</span>
+      <span class="ticker-item"><span class="ticker-dot"></span> CREDIT CARD PARCELAS: 73.9% GMV TRANSACTION SHARE</span>
+      <span class="ticker-item"><span class="ticker-dot"></span> AVERAGE FREIGHT RATIO: 18.4% OF ITEM VALUE</span>
+      <span class="ticker-item"><span class="ticker-dot"></span> FASTEST STATE: S&Atilde;O PAULO (8.65 DAYS AVG)</span>
+      <span class="ticker-item"><span class="ticker-dot"></span> SLOWEST STATE: RORAIMA (29.3 DAYS AVG)</span>
+      <span class="ticker-item"><span class="ticker-dot"></span> REPEAT PURCHASE RATE: 3.12% MARKETPLACE BENCHMARK</span>
+      <span class="ticker-item"><span class="ticker-dot"></span> CREDIT CARD PARCELAS: 73.9% GMV TRANSACTION SHARE</span>
+      <span class="ticker-item"><span class="ticker-dot"></span> AVERAGE FREIGHT RATIO: 18.4% OF ITEM VALUE</span>
+    </div>
+  </div>
+
+  <section class="chapter-section" id="pillars-chapter">
+    <div class="chapter-heading-box">
+      <span class="chapter-eyebrow">Core Empirical Findings</span>
+      <h2 class="chapter-title">The 6 Pillars of Marketplace Dynamics</h2>
+      <p class="chapter-desc">
+        Temuan kunci dari pembedahan data transaksi, disparitas waktu tempuh logistik, dan perilaku retensi pelanggan di pasar Brasil.
+      </p>
+    </div>
+
+    <div class="bento-matrix-bezel-grid">
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div>
+            <div class="bezel-top-row">
+              <div class="bezel-icon-pod"><i data-lucide="map-pin"></i></div>
+              <span class="bezel-badge">Disparity 3.4x</span>
+            </div>
+            <h3 class="bezel-h3">Disparitas Logistik Wilayah</h3>
+            <p class="bezel-p">Kesenjangan tajam antara wilayah metropolitan Tenggara (SP 8.65 hari) dan wilayah terluar Utara (Roraima 29.3 hari).</p>
+          </div>
+          <div class="bezel-bottom-meta">
+            <span class="meta-label">Fastest vs Slowest:</span>
+            <span class="meta-val">SP (8.65d) vs RR (29.3d)</span>
+          </div>
+        </div>
       </div>
 
-      <div class="two-col-grid">
-        
-        <!-- Left: State Delivery SLA Explorer -->
-        <div class="panel-card">
-          <div class="section-title-wrap">
-            <div class="section-h2" style="font-size: 16px;">Waktu Kirim Rata-rata per Negara Bagian (Hari)</div>
-            <p class="section-p">Pilih negara bagian untuk inspeksi performa logistik</p>
-          </div>
-
-          <!-- State Selector Buttons -->
-          <div class="segmented-button-group" id="state-selector-bar" style="flex-wrap: wrap;">
-            <button type="button" class="segment-btn active" data-state="SP">SP</button>
-            <button type="button" class="segment-btn" data-state="RJ">RJ</button>
-            <button type="button" class="segment-btn" data-state="MG">MG</button>
-            <button type="button" class="segment-btn" data-state="PR">PR</button>
-            <button type="button" class="segment-btn" data-state="RS">RS</button>
-            <button type="button" class="segment-btn" data-state="BA">BA</button>
-            <button type="button" class="segment-btn" data-state="PE">PE</button>
-            <button type="button" class="segment-btn" data-state="AM">AM</button>
-            <button type="button" class="segment-btn" data-state="RR">RR</button>
-          </div>
-
-          <!-- State Live Readout Info Box -->
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 12px; background-color: var(--bg-subtle); border-radius: 10px; border: 1px solid var(--border-subtle);" class="font-mono">
-            <div>
-              <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Wilayah</span>
-              <div style="font-size: 13px; font-weight: 700; color: var(--color-blue);" id="disp-state-name">Sao Paulo (SP)</div>
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div>
+            <div class="bezel-top-row">
+              <div class="bezel-icon-pod"><i data-lucide="repeat"></i></div>
+              <span class="bezel-badge">3.12% Rate</span>
             </div>
-            <div>
-              <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Waktu Kirim</span>
-              <div style="font-size: 13px; font-weight: 700; color: var(--color-emerald);" id="disp-state-sla">8.65 Hari</div>
+            <h3 class="bezel-h3">Anomali Repeat Purchase</h3>
+            <p class="bezel-p">Tingkat pembelian ulang hanya 3.12% karena model platform agregator merchant yang terfragmentasi tanpa program loyalitas.</p>
+          </div>
+          <div class="bezel-bottom-meta">
+            <span class="meta-label">Single Buyers:</span>
+            <span class="meta-val">96.88% of Customers</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div>
+            <div class="bezel-top-row">
+              <div class="bezel-icon-pod"><i data-lucide="star"></i></div>
+              <span class="bezel-badge">CSAT Decay</span>
+            </div>
+            <h3 class="bezel-h3">Elastisitas Review Skor</h3>
+            <p class="bezel-p">Pesanan yang tiba tepat waktu menghasilkan review rata-rata 4.2+, sedangkan keterlambatan memangkas kepuasan.</p>
+          </div>
+          <div class="bezel-bottom-meta">
+            <span class="meta-label">Late Delivery CSAT:</span>
+            <span class="meta-val">1.62 / 5.0 Avg</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div>
+            <div class="bezel-top-row">
+              <div class="bezel-icon-pod"><i data-lucide="credit-card"></i></div>
+              <span class="bezel-badge">73.9% Share</span>
+            </div>
+            <h3 class="bezel-h3">Dominasi Kartu Kredit</h3>
+            <p class="bezel-p">Sebagian besar transaksi bernilai di atas R$ 100 menggunakan metode cicilan (*parcelas*) hingga 10 kali tanpa bunga.</p>
+          </div>
+          <div class="bezel-bottom-meta">
+            <span class="meta-label">Avg Installments:</span>
+            <span class="meta-val">3.2x Payments</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div>
+            <div class="bezel-top-row">
+              <div class="bezel-icon-pod"><i data-lucide="truck"></i></div>
+              <span class="bezel-badge">Freight Ratio</span>
+            </div>
+            <h3 class="bezel-h3">Beban Ongkos Kirim (FPR)</h3>
+            <p class="bezel-p">Rata-rata rasio ongkos kirim terhadap harga barang mencapai 18.4%. Di pelosok, ongkir melebihi 40% harga barang.</p>
+          </div>
+          <div class="bezel-bottom-meta">
+            <span class="meta-label">Avg Freight Value:</span>
+            <span class="meta-val">R$ 22.75</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div>
+            <div class="bezel-top-row">
+              <div class="bezel-icon-pod"><i data-lucide="users"></i></div>
+              <span class="bezel-badge">RFM VIP 7.8%</span>
+            </div>
+            <h3 class="bezel-h3">Segmentasi Champions</h3>
+            <p class="bezel-p">Segmen Champions menyumbang 24.6% total omset platform meskipun populasinya hanya 7.8% dari total pembeli.</p>
+          </div>
+          <div class="bezel-bottom-meta">
+            <span class="meta-label">Champions AOV:</span>
+            <span class="meta-val">R$ 380+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="simulator-chapter">
+    <div class="chapter-heading-box">
+      <span class="chapter-eyebrow">Interactive Simulation Deck</span>
+      <h2 class="chapter-title">Delivery Delay & CSAT Predictor</h2>
+      <p class="chapter-desc">
+        Uji parameter pengiriman logistik untuk memproyeksikan hari ketibaan aktual, estimasi review kepuasan bintang, dan risiko komplain pelanggan.
+      </p>
+    </div>
+
+    <div class="studio-split-console">
+      <div class="console-bezel-outer">
+        <div class="console-bezel-core">
+          <div class="console-header-row">
+            <div class="console-title-text">
+              <i data-lucide="sliders" style="color: var(--color-primary);"></i>
+              <span>Logistics Parameter Controls</span>
+            </div>
+            <div class="preset-chip-group">
+              <button class="preset-chip active" data-dist="430" data-weight="1200" data-sla="10" data-price="145">SP-RJ (430km)</button>
+              <button class="preset-chip" data-dist="1950" data-weight="2500" data-sla="18" data-price="260">SP-BA (1,950km)</button>
+              <button class="preset-chip" data-dist="3890" data-weight="3200" data-sla="28" data-price="420">SP-AM (3,890km)</button>
+              <button class="preset-chip" data-dist="410" data-weight="900" data-sla="8" data-price="110">SP-PR (410km)</button>
             </div>
           </div>
 
-          <div class="chart-box-medium">
+          <div class="tactile-sliders-matrix">
+            <div class="tactile-slider-unit">
+              <div class="slider-label-row">
+                <span class="slider-name">Shipping Distance (km)</span>
+                <span class="slider-dynamic-val" id="val-distance">650 km</span>
+              </div>
+              <input type="range" id="sim-distance" class="neon-range-slider" min="50" max="4000" step="50" value="650">
+            </div>
+
+            <div class="tactile-slider-unit">
+              <div class="slider-label-row">
+                <span class="slider-name">Package Weight (g)</span>
+                <span class="slider-dynamic-val" id="val-weight">1,200 g</span>
+              </div>
+              <input type="range" id="sim-weight" class="neon-range-slider" min="100" max="25000" step="100" value="1200">
+            </div>
+
+            <div class="tactile-slider-unit">
+              <div class="slider-label-row">
+                <span class="slider-name">Promised SLA (Days)</span>
+                <span class="slider-dynamic-val" id="val-sla">15 Days</span>
+              </div>
+              <input type="range" id="sim-sla" class="neon-range-slider" min="3" max="45" step="1" value="15">
+            </div>
+
+            <div class="tactile-slider-unit">
+              <div class="slider-label-row">
+                <span class="slider-name">Order Value (R$)</span>
+                <span class="slider-dynamic-val" id="val-price">R$ 145</span>
+              </div>
+              <input type="range" id="sim-price" class="neon-range-slider" min="20" max="2500" step="10" value="145">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="console-output-stack">
+        <div class="gauge-console-card">
+          <div class="conic-gauge-outer" id="sim-gauge-progress">
+            <div class="conic-gauge-core">
+              <span class="gauge-score-display" id="sim-csat-value">4.3</span>
+              <span class="gauge-score-sub">Expected CSAT / 5.0</span>
+            </div>
+          </div>
+
+          <div id="sim-tier-badge" class="tier-status-pill">
+            <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i>
+            <span id="sim-status-text">ON-TIME DELIVERY</span>
+          </div>
+
+          <p class="tier-narrative" id="sim-explanation-text">
+            Estimasi tiba aktual 10.4 hari. Paket diproyeksikan tiba 4.6 hari sebelum batas SLA.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="analytics-chapter">
+    <div class="chapter-heading-box">
+      <span class="chapter-eyebrow">Exploratory Data Visualizations</span>
+      <h2 class="chapter-title">Logistics & Revenue Analytics</h2>
+      <p class="chapter-desc">
+        Tren pertumbuhan omset bulanan marketplace Olist dan sebaran waktu pengiriman antar-negara bagian Brasil.
+      </p>
+    </div>
+
+    <div class="analytics-cards-grid">
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div class="console-title-text" style="font-size: 1.1rem;">
+            <i data-lucide="trending-up" style="color: var(--color-primary);"></i>
+            <span>Monthly GMV Revenue Trajectory (R$)</span>
+          </div>
+          <div class="chart-canvas-box">
+            <canvas id="monthlyTrendChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div class="console-title-text" style="font-size: 1.1rem;">
+            <i data-lucide="truck" style="color: var(--color-primary);"></i>
+            <span>State Average Delivery Time (Days)</span>
+          </div>
+          <div class="chart-canvas-box">
             <canvas id="stateDeliveryChart"></canvas>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
 
-        <!-- Right: Delay Cliff & Correlation -->
-        <div class="panel-card">
-          <div class="section-title-wrap">
-            <div class="section-h2" style="font-size: 16px;">Pengaruh Waktu Kirim terhadap Bintang Ulasan</div>
-            <p class="section-p">Penurunan rating ulasan saat waktu kirim melebihi estimasi</p>
+  <section class="chapter-section" id="research-chapter">
+    <div class="chapter-heading-box">
+      <span class="chapter-eyebrow">Scientific Methodology</span>
+      <h2 class="chapter-title">Mathematical & RFM Telemetry</h2>
+      <p class="chapter-desc">
+        Formulasi kuantitatif untuk pemodelan segmentasi pelanggan dan elastisitas review score.
+      </p>
+    </div>
+
+    <div class="math-cards-grid">
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div class="math-card-header">
+            <span class="math-index-pill">01</span>
+            <h3 class="bezel-h3" style="font-size: 1.15rem; margin-bottom: 0;">RFM Composite Scoring</h3>
           </div>
-
-          <div class="chart-box-medium">
-            <canvas id="delayImpactChart"></canvas>
-          </div>
-
-          <div style="padding: 12px 14px; background-color: var(--bg-subtle); border-radius: 10px; border: 1px solid var(--border-subtle); font-size: 12.5px; color: var(--text-secondary);">
-            <strong>Temuan Empiris:</strong> Pesanan dengan ulasan <strong>Bintang 1</strong> memiliki rata-rata waktu kirim <strong>20,2 hari</strong> (38.5% melewati batas estimasi), sedangkan pesanan <strong>Bintang 5</strong> tiba dalam rata-rata <strong>10,6 hari</strong>.
+          <p class="bezel-p">Penggabungan skor Recency (R), Frequency (F), dan Monetary (M) berbobot kuantil.</p>
+          <div class="katex-formula-box">
+            $$\text{RFM} = w_R \cdot R + w_F \cdot F + w_M \cdot M$$
           </div>
         </div>
-
-      </div>
-    </section>
-
-    <!-- Section 3: Customer Retention & RFM Segmentation -->
-    <section class="content-section reveal-on-scroll">
-      <div class="section-title-wrap">
-        <h2 class="section-h2">3. Retensi Pelanggan & Segmentasi RFM</h2>
-        <p class="section-p">Distribusi segmen Recency, Frequency, Monetary dari 96.096 pembeli unik.</p>
       </div>
 
-      <div class="two-col-grid">
-        
-        <!-- Left: RFM Donut Chart -->
-        <div class="panel-card">
-          <div class="section-title-wrap">
-            <div class="section-h2" style="font-size: 16px;">Proporsi Segmen Pelanggan (RFM)</div>
-            <p class="section-p">Klasifikasi kuantil pelanggan berdasarkan riwayat belanja</p>
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div class="math-card-header">
+            <span class="math-index-pill">02</span>
+            <h3 class="bezel-h3" style="font-size: 1.15rem; margin-bottom: 0;">Freight-to-Price Ratio</h3>
           </div>
-
-          <div class="chart-box-medium">
-            <canvas id="rfmDonutChart"></canvas>
+          <p class="bezel-p">Rasio beban logistik terhadap harga riil produk untuk mengidentifikasi inefisiensi.</p>
+          <div class="katex-formula-box">
+            $$\text{FPR} = \frac{\text{Freight Value}}{\text{Total Item Price}} \times 100\%$$
           </div>
         </div>
+      </div>
 
-        <!-- Right: Business Simulator -->
-        <div class="panel-card">
-          <div class="section-title-wrap">
-            <div class="section-h2" style="font-size: 16px;">Simulator Dampak Bisnis Logistik</div>
-            <p class="section-p">Simulasikan reduksi waktu kirim terhadap potensi kenaikan kepuasan dan GMV</p>
+      <div class="double-bezel-card">
+        <div class="bezel-core-box">
+          <div class="math-card-header">
+            <span class="math-index-pill">03</span>
+            <h3 class="bezel-h3" style="font-size: 1.15rem; margin-bottom: 0;">CSAT Delay Decay</h3>
           </div>
-
-          <div style="display: flex; flex-direction: column; gap: 14px;">
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600;">
-                <span>Target Pengurangan Waktu Kirim:</span>
-                <span class="font-mono" id="sim-sla-val">2 Hari</span>
-              </div>
-              <input type="range" class="clean-slider" id="sim-sla-slider" min="0" max="6" value="2">
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600;">
-                <span>Target Peningkatan Repeat Order:</span>
-                <span class="font-mono" id="sim-ret-val">+1.5%</span>
-              </div>
-              <input type="range" class="clean-slider" id="sim-ret-slider" min="0" max="5" value="1.5" step="0.5">
-            </div>
+          <p class="bezel-p">Model degradasi eksponensial kepuasan ulasan pelanggan akibat keterlambatan.</p>
+          <div class="katex-formula-box">
+            $$\text{CSAT}(t) = S_0 \cdot e^{-\lambda (t - \text{SLA})}$$
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-          <!-- Dynamic Readout Box -->
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 14px; background-color: var(--bg-subtle); border-radius: 12px; border: 1px solid var(--border-subtle);" class="font-mono">
-            <div>
-              <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Estimasi Rating Baru</span>
-              <div style="font-size: 18px; font-weight: 700; color: var(--color-emerald);" id="sim-res-rating">4.21 / 5.0</div>
-            </div>
-            <div>
-              <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Potensi Tambahan GMV</span>
-              <div style="font-size: 18px; font-weight: 700; color: var(--color-blue);" id="sim-res-gmv">+R$ 480.2K</div>
-            </div>
-          </div>
-
+  <footer class="studio-footer-chapter">
+    <div class="footer-inner-wrapper">
+      <div class="footer-top-row">
+        <div class="footer-brand-box">
+          <div class="brand-title" style="font-size: 1.2rem;">OLIST <span>LOGISTICS</span></div>
+          <p class="footer-tagline">
+            Analisis data komputasional rantai pasok dan kepuasan pelanggan pada ekosistem marketplace kontinental Brasil.
+          </p>
         </div>
 
+        <div class="footer-nav-columns">
+          <div class="footer-nav-col">
+            <span class="footer-col-header">Navigation</span>
+            <a href="#hero-chapter" class="footer-nav-link">Overview</a>
+            <a href="#pillars-chapter" class="footer-nav-link">Pillars</a>
+            <a href="#simulator-chapter" class="footer-nav-link">Delay Simulator</a>
+            <a href="#analytics-chapter" class="footer-nav-link">Analytics</a>
+          </div>
+          <div class="footer-nav-col">
+            <span class="footer-col-header">Resources</span>
+            <a href="notebook.ipynb" class="footer-nav-link" target="_blank">Jupyter Notebook (.ipynb)</a>
+            <a href="README.md" class="footer-nav-link" target="_blank">Research Report</a>
+            <a href="https://github.com/izamrosiawan/olist-brazilian-ecommerce-analytics" class="footer-nav-link" target="_blank">GitHub Repository</a>
+          </div>
+        </div>
       </div>
-    </section>
 
-  </main>
-
-  <!-- Clean Institutional Footer -->
-  <footer class="clean-footer">
-    <div class="footer-inner-box">
-      <div>
-        <span>Kajian Komputasional E-Commerce Brazil (Olist 100k Orders)</span>
-      </div>
-      <div class="font-mono">
-        <span>Izam Rosiawan • Universitas Telkom Surabaya</span>
+      <div class="footer-bottom-telemetry">
+        <span>&copy; 2026 Olist Brazilian E-Commerce Analytics Research.</span>
+        <span>Double-Bezel Architecture &bull; GSAP Motion &bull; KaTeX</span>
       </div>
     </div>
   </footer>
