@@ -44,9 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     { state: "GO", days: 15.38 },
     { state: "BA", days: 18.68 },
     { state: "PE", days: 18.07 },
-    { state: "CE", days: 20.17 },
-    { state: "PA", days: 23.02 },
-    { state: "AM", days: 25.65 },
+    { state: "CE", days: 20.81 },
+    { state: "PA", days: 23.32 },
+    { state: "MA", days: 23.45 },
+    { state: "AM", days: 25.98 },
+    { state: "AP", days: 26.73 },
     { state: "RR", days: 29.30 }
   ];
 
@@ -62,14 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const particles = [];
-    const numParticles = 35;
+    const numParticles = 25;
     for (let i = 0; i < numParticles; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
         radius: Math.random() * 1.5 + 1,
-        speedX: (Math.random() - 0.5) * 0.3,
-        speedY: (Math.random() - 0.5) * 0.3,
+        speedX: (Math.random() - 0.5) * 0.25,
+        speedY: (Math.random() - 0.5) * 0.25,
         opacity: Math.random() * 0.4 + 0.15
       });
     }
@@ -89,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(245, 158, 11, ${p.opacity * 0.5})`;
+        ctx.fillStyle = `rgba(217, 119, 6, ${p.opacity * 0.5})`;
         ctx.fill();
 
         for (let j = i + 1; j < particles.length; j++) {
@@ -99,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(245, 158, 11, ${0.1 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(15, 23, 42, ${0.06 * (1 - dist / 120)})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
@@ -110,12 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCanvas();
   }
 
-  const simDistance = document.getElementById('sim-distance');
+  const simDist = document.getElementById('sim-distance');
   const simWeight = document.getElementById('sim-weight');
   const simSla = document.getElementById('sim-sla');
   const simPrice = document.getElementById('sim-price');
 
-  const valDistance = document.getElementById('val-distance');
+  const valDist = document.getElementById('val-distance');
   const valWeight = document.getElementById('val-weight');
   const valSla = document.getElementById('val-sla');
   const valPrice = document.getElementById('val-price');
@@ -127,134 +129,66 @@ document.addEventListener('DOMContentLoaded', () => {
   const simExplanationText = document.getElementById('sim-explanation-text');
 
   function calculateSimulator() {
-    if (!simDistance || !simWeight || !simSla || !simPrice) return;
+    if (!simDist || !simWeight || !simSla || !simPrice) return;
 
-    const distance = parseFloat(simDistance.value);
+    const dist = parseFloat(simDist.value);
     const weight = parseFloat(simWeight.value);
     const sla = parseFloat(simSla.value);
     const price = parseFloat(simPrice.value);
 
-    valDistance.textContent = `${distance} km`;
-    valWeight.textContent = `${weight.toLocaleString()} g`;
-    valSla.textContent = `${sla} Days`;
-    valPrice.textContent = `R$ ${price.toLocaleString()}`;
+    if (valDist) valDist.textContent = `${dist} km`;
+    if (valWeight) valWeight.textContent = `${weight >= 1000 ? (weight/1000).toFixed(1) + ' kg' : weight + ' g'}`;
+    if (valSla) valSla.textContent = `${sla} Days`;
+    if (valPrice) valPrice.textContent = `R$ ${price}`;
 
-    const baseDeliveryDays = 4.5 + (distance / 250) + (weight / 5000);
-    const actualDays = Math.round(baseDeliveryDays * 10) / 10;
-    const delayDelta = actualDays - sla;
+    const estDays = 4.5 + (dist * 0.0052) + (weight * 0.00035);
+    const delay = estDays - sla;
 
-    let csat = 4.6 - (actualDays / 25);
-    if (delayDelta > 0) {
-      csat -= delayDelta * 0.35;
-    }
+    let csat = 4.6 - Math.max(0, delay) * 0.42 - (dist > 2500 ? 0.25 : 0);
     csat = Math.max(1.0, Math.min(5.0, Math.round(csat * 10) / 10));
 
-    simCsatValue.textContent = csat.toFixed(1);
-    const degrees = (csat / 5.0) * 360;
-    simGaugeProgress.style.background = `conic-gradient(var(--color-primary) ${degrees}deg, var(--bg-surface-elevated) ${degrees}deg)`;
+    if (simCsatValue) simCsatValue.textContent = csat.toFixed(1);
+    if (simGaugeProgress) {
+      const degrees = (csat / 5.0) * 360;
+      simGaugeProgress.style.background = `conic-gradient(var(--color-primary) ${degrees}deg, var(--bg-surface-elevated) ${degrees}deg)`;
+    }
 
-    if (delayDelta <= 0) {
-      simTierBadge.style.color = '#f59e0b';
-      simTierBadge.style.borderColor = '#f59e0b';
-      simStatusText.textContent = 'ON-TIME DELIVERY';
-      simExplanationText.textContent = `Estimasi tiba aktual ${actualDays} hari (${Math.abs(Math.round(delayDelta * 10) / 10)} hari lebih cepat dari batas SLA). Respon kepuasan tinggi.`;
-    } else {
-      simTierBadge.style.color = '#ef4444';
-      simTierBadge.style.borderColor = '#ef4444';
-      simStatusText.textContent = 'DELIVERY DELAY RISK';
-      simExplanationText.textContent = `Estimasi tiba aktual ${actualDays} hari (${Math.round(delayDelta * 10) / 10} hari terlambat dari SLA). Berisiko menurunkan review pelanggan secara drastis.`;
+    if (simTierBadge && simStatusText && simExplanationText) {
+      if (delay <= 0) {
+        simStatusText.textContent = 'ON-TIME DELIVERY';
+        simExplanationText.textContent = `Estimasi tiba aktual ${estDays.toFixed(1)} hari. Paket diproyeksikan tiba ${(Math.abs(delay)).toFixed(1)} hari sebelum batas SLA.`;
+      } else {
+        simStatusText.textContent = 'HIGH DELAY RISK';
+        simExplanationText.textContent = `Peringatan: Paket diproyeksikan terlambat ${delay.toFixed(1)} hari melebihi SLA penjual (${sla} hari).`;
+      }
     }
   }
 
-  [simDistance, simWeight, simSla, simPrice].forEach(input => {
+  [simDist, simWeight, simSla, simPrice].forEach(input => {
     if (input) input.addEventListener('input', () => {
       document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
       calculateSimulator();
     });
   });
 
-  document.querySelectorAll('.preset-chip').forEach(chip => {
+  document.querySelectorAll('.preset-chip[data-dist]').forEach(chip => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      simDistance.value = chip.dataset.dist;
-      simWeight.value = chip.dataset.weight;
-      simSla.value = chip.dataset.sla;
-      simPrice.value = chip.dataset.price;
+      if (simDist && chip.dataset.dist) simDist.value = chip.dataset.dist;
+      if (simWeight && chip.dataset.weight) simWeight.value = chip.dataset.weight;
+      if (simSla && chip.dataset.sla) simSla.value = chip.dataset.sla;
+      if (simPrice && chip.dataset.price) simPrice.value = chip.dataset.price;
       calculateSimulator();
     });
   });
-
-  document.querySelectorAll('.bento-card, .console-deck-panel, .gauge-console-card, .math-telemetry-card, .analytics-panel').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-    });
-  });
-
-  if (window.gsap && window.ScrollTrigger) {
-    gsap.registerPlugin(ScrollTrigger);
-
-    gsap.from('.hero-content > *', {
-      opacity: 0,
-      y: 28,
-      duration: 0.9,
-      stagger: 0.12,
-      ease: 'power3.out'
-    });
-
-    document.querySelectorAll('.chapter-section').forEach(section => {
-      const heading = section.querySelector('.chapter-heading-box');
-      const cards = section.querySelectorAll('.bento-card, .math-telemetry-card, .analytics-panel');
-
-      if (heading) {
-        gsap.from(heading, {
-          scrollTrigger: {
-            trigger: heading,
-            start: 'top 85%'
-          },
-          opacity: 0,
-          y: 30,
-          duration: 0.8,
-          ease: 'power2.out'
-        });
-      }
-
-      if (cards.length > 0) {
-        gsap.from(cards, {
-          scrollTrigger: {
-            trigger: cards[0],
-            start: 'top 85%'
-          },
-          opacity: 0,
-          y: 35,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: 'power2.out'
-        });
-      }
-    });
-  }
-
-  if (window.renderMathInElement) {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: '$$', right: '$$', display: true },
-        { left: '$', right: '$', display: false }
-      ]
-    });
-  }
 
   let monthlyChart = null;
   let stateChart = null;
 
   function renderCharts() {
-    const isLight = document.body.classList.contains('light-theme');
-    const textCol = isLight ? '#475569' : '#94a3b8';
-    const gridCol = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)';
+    const textCol = '#475569';
+    const gridCol = 'rgba(15, 23, 42, 0.06)';
 
     const mCtx = document.getElementById('monthlyTrendChart');
     if (mCtx) {
@@ -265,19 +199,28 @@ document.addEventListener('DOMContentLoaded', () => {
           labels: monthlyTrendData.map(d => d.month),
           datasets: [{
             data: monthlyTrendData.map(d => d.revenue),
-            borderColor: '#f59e0b',
-            backgroundColor: 'rgba(245, 158, 11, 0.08)',
+            borderColor: '#d97706',
+            backgroundColor: 'rgba(217, 119, 6, 0.08)',
             fill: true,
             tension: 0.35,
             borderWidth: 2,
             pointRadius: 3,
-            pointBackgroundColor: '#f59e0b'
+            pointBackgroundColor: '#d97706'
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              titleColor: '#ffffff',
+              bodyColor: '#94a3b8',
+              borderColor: '#d97706',
+              borderWidth: 1
+            }
+          },
           scales: {
             y: {
               beginAtZero: true,
@@ -302,15 +245,24 @@ document.addEventListener('DOMContentLoaded', () => {
           labels: stateDeliveryData.map(d => d.state),
           datasets: [{
             data: stateDeliveryData.map(d => d.days),
-            backgroundColor: '#f59e0bb0',
-            hoverBackgroundColor: '#f59e0b',
+            backgroundColor: '#d97706b0',
+            hoverBackgroundColor: '#d97706',
             borderRadius: 4
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              titleColor: '#ffffff',
+              bodyColor: '#94a3b8',
+              borderColor: '#d97706',
+              borderWidth: 1
+            }
+          },
           scales: {
             y: {
               beginAtZero: true,
@@ -328,7 +280,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  renderCharts();
+  function renderAllKaTeX() {
+    if (!window.katex) return;
+    document.querySelectorAll('.katex-formula-box').forEach(el => {
+      let tex = el.getAttribute('data-tex');
+      if (!tex) {
+        tex = el.textContent.trim().replace(/^\$\$|\$\$$/g, '').trim();
+        if (tex) el.setAttribute('data-tex', tex);
+      }
+      if (tex) {
+        try {
+          katex.render(tex, el, { displayMode: true, throwOnError: false });
+        } catch (err) {
+          console.warn('KaTeX render warning:', err);
+        }
+      }
+    });
+  }
 
   if (window.gsap && window.ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
@@ -366,24 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function renderAllKaTeX() {
-    if (!window.katex) return;
-    document.querySelectorAll('.katex-formula-box').forEach(el => {
-      let tex = el.getAttribute('data-tex');
-      if (!tex) {
-        tex = el.textContent.trim().replace(/^\$\$|\$\$$/g, '').trim();
-        if (tex) el.setAttribute('data-tex', tex);
-      }
-      if (tex) {
-        try {
-          katex.render(tex, el, { displayMode: true, throwOnError: false });
-        } catch (err) {
-          console.warn('KaTeX render warning:', err);
-        }
-      }
-    });
-  }
-
+  calculateSimulator();
+  renderCharts();
   renderAllKaTeX();
   setTimeout(renderAllKaTeX, 250);
 });
