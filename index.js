@@ -52,66 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { state: "RR", days: 29.30 }
   ];
 
-  const heroCanvas = document.getElementById('hero-canvas');
-  if (heroCanvas) {
-    const ctx = heroCanvas.getContext('2d');
-    let width = (heroCanvas.width = heroCanvas.offsetWidth);
-    let height = (heroCanvas.height = heroCanvas.offsetHeight);
-
-    window.addEventListener('resize', () => {
-      width = heroCanvas.width = heroCanvas.offsetWidth;
-      height = heroCanvas.height = heroCanvas.offsetHeight;
-    });
-
-    const particles = [];
-    const numParticles = 25;
-    for (let i = 0; i < numParticles; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        radius: Math.random() * 1.5 + 1,
-        speedX: (Math.random() - 0.5) * 0.25,
-        speedY: (Math.random() - 0.5) * 0.25,
-        opacity: Math.random() * 0.4 + 0.15
-      });
-    }
-
-    function renderCanvas() {
-      ctx.clearRect(0, 0, width, height);
-
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        p.x += p.speedX;
-        p.y += p.speedY;
-
-        if (p.x < 0) p.x = width;
-        if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        if (p.y > height) p.y = 0;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(217, 119, 6, ${p.opacity * 0.5})`;
-        ctx.fill();
-
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(15, 23, 42, ${0.06 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.6;
-            ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(renderCanvas);
-    }
-    renderCanvas();
-  }
-
   const simDist = document.getElementById('sim-distance');
   const simWeight = document.getElementById('sim-weight');
   const simSla = document.getElementById('sim-sla');
@@ -211,16 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#0f172a',
-              titleColor: '#ffffff',
-              bodyColor: '#94a3b8',
-              borderColor: '#d97706',
-              borderWidth: 1
-            }
-          },
+          animation: { duration: 400 },
+          plugins: { legend: { display: false } },
           scales: {
             y: {
               beginAtZero: true,
@@ -253,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          animation: { duration: 400 },
           plugins: {
             legend: { display: false },
             tooltip: {
@@ -298,44 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (window.gsap && window.ScrollTrigger) {
-    gsap.registerPlugin(ScrollTrigger);
-
-    document.querySelectorAll('.chapter-section').forEach(section => {
-      const heading = section.querySelector('.chapter-heading-box');
-      const cards = section.querySelectorAll('.double-bezel-card, .console-bezel-outer, .gauge-console-card');
-
-      if (heading) {
-        gsap.from(heading, {
-          scrollTrigger: {
-            trigger: heading,
-            start: 'top 88%'
-          },
-          opacity: 0,
-          y: 24,
-          duration: 0.8,
-          ease: 'power2.out'
-        });
-      }
-
-      if (cards.length > 0) {
-        gsap.from(cards, {
-          scrollTrigger: {
-            trigger: cards[0],
-            start: 'top 88%'
-          },
-          opacity: 0,
-          y: 28,
-          duration: 0.7,
-          stagger: 0.08,
-          ease: 'power2.out'
-        });
-      }
-    });
-  }
-
   calculateSimulator();
   renderCharts();
   renderAllKaTeX();
-  setTimeout(renderAllKaTeX, 250);
+  setTimeout(renderAllKaTeX, 200);
 });
