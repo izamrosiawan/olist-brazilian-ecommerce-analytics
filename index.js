@@ -102,6 +102,17 @@ document.addEventListener('DOMContentLoaded', () => {
         simExplanationText.textContent = `Peringatan: Paket diproyeksikan terlambat ${delay.toFixed(1)} hari melebihi SLA penjual (${sla} hari).`;
       }
     }
+
+    const freightCostEl = document.getElementById('telemetry-freight-cost');
+    const fprEl = document.getElementById('telemetry-fpr');
+    const transitEl = document.getElementById('telemetry-transit-days');
+
+    const estFreight = 12.50 + (dist * 0.018) + (weight * 0.0032);
+    const estFpr = (estFreight / price) * 100;
+
+    if (freightCostEl) freightCostEl.textContent = `Freight: R$ ${estFreight.toFixed(2)}`;
+    if (fprEl) fprEl.textContent = `${estFpr.toFixed(1)}%`;
+    if (transitEl) transitEl.textContent = `${estDays.toFixed(1)} Days`;
   }
 
   [simDist, simWeight, simSla, simPrice].forEach(input => {

@@ -309,6 +309,23 @@
           <p class="tier-narrative" id="sim-explanation-text">
             Estimasi tiba aktual 10.4 hari. Paket diproyeksikan tiba 4.6 hari sebelum batas SLA.
           </p>
+
+          <div class="freight-telemetry-pod" style="margin-top: 1.25rem; padding: 1rem; background: var(--bg-surface-elevated); border: 1px solid var(--border-shell); border-radius: var(--radius-inner); width: 100%; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-primary); font-weight: 700; text-transform: uppercase;">Freight & Routing Telemetry</span>
+              <span id="telemetry-freight-cost" style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; color: var(--text-primary); background: var(--color-primary-glow); padding: 0.15rem 0.4rem; border-radius: 4px;">Freight: R$ 24.50</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.78rem;">
+              <div>
+                <div style="color: var(--text-muted); font-size: 0.7rem;">Freight-to-Price (FPR)</div>
+                <div id="telemetry-fpr" style="font-family: var(--font-mono); font-weight: 700; color: var(--text-primary);">16.9%</div>
+              </div>
+              <div>
+                <div style="color: var(--text-muted); font-size: 0.7rem;">Projected Transit</div>
+                <div id="telemetry-transit-days" style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary);">7.9 Days</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
