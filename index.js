@@ -235,4 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCharts();
   renderAllKaTeX();
   setTimeout(renderAllKaTeX, 200);
+  setTimeout(renderAllKaTeX, 600);
+  window.addEventListener('load', renderAllKaTeX);
 });
