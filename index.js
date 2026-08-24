@@ -113,6 +113,30 @@ document.addEventListener('DOMContentLoaded', () => {
     if (freightCostEl) freightCostEl.textContent = `Freight: R$ ${estFreight.toFixed(2)}`;
     if (fprEl) fprEl.textContent = `${estFpr.toFixed(1)}%`;
     if (transitEl) transitEl.textContent = `${estDays.toFixed(1)} Days`;
+
+    const slaBufEl = document.getElementById('telemetry-sla-buffer');
+    const corridorEl = document.getElementById('telemetry-corridor');
+    const riskEl = document.getElementById('telemetry-delay-risk');
+
+    if (slaBufEl) {
+      if (delay <= 0) {
+        slaBufEl.textContent = `+${(Math.abs(delay)).toFixed(1)} Days Ahead`;
+        slaBufEl.style.color = 'var(--color-primary)';
+      } else {
+        slaBufEl.textContent = `-${delay.toFixed(1)} Days Overdue`;
+        slaBufEl.style.color = '#dc2626';
+      }
+    }
+    if (corridorEl) {
+      if (dist < 800) corridorEl.textContent = 'SE → Metro Hub';
+      else if (dist < 2200) corridorEl.textContent = 'SE → NE Coastal';
+      else corridorEl.textContent = 'SE → Amazon Frontier';
+    }
+    if (riskEl) {
+      const riskPct = delay > 0 ? Math.min(98, Math.round(50 + delay * 12)) : Math.max(1.5, Math.round(5 - Math.abs(delay) * 0.8));
+      riskEl.textContent = `${riskPct}% Delay Risk`;
+      riskEl.style.color = riskPct > 20 ? '#dc2626' : 'var(--color-primary)';
+    }
   }
 
   [simDist, simWeight, simSla, simPrice].forEach(input => {
